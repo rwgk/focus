@@ -39,53 +39,6 @@ def apply_rstrip(list_of_strings):
 
 class empty: pass
 
-class gsas_profile_function_2:
-
-  def __init__(self, GU,GV,GW,LX,LY,trns,asym,shft,GP,stec,ptec,sfec):
-    adopt_init_args(self, locals())
-
-  def get_fwhm(self, Theta_deg):
-    Theta_rad = Theta_deg * math.pi / 180
-    tan_Theta = math.tan(Theta_rad)
-    tan2_Theta = tan_Theta**2
-    cos_Theta = math.cos(Theta_rad)
-    cos2_Theta = cos_Theta**2
-    cos_phi = 1.
-    Sigma2 = (  self.GU * tan2_Theta
-              + self.GV * tan_Theta
-              + self.GW
-              + self.GP / cos2_Theta)
-    Gamma_g = math.sqrt(8. * Sigma2 * math.log(2.))
-    gamma =   (self.LX + self.sfec * cos_phi) / cos_Theta \
-            + (self.LY + self.stec * cos_phi) * tan_Theta
-    G1 = Gamma_g
-    G2 = Gamma_g * G1
-    G3 = Gamma_g * G2
-    G4 = Gamma_g * G3
-    G5 = Gamma_g * G4
-    g1 = gamma
-    g2 = gamma * g1
-    g3 = gamma * g2
-    g4 = gamma * g3
-    g5 = gamma * g4
-    Gamma = (            G5
-             + 2.69269 * G4 * g1
-             + 2.42843 * G3 * g2
-             + 4.47163 * G2 * g3
-             + 0.07842 * G1 * g4
-             +                g5)
-    return math.pow(Gamma, 0.2) * .01
-
-  def show_parameters(self, lead_string="# "):
-    print "%sGU    GV    GW    %8.1f  %8.1f  %8.1f" % (
-      lead_string, self.GU, self.GV, self.GW)
-    print "%sLX    LY    trns  %8.3f  %8.3f  %8.2f" % (
-      lead_string, self.LX, self.LY, self.trns)
-    print "%sasym  shft  GP    %8.4f  %8.4f  %8.1f" % (
-      lead_string, self.asym, self.shft, self.GP)
-    print "%sstec  ptec  sfec  %8.2f  %8.2f  %8.2f" % (
-      lead_string, self.stec, self.ptec, self.sfec)
-
 class read_gsas_exp:
 
   def __init__(self, file_object, file_name):
@@ -166,22 +119,6 @@ class read_gsas_exp:
     HSThh = self.HST[histogram_id]
     return HSThh.NREF
 
-  def get_profile_function(self, phase_id, histogram_id):
-    raw = self.HAP[(phase_id, histogram_id)]
-    ptyp = int(raw.key0[:5])
-    assert ptyp == 2, "Sorry, unsupported profile function type."
-    ncof = int(raw.key0[5:10])
-    assert ncof == 18, \
-      "Number of profile function coefficients other than expected."
-    flds = raw.key1.split()
-    flds += raw.key2.split()
-    flds += raw.key3.split()
-    flds += raw.key4.split()
-    flds += raw.key5.split()
-    assert len(flds) == ncof
-    cof = [float(s) for s in flds]
-    return apply(gsas_profile_function_2, cof[:12])
-
   def init_validate(self, phase_id, histogram_id, other_file_name):
     import sys
     from cctbx_boost import uctbx
@@ -234,78 +171,6 @@ class read_gsas_rfl:
     for r in self.records:
       mul = info.space_group.multiplicity(r.ihkl, 1)
       assert r.mul == mul, (r.ihkl, r.mul, mul)
-      stol = info.unit_cell.stol(r.ihkl)
-      assert abs(r.stol - stol) < 1.e-4, (r.ihkl, r.stol, stol)
-      tth = info.unit_cell.two_theta_deg(r.ihkl, info.wave_length)
-      assert abs(r.tth - tth) < 1.e-2, (r.ihkl, r.tth, tth)
-    print "OK"
-
-def xtal_reduce_f2_to_f(f2rel, sigf2rel, small=5.e-7):
-  if (f2rel > 0.): frel = math.sqrt(f2rel)
-  else:            frel = 0.
-  if (frel < small and sigf2rel < small):
-    sigfrel = 0.
-  else:
-    sigfrel = sigf2rel / (frel + math.sqrt(sigf2rel + frel**2))
-  return frel, sigfrel
-
-class read_refnnp_record:
-
-  def __init__(self, ihkl,mul,d_space,wave_length,fosq,sig):
-    adopt_init_args(self, locals())
-    self.fobs = xtal_reduce_f2_to_f(fosq, sig)[0]
-    # d-spacing measure sin(theta)/lambda = 1/(2*d)
-    self.stol = 1/(2*self.d_space)
-    self.tth = 2 * math.asin(self.stol * self.wave_length) * 180 / math.pi
-
-  def set_fwhm(self, profile_function):
-    self.fwhm = profile_function.get_fwhm(self.tth/2)
-
-class read_read_refnnp_output:
-
-  def __init__(self, file_object, file_name):
-    self.file_name = file_name
-    header_flds = "#  H   K   L Mul Icod      Prfo  D-space   Lambda" \
-      "      Fosq  esd_Fosq     FoTsq      Fcsq     FcTsq  Phas     Trans" \
-      "      Extc    Proflp       TOF".split()
-    records = 0
-    for line in file_object.xreadlines():
-      if (records == 0):
-        assert line.split() == header_flds, "Unknown read_refnnp file format."
-        records = []
-      else:
-        if (line.strip().startswith("Error reading GSAS REFnnP")):
-          break
-        flds = line.split()
-        ihkl = tuple([int(flds[i]) for i in xrange(3)])
-        mul = int(flds[header_flds.index("Mul")-1])
-        d_space = float(flds[header_flds.index("D-space")-1])
-        wave_length = float(flds[header_flds.index("Lambda")-1])
-        fosq = float(flds[header_flds.index("Fosq")-1])
-        sig = float(flds[header_flds.index("esd_Fosq")-1])
-        records.append(
-          read_refnnp_record(ihkl,mul,d_space,wave_length,fosq,sig))
-    self.records = records
-
-  def prune(self, gsas_exp, histogram_id=1):
-    nref = gsas_exp.get_nref(histogram_id)
-    assert len(self.records) >= nref
-    self.records = self.records[:nref]
-
-  def set_fwhm(self, gsas_exp, phase_id=1, histogram_id=1):
-    self.profile_function = gsas_exp.get_profile_function(
-      phase_id, histogram_id)
-    #self.profile_function.show_parameters()
-    for r in self.records:
-      r.set_fwhm(self.profile_function)
-
-  def validate(self, gsas_exp, phase_id=1, histogram_id=1):
-    info = gsas_exp.init_validate(phase_id, histogram_id, self.file_name)
-    for r in self.records:
-      mul = info.space_group.multiplicity(r.ihkl, 1)
-      assert r.mul == mul, (r.ihkl, r.mul, mul)
-      d_space = info.unit_cell.d(r.ihkl)
-      assert abs(r.d_space - d_space) < 1.e-4, (r.ihkl, r.d_space, d_space)
       stol = info.unit_cell.stol(r.ihkl)
       assert abs(r.stol - stol) < 1.e-4, (r.ihkl, r.stol, stol)
       tth = info.unit_cell.two_theta_deg(r.ihkl, info.wave_length)
@@ -479,7 +344,6 @@ def format_xtal_input(gsas_exp, gsas_rfl,
 def run():
   import sys, os.path
   Flags = command_line_options(sys.argv[1:], (
-    "read_refnnp",
     "focus",
     "xtal",
     "validate",
@@ -496,29 +360,21 @@ def run():
   gsas_exp = read_gsas_exp(f, file_names[0])
   f.close()
   gsas_rfl = 0
-  gsas_refnnp = 0
   f = open(file_names[1], "r")
-  if (not Flags.read_refnnp):
-    gsas_rfl = read_gsas_rfl(f, file_names[1])
-    gsas_data = gsas_rfl
-  else:
-    gsas_refnnp = read_read_refnnp_output(f, file_names[1])
-    gsas_refnnp.set_fwhm(gsas_exp)
-    gsas_data = gsas_refnnp
+  gsas_rfl = read_gsas_rfl(f, file_names[1])
   f.close()
-  gsas_data.prune(gsas_exp)
+  gsas_rfl.prune(gsas_exp)
   divide_pr = 0
   if (len(file_names) > 2):
     f = open(file_names[2], "r")
     divide_pr = read_divide_pr(f, file_names[2])
     f.close()
   if (Flags.focus):
-    format_focus_input(gsas_exp, gsas_data, divide_pr)
+    format_focus_input(gsas_exp, gsas_rfl, divide_pr)
   if (Flags.xtal):
-    format_xtal_input(gsas_exp, gsas_data)
+    format_xtal_input(gsas_exp, gsas_rfl)
   if (Flags.validate):
     if (gsas_rfl): gsas_rfl.validate(gsas_exp)
-    if (gsas_refnnp): gsas_refnnp.validate(gsas_exp)
     if (divide_pr): divide_pr.validate(gsas_exp)
 
 if (__name__ == "__main__"):
