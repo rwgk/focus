@@ -341,11 +341,51 @@ def format_xtal_input(gsas_exp, gsas_rfl,
   print
   print "FINISH"
 
+def format_8_2(value):
+  for i in (5,4,3,2,1):
+    s = ("%8."+str(i)+"f") % (value,)
+    if (i > 1):
+      if (s[-1] == "0"): continue
+    else:
+      if (s[-1] == "0"):
+        s = "%7.0f." % (value,)
+    if (len(s) == 8): return s
+  raise RuntimeError,  "Value does not fit Shelx HKLF -4 format: "+str(value)
+
+def format_hklf_4(h, f_sq, sigma_f_sq=0.01):
+  s = "%4d%4d%4d%s%s" % (h + (format_8_2(f_sq), format_8_2(sigma_f_sq)))
+  assert len(s) == 28, \
+    "Miller index does not fit Shelx HKLF -4 format: " + str(h)
+  return s
+
+def format_shelx_input(gsas_exp, gsas_rfl, divide_pr,
+                       phase_id=1, histogram_id=1):
+  title = gsas_exp.DESCR
+  if (divide_pr):
+    title += ", FIPS partitioning"
+  print "TITL", title
+  print "CELL 1.0 %.6g %.6g %.6g %.6g %.6g %.6g" % (
+    gsas_exp.get_unit_cell_parameters(phase_id))
+  print "ZERR 1 0.01 0.01 0.01 0 0 0" # XXX could use gsas_exp
+  print "****** Use http://cci.lbl.gov/cctbx/shelx.html ******"
+  print "****** to create the LATT and SYMM cards for   ******"
+  print "****** space group %-27s ******" % (
+    gsas_exp.get_space_group_symbol(phase_id),)
+  print "HKLF -4"
+  if (not divide_pr):
+    for r in gsas_rfl.records:
+      print format_hklf_4(r.ihkl, r.fosq, r.sig)
+  else:
+    for r in divide_pr.records:
+      print format_hklf_4(r.hkl, r.fnew**2)
+  print format_hklf_4((0,0,0), 0, 0)
+
 def run():
   import sys, os.path
   Flags = command_line_options(sys.argv[1:], (
     "focus",
     "xtal",
+    "shelx",
     "validate",
   ))
   if (not len(Flags.regular_args) in (2,3)):
@@ -373,6 +413,8 @@ def run():
     format_focus_input(gsas_exp, gsas_rfl, divide_pr)
   if (Flags.xtal):
     format_xtal_input(gsas_exp, gsas_rfl)
+  if (Flags.shelx):
+    format_shelx_input(gsas_exp, gsas_rfl, divide_pr)
   if (Flags.validate):
     if (gsas_rfl): gsas_rfl.validate(gsas_exp)
     if (divide_pr): divide_pr.validate(gsas_exp)
