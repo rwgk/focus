@@ -121,17 +121,18 @@ class read_gsas_exp:
 
   def init_validate(self, phase_id, histogram_id, other_file_name):
     import sys
-    from cctbx_boost import uctbx
-    from cctbx_boost import sgtbx
+    from cctbx import uctbx
+    from cctbx import sgtbx
     print "Validating:"
     print " ", self.file_name
     print "    phase id:", phase_id
     print "    histogram id:", histogram_id
     print " ", other_file_name
     info = empty()
-    info.unit_cell = uctbx.UnitCell(self.get_unit_cell_parameters(phase_id))
-    info.space_group = sgtbx.SpaceGroup(sgtbx.SpaceGroupSymbols(
-      self.get_space_group_symbol(phase_id)))
+    info.unit_cell = uctbx.unit_cell(
+      self.get_unit_cell_parameters(phase_id))
+    info.space_group = sgtbx.space_group_info(
+      self.get_space_group_symbol(phase_id)).group()
     info.wave_length = self.get_wave_length(histogram_id)
     return info
 
@@ -173,7 +174,7 @@ class read_gsas_rfl:
       assert r.mul == mul, (r.ihkl, r.mul, mul)
       stol = info.unit_cell.stol(r.ihkl)
       assert abs(r.stol - stol) < 1.e-4, (r.ihkl, r.stol, stol)
-      tth = info.unit_cell.two_theta_deg(r.ihkl, info.wave_length)
+      tth = info.unit_cell.two_theta(r.ihkl, info.wave_length, 0001)
       assert abs(r.tth - tth) < 1.e-2, (r.ihkl, r.tth, tth)
     print "OK"
 
@@ -380,6 +381,41 @@ def format_shelx_input(gsas_exp, gsas_rfl, divide_pr,
       print format_hklf_4(r.hkl, r.fnew**2)
   print format_hklf_4((0,0,0), 0, 0)
 
+def as_miller_array(gsas_exp, gsas_rfl, divide_pr,
+                    phase_id=1, histogram_id=1):
+  from cctbx import miller
+  from cctbx import crystal
+  from cctbx.array_family import flex
+  from scitbx.python_utils import easy_pickle
+  info = gsas_exp.DESCR
+  if (divide_pr):
+    info += ", FIPS partitioning"
+  indices = flex.miller_index()
+  data = flex.double()
+  if (not divide_pr):
+    sigmas = flex.double()
+    for r in gsas_rfl.records:
+      indices.append(r.ihkl)
+      data.append(r.fosq)
+      sigmas.append(r.sig)
+  else:
+    sigmas = None
+    for r in divide_pr.records:
+      indices.append(r.hkl)
+      data.append(r.fnew**2)
+  miller_array = miller.array(
+    miller_set=miller.set(
+      crystal_symmetry=crystal.symmetry(
+        unit_cell=gsas_exp.get_unit_cell_parameters(phase_id),
+        space_group_symbol=gsas_exp.get_space_group_symbol(phase_id)),
+      indices=indices,
+      anomalous_flag=00000),
+    data=data,
+    sigmas=sigmas).set_info(info).set_observation_type_xray_intensity()
+  miller_array.show_comprehensive_summary()
+  print "Writing file: miller_array.pickle"
+  easy_pickle.dump("miller_array.pickle", miller_array)
+
 def run():
   import sys, os.path
   Flags = command_line_options(sys.argv[1:], (
@@ -387,6 +423,7 @@ def run():
     "xtal",
     "shelx",
     "validate",
+    "as_miller_array",
   ))
   if (not len(Flags.regular_args) in (2,3)):
     print "usage: %s YOUR.EXP YOUR.RFL [squared.lst] <options>" % (
@@ -415,6 +452,8 @@ def run():
     format_xtal_input(gsas_exp, gsas_rfl)
   if (Flags.shelx):
     format_shelx_input(gsas_exp, gsas_rfl, divide_pr)
+  if (Flags.as_miller_array):
+    as_miller_array(gsas_exp, gsas_rfl, divide_pr)
   if (Flags.validate):
     if (gsas_rfl): gsas_rfl.validate(gsas_exp)
     if (divide_pr): divide_pr.validate(gsas_exp)
