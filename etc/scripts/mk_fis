@@ -14,14 +14,14 @@ foreach iC ($iCodes)
   endif
 
   echo $kC | kriber reacs wrifocus quit
+  grep -v '^End$' list > $kC.fis
+  rm list
+  echo "MinNodeDistance 2.6" >> $kC.fis
+  echo "CheckTetrahedralGeometry Off" >> $kC.fis
   if (-f fis_profile_parameters) then
-    sed 's/^End$//' list > $kC.fis
     cat fis_profile_parameters >> $kC.fis
-    echo 'End' >> $kC.fis
-    rm list
-  else
-    mv list $kC.fis
   endif
+  echo 'End' >> $kC.fis
 end
 
 exit 0
