@@ -1,0 +1,17 @@
+#! /bin/csh -f
+
+set noglob
+
+set progn = "$0"
+set progn = "$progn:t"
+
+if ($#argv == 0) then
+  echo 'usage: '"$progn"' fis_file(s)'
+  exit 1
+endif
+
+foreach f ($*)
+  focus -SiteFrame -SiteLabel -Coseq=50 -CoseqSplit=500 "$f" > "$f:r".cs50
+end
+
+exit 0

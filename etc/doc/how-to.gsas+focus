@@ -1,0 +1,154 @@
+GSAS extraction: How to set all Fobs to 1
+-----------------------------------------
+gsas
+    ...
+    powpref
+''''''''''''''''''''''''''''''''''''''''''''
+    exit
+
+ln -s CIT5.REF01P gsas.REFnnP
+read_refnnp > zz
+mv gsas.REFnnP_new CIT5.REF01P
+
+gsas
+''''''''''''''''''''''''''''''''''''''''''''
+    genles
+    ...
+
+
+
+Extract information from GSAS
+-----------------------------
+gsas
+    convdtos CIT5.EXP texp_9706082015
+    exit
+
+Equivalent to previous (alternative):
+    (fold CIT5.EXP; echo '') > texp_9706082015
+
+ln -s CIT5.REF01P gsas.REFnnP
+read_refnnp > refnnp_9706082015
+rm gsas.REFnnP_new
+
+
+
+Find scaling factor with xtal35
+-------------------------------
+gsas_fwhm (to see what the syntax is)
+
+gsas_fwhm -xtal 1 1 texp_9706082015 refnnp_9706082015 > zxtal
+
+Take old xtal.dat as template to make new xtal.dat for your
+new structure. Paste in zxtal, change: Cell, SGNAME, CELCON,
+EXPER (wavelength). Finally, put a colon in front of "fixk".
+
+xtal35 xtal
+
+Edit xtal.lst, inspect Wilson plot, guess best scaling factor K.
+Remove colon in front of k, set scaling factor, e.g. "fixk 2.5".
+Run xtal35 xtal again to see how the Wilson plot looks like.
+Change fixk if necessary and try again, keep going until happy.
+
+
+
+Setup focus input file
+----------------------
+gsas_fwhm -focus 1 1 texp_9706082015 refnnp_9706082015 > zfocus
+
+Take old focus input file to make new one for your new structure.
+Paste in zfocus, change ... (ignore everthing which is not mentioned
+in thesis).
+
+Run focus with 0 trials to check if the input produces the desired
+results.
+
+focus cit5.fie 0 > zz
+
+Make corrections if necessary. Then run a few cycles, just to see
+if the recycling seems to work ok, and to find out how long a trial
+takes approximately.
+
+focus cit5.fie 5 > zz
+
+Look at the total CPU time...
+
+# Time 97-06-08 20:34:56  9.67  8.72  8.65  0.07  Exit
+                                ****
+                                here
+
+Look at time needed for framework search:
+
+# Time Framework Search = 1.60
+
+If ratio is such that the framework search took more than ~50% of
+total time, lower values for
+MaxPeaksFwSearch and/or MaxPeaksFwFragmentSearch.
+
+You are ready for a real try (run in the background):
+
+focus cit5.fie >& real-log-file &
+
+
+
+How is focus doing?
+-------------------
+
+fo2hist real-log-file
+
+Keep looking...
+
+
+
+Kill focus in a clean way
+-------------------------
+
+head real-log-file
+
+Look for
+
+# PID: 23482
+
+kill -INT 23482
+
+
+
+Extracting the topologies from the real-log-file
+------------------------------------------------
+
+fo2hist real-log-file | cut -c2- > histogram
+section real-log-file Framework -take=histogram > strudat-log
+
+-take means that section only extract the unique structures listed
+in histogram.
+
+strudat-log is an input file for kriber. No modifications necessary.
+
+
+
+Run DLS for all unique topologies automatically
+-----------------------------------------------
+
+ln -s strudat-log strudat
+mk_dls_with_strudat > strudat-dls
+
+Again, strudat-dls is an input file for kriber. No modifications necessary.
+
+If also want to see the DLS R-values with unit cell refinement:
+
+rm strudat
+ln -s strudat-dls strudat
+mk_cdls_with_strudat > strudat-cdls
+
+
+
+View "the" structure in Cerius
+------------------------------
+
+rm strudat
+ln -s strudat-dls strudat
+kriber
+    reacs
+        Fw0002
+    wricssr
+    quit
+mv list Fw0002.cssr

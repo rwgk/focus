@@ -1,0 +1,27 @@
+#! /bin/csh -f
+
+if ($#argv > 0) then
+  set iCodes = (`cut -d" " -f1 $1`)
+else
+  set iCodes = (`grep '^\*' strudat | cut -c2-`)
+endif
+
+foreach iC ($iCodes)
+  if (`echo $iC | grep '^[0-9]' | wc -l` != 0) then
+    set kC = Fw$iC
+  else
+    set kC =   $iC
+  endif
+
+  echo $kC | kriber reacs wrifocus quit
+  if (-f fis_profile_parameters) then
+    sed 's/^End$//' list > $kC.fis
+    cat fis_profile_parameters >> $kC.fis
+    echo 'End' >> $kC.fis
+    rm list
+  else
+    mv list $kC.fis
+  endif
+end
+
+exit 0

@@ -1,0 +1,107 @@
+!##############################################################
+!        XTAL3.7  Tcl/Tk resource database    $XTALHOME/xtalrc
+!
+!       Copyright (C) 2000, The Xtal System, The University of
+!             Western Australia, xtal@crystal.uwa.edu.au.
+!  Distributed under the GNU General Public Licence as published by
+!  the Free Software Foundation, in the hope that it will be useful
+!  but WITHOUT ANY WARRANTY. See the GNU General Public License
+!  for more details.
+!
+!##############################################################
+!  NOTE:  colours and fonts specified from at the application-defaults
+!  priority are not applied. However when sourced with user-defaults 
+!  priority, they work just fine. Therefore the font and colour defaults
+!  included below are just examples for user customization.
+
+
+! Apply global colour changes to all widgets
+!*background:                   #d9d9d9
+*foreground:                   black
+*activeBackground:             #ececec
+*activeForeground:             black
+!*disabledForeground:           #a3a3a3
+!*selectBackground:             #c3c3c3
+!*selectColor:                  #b03060
+!*troughColor:                  #c3c3c3
+!*highlightForeground:          #d9d9d9
+!*highlightBackground:          #d9d9d9
+!*highlightColor:               #d9d9d9
+!*insertBackground:             #d9d9d9
+!*selectForeground:             #d9d9d9
+
+*Entry*background:              salmon
+*troughColor:                   salmon
+
+!  Apply global text changes to all widgets
+*font:                         -*-times-bold-r-normal-*-18-*
+
+
+! The following defaults are vital application-defaults
+! which take effect at all priorities.
+!  widget specific changes 
+! preserve width/height aspect ratio of 1.2
+*gip.main.width:		960
+*gip.main.height:		800
+*gip.main.highlightThickness:	0
+*gip.main.borderWidth:		0
+*gip.main.background:		Black
+
+! preserve width/height aspect ratio of 1.2
+*preabs.main.width:		960
+*preabs.main.height:		800
+*preabs.main.highlightThickness:	0
+*preabs.main.borderWidth:		0
+*preabs.main.background:		Black
+
+! preserve width/height aspect ratio of 1.2
+*pig.main.width:		960
+*pig.main.height:		800
+*pig.main.highlightThickness:	0
+*pig.main.borderWidth:		0
+*pig.main.background:		Black
+
+! preserve width/height aspect ratio of 1.0
+*prevue.main.width:		800
+*prevue.main.height:		800
+*prevue.main.highlightThickness:	0
+*prevue.main.borderWidth:		0
+*prevue.main.background:		Black
+
+! preserve width/height aspect ratio of 1.0
+*plotx.main.width:		800
+*plotx.main.height:		800
+*plotx.main.highlightThickness:	0
+*plotx.main.borderWidth:		0
+*plotx.main.background:		Black
+
+
+*powgen.legend.width:		180
+*powgen.legend.height:		260
+*powgen.legend.highlightThickness:	0
+*powgen.legend.borderWidth:		2
+!*powgen.legend.background:		Black
+*powgen.legend.relief:		sunken
+
+*powgen.graph.width:		680
+*powgen.graph.height:		420
+*powgen.graph.scrollregion:		{0 0 680 420 }
+*powgen.graph.highlightThickness:	0
+*powgen.graph.borderwidth:		0
+*powgen.graph.background:		Black
+!*powgen.graph.relief:		sunken
+
+*powgen.abscissa.height:		10
+*powgen.abscissa.highlightThickness:	0
+*powgen.abscissa.borderwidth:		0
+*powgen.abscissa.background:		Black
+
+*powgen.ordinate.width:		        10
+*powgen.ordinate.highlightThickness:	0
+*powgen.ordinate.borderwidth:		0
+*powgen.ordinate.background:		Black
+
+*powgen.vscroll.relief:		sunken
+*powgen.vscroll.orient:		vertical
+*powgen.hscroll.relief:		sunken
+*powgen.hscroll.orient:		horizontal

@@ -1,0 +1,205 @@
+gsas_raw:    a simple tool to build GSAS raw files
+gsas_fwhm:   a simple tool to extract GSAS FWHM
+read_phh.f:  tool to convert EXPNAM.Phh    files to ascii files
+read_refnnp: tool to convert EXPNAM.REFnnP files to ascii files
+
+The following applies to Unix machines.
+On VMS machines I use to redirect the output by
+issuing, e.g., "define/user sys$output buffer_file".
+
+Send questions and suggestions to:
+    rwgk@laplace.csb.yale.edu
+
+
+You need two aliases, e.g.:
+  alias convstod /usr/local/gsas/exe/convstod
+  alias convdtos /usr/local/gsas/exe/convdtos
+
+
+Using "gsas_raw":
+
+  X-ray, without ESD's:
+        - Setup a file which contains the counts only.
+          Any format is legal.
+          Say, the file name is "collected_data".
+
+        - Run: "gsas_raw collected_data > buffer_file"
+
+        - Edit the first two lines of "buffer_file". An
+          example: The header produced by gsas_raw is:
+
+                Put your Title here
+                BANK 1 7997 800 CONST 0.0000 0.0000 0 0 STD
+
+          Given your scan range starts at 5 deg, step with
+          0.02 deg, change the header to:
+
+                Exciting new material
+                BANK 1 7997 800 CONST 500.0000 2.0000 0 0 STD
+
+        - Run: "convstod < buffer_file > exciting_new_material.raw"
+          Done.
+
+  X-ray, with ESD's:
+        - Setup a file which contains pairs of counts and esd's.
+          Any format is legal.
+
+        - Run: "gsas_raw -ESD collected_data > buffer_file"
+
+        - Continue with the "Edit" step above.
+
+
+  Rutherford TOF data:
+        - Setup a file which contains a sequence of TOF's, counts,
+          and esd's.
+          Any format is legal.
+
+        - Run: "gsas_raw -RALF collected_data > buffer_file"
+
+        - Continue with the "Edit" step above.
+
+
+  Using some standard Unix tools it is easy to pre-process the
+  original files. E.g., given a file with 2-theta, counts on
+  each line, this two lines script will do the job:
+
+  #! /bin/sh
+  sed 's/^  *//' $1 | sed 's/  */ /g' | cut -f2 -d' ' | gsas_raw
+
+  Or for files with 2-theta, counts, esd's on each line:
+
+  #! /bin/sh
+  sed 's/^  *//' $1 | sed 's/  */ /g' | cut -f2-3 -d' ' | gsas_raw -ESD
+
+
+  Note that it is easy to convert the .raw files back to a standard
+  text file. Just run:
+
+        convdtos < exciting_new_material.raw > buffer_file
+
+  Thus, there is no need to keep the buffer_file.
+
+  Caveat: There is no provision to scale the the counts and esd's.
+  Since I use an external tool to do this (just one more filter in
+  the pipeline) I do not need this feature.
+
+
+Using "gsas_fwhm":
+
+  Before you start using gsas_fwhm please notice: this tool is
+  limited to the "CW Profile Function 2" with these 12 refineable
+  parameters:
+
+        GU, GV, GW
+        LX, LY, trns
+        asym, shft, GP
+        stec, ptec, sfec
+
+  BUT makes use of GU, GV, GW, LX, LY, GP, stec, ptec only.
+  Parameters trns, asym, shft, sfec are IGNORED!
+  This tool works for me. And that is all I claim it is
+  doing. I hope, the developers of GSAS will make gsas_fwhm
+  obsolete one day.
+
+
+  At the end of your extraction or refinement, leave GSAS
+  and rename your .LST file temporarily. Enter GSAS again
+  and issue:
+
+        convdtos EXPNAM.EXP texp
+
+  Next, call "reflist" and, after choosing your histogram,
+  use "L" to write the hkl data to the list file.
+  Leave GSAS again and rename the .LST file to, e.g.,
+  reflist. Now you can re-rename your original .LST file.
+
+  If you want a file containing 2-theta, FWHM, run:
+
+        gsas_fwhm -ACEgr 1 1 texp reflist > fwhm.xmgr
+
+  ACEgr alias xmgr is a comprehensive freeware XY plotting
+  tool (ftp.teleport.com). However, the input format is simple
+  text and I assume you can use any XY plotting program to
+  visualize the FWHM.
+
+  XTAL users who want to work with extracted Fobs may like:
+
+        gsas_fwhm -Xtal 1 1 texp reflist > addref.inp
+
+  A sample output:
+        : gsas_fwhm -xtal 1 1 texp reflist
+        : UnitCell    9.8946   9.8946  36.8715   90.000   90.000   90.000
+        : Lambda  0.94734
+        : GU    GV    GW        56.6     -14.0       3.6
+        : LX    LY    trns     0.888    10.282      0.00
+        : asym  shft  GP      0.0000    0.0000       0.0
+        : stec  ptec  sfec      0.00      0.00      0.00
+           0   0   2    2.945  0.04894  8.491+06 1.0
+           0   0   4    5.891  0.04888  2.105+07 1.0
+           1   0   2    6.229  0.04890  2.562+07 1.0
+           ...
+
+  This is hkl, 2-theta, FWHM, Fosq, esd's are set to unity. GSAS does
+  not provide esd's.
+
+  If one wants to have the GSAS Fosq reduced to Fobs, the "-focus"
+  option might be interesting. "gsas_fwhm -focus" produces input for
+  an in-house program:
+        # gsas_fwhm -focus 1 1 texp reflist
+        # UnitCell    9.8946   9.8946  36.8715   90.000   90.000   90.000
+        # Lambda  0.94734
+        # GU    GV    GW        56.6     -14.0       3.6
+        # LX    LY    trns     0.888    10.282      0.00
+        # asym  shft  GP      0.0000    0.0000       0.0
+        # stec  ptec  sfec      0.00      0.00      0.00
+           0   0   2     2913.93 *   0.04894
+           0   0   4     4588.03 *   0.04888
+           1   0   2     5061.62 *   0.04890
+           ...
+
+  This is hkl, Fobs, *, FWHM.
+
+
+read_phh.f:
+c
+c Tool to convert EXPNAM.Phh files (histogram files)
+c                   to ascii files
+c
+c usage: link or copy the EXPNAM.Phh file you want to convert
+c        to "gsas.Phh", then type read_phh.
+c        Redirection of the output is recommended.
+c
+c Caveat: Sometimes there are bogous records at the end
+c         of the file. Delete them with your editor.
+c
+
+
+read_refnnp.f:
+c
+c Tool to convert EXPNAM.REFnnP files (reflection files)
+c                      to ascii files
+c
+c usage: link or copy the EXPNAM.REFnnP file you want to convert
+c        to "gsas.REFnnP", then type read_refnnp.
+c        Redirection of the output is recommended.
+c
+c        Besides converting gsas.REFnnP to an ascii file,
+c        read_refnnp also writes a new direct access
+c        file "gsas.REFnnP_new", with all of the data
+c        items 9-13 (Fosq, esd_Fosq, FoTsq, Fcsq, FcTsq)
+c        set to 1.
+c        This is very useful for starting a LeBail extraction:
+c          - Set up the experiment file as usual
+c          - powpref
+c          - 1 cycle genles
+c          - copy EXPNAM.REFnnP to gsas.REFnnP
+c          - read_refnnp
+c          - copy gsas.REFnnP_new to EXPNAM.REFnnP
+c          - continue with genles
+c        This procedure is necessary after each use of
+c        powpref.
+c
+c Caveat: Sometimes there are bogous records at the end
+c         of the file. However, since gsas knows how many
+c         records to read this should not hurt.
+c

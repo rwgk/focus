@@ -1,0 +1,48 @@
+#! /bin/sh -f
+#
+# Script to run Xtal 3.7 
+#
+# NOTE: The environment variable XTALHOME should be set to point to
+#       where the auxiliary (library) files that xtal needs reside.
+#       If it is unset, the files are assumed to be in the same directory
+#       as the job is being run in.
+#
+#                             #export the path to xtal aux files
+XTALROOT="$FOCUS_ETC"/xtal371
+XTALHOME=$XTALROOT/aux/
+XTALEXE=xtal371_plus_divide.x
+#POVEXE=/util/bin/x-povray
+#export XTALHOME POVEXE
+export XTALHOME
+#
+#
+#  Execute XTAL    by reading $1.dat   and outputing  $1.lst
+#
+if [ -f "$1.dat" ] 
+   then
+       rm -f $1.xx?
+       rm -f xtal.xx?
+       $XTALEXE < $1.dat > $1.lst
+       rm -f $1.xx?
+       rm -f xtal.xx?
+       exit 0
+else 
+   if [ ! -f "$1.cif" ] 
+       then
+       echo "Unable to locate $1.dat or $1.cif files. Exiting."
+       exit 1
+   fi
+fi
+#
+#         default sequence if $1.dat not present    
+#
+#
+echo "XTAL 3.7 has created a default $1.dat to use $1.cif "
+echo "compid $1"           > $1.dat
+echo "cifio dict"         >> $1.dat
+echo "pig ort "           >> $1.dat
+#                             #copy file to standard in & catch stdout
+$XTALEXE < $1.dat > $1.lst
+#                             #cleanup scratch files
+rm -f   $1.xx?
+rm -f xtal.xx?

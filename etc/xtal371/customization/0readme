@@ -1,0 +1,20 @@
+Using:
+  xtal-3.7.1.tgz
+
+Modified:
+  xtal-3.7/bin/xtal
+  xtal-3.7/source/aa.r
+
+Additional file:
+  xtal-3.7/source/di.r
+
+Replaced:
+  xtal-3.7/source/Makefile
+
+unpack xtal-3.7.1.tgz
+cd xtal-3.7
+.../copy_files
+Adjust XTALROOT in bin/xtal
+cd source
+Adjust macros near top of Makefile.
+make

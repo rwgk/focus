@@ -1,0 +1,24 @@
+#! /bin/csh -f
+
+set noglob
+
+if ($#argv < 2) then
+  'usage: '"$0"' #OfUniqueTopology logfile ...'
+  exit 1
+endif
+
+set iUT = "$1"
+shift
+
+set tA = /var/tmp/tmp$$A
+onintr CLEAN
+
+foreach f ($*)
+  get_coseq $f | coseq_cmp -v | head -"$iUT" | tail -1 | awk -F: '{ print $1 }' | tr -s " " "\012" | cut -c2- > $tA
+  section $f Framework -take=$tA | grep '^Framework' | awk '{ print $4 }' | uniq | wc -l
+end
+
+CLEAN:
+rm -f $tA
+
+exit 0

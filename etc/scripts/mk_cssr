@@ -1,0 +1,20 @@
+#! /bin/csh -f
+
+if ($#argv > 0) then
+  set iCodes = (`cut -d" " -f1 $1`)
+else
+  set iCodes = (`grep '^\*' strudat | cut -c2-`)
+endif
+
+foreach iC ($iCodes)
+  if (`echo $iC | grep '^[0-9]' | wc -l` != 0) then
+    set kC = Fw$iC
+  else
+    set kC =   $iC
+  endif
+
+  echo $kC | kriber reacs wricssr quit
+  mv list $kC.cssr
+end
+
+exit 0

@@ -1,0 +1,43 @@
+#!/bin/csh
+
+umask 022
+
+onintr Interrupt
+
+set PEAKFIND = /use/ralf/dlsxrs/peakfind/peakfind.x
+
+echo " PEAKFIND (location of diffraction peak positions)"
+
+if ($#argv == 0) then
+  set pfinp = peakfind.inp
+else
+  set pfinp = $1
+endif
+
+if (! -e $pfinp) then
+  echo $0': Error: Missing '$pfinp'\07\n'
+  exit(1)
+endif
+
+if (! -e scandata.dat) then
+  echo $0': Error: Missing scandata.dat\07\n'
+  exit(1)
+endif
+
+rm -f fort.15 fort.22 fort.23 fort.27
+
+ln -s scandata.dat fort.22
+
+$PEAKFIND < $pfinp
+
+if (-e fort.15) mv fort.15 peaks.dat
+if (-e fort.23) mv fort.23 peakfind.out
+
+rm -f fort.15 fort.22 fort.23 fort.27
+
+exit(0)
+
+
+Interrupt:
+  echo $0': Interrupt signal received.'
+  exit(1)

@@ -1,0 +1,217 @@
+#! /bin/csh -f
+
+# Reference: International Tables for Crystallography Volume A, 1983
+#            Chapter 3. Space-group determination and diffraction symbols
+#            Table 3.2
+
+set noglob
+
+set progn = "$0"
+set progn = "$progn:t"
+
+if ($#argv != 1 && $#argv != 2) then
+  echo 'usage: '"$progn"' crystal_system [centring_type]'
+  exit 1
+endif
+
+set crystal_system = "$1"
+
+if ($#argv > 1) then
+  set centring_type = "$2"
+else
+  set centring_type = "."
+endif
+
+grep -i "$crystal_system" << EOT | cut -d" " -f2 | grep -i "^$centring_type"
+triclinic P1
+triclinic F_1
+monoclinic P121
+monoclinic P1211
+monoclinic P1a1
+monoclinic P121/a1
+monoclinic P1c1
+monoclinic P121/c1
+monoclinic P1n1
+monoclinic P121/n1
+monoclinic C121
+monoclinic C1c1
+monoclinic A121
+monoclinic A1n1
+monoclinic I121
+monoclinic I1a1
+orthorhombic P222
+orthorhombic P2221
+orthorhombic P2212
+orthorhombic P22121
+orthorhombic P2122
+orthorhombic P21221
+orthorhombic P21212
+orthorhombic P212121
+orthorhombic Pm2a
+orthorhombic Pm21b
+orthorhombic P21mn
+orthorhombic Pma2
+orthorhombic P2aa
+orthorhombic P21ab
+orthorhombic P2an
+orthorhombic Pmc21
+orthorhombic P21ca
+orthorhombic P2cb
+orthorhombic P21cn
+orthorhombic Pmn21
+orthorhombic P2na
+orthorhombic P21nb
+orthorhombic P2nn
+orthorhombic Pbm2
+orthorhombic Pb21a
+orthorhombic Pb2b
+orthorhombic Pb2n
+orthorhombic Pba2
+orthorhombic Pbaa
+orthorhombic Pbab
+orthorhombic Pban
+orthorhombic Pbc21
+orthorhombic Pbca
+orthorhombic Pbcb
+orthorhombic Pbcn
+orthorhombic Pbn21
+orthorhombic Pbna
+orthorhombic Pbnb
+orthorhombic Pbnn
+orthorhombic Pcm21
+orthorhombic Pc2a
+orthorhombic Pc21b
+orthorhombic Pc21n
+orthorhombic Pca21
+orthorhombic Pcaa
+orthorhombic Pcab
+orthorhombic Pcan
+orthorhombic Pcc2
+orthorhombic Pcca
+orthorhombic Pccb
+orthorhombic Pccn
+orthorhombic Pcn2
+orthorhombic Pcna
+orthorhombic Pcnb
+orthorhombic Pcnn
+orthorhombic Pnm21
+orthorhombic Pn21a
+orthorhombic Pn2b
+orthorhombic Pn2n
+orthorhombic Pna21
+orthorhombic Pnaa
+orthorhombic Pnab
+orthorhombic Pnan
+orthorhombic Pnc2
+orthorhombic Pnca
+orthorhombic Pncb
+orthorhombic Pncn
+orthorhombic Pnn2
+orthorhombic Pnna
+orthorhombic Pnnb
+orthorhombic Pnnn
+orthorhombic C222
+orthorhombic C2221
+orthorhombic Cm2a
+orthorhombic Cmc21
+orthorhombic C2cb
+orthorhombic Ccm21
+orthorhombic Cc2a
+orthorhombic Ccc2
+orthorhombic Ccca
+orthorhombic B222
+orthorhombic B2212
+orthorhombic Bm21b
+orthorhombic Bma2
+orthorhombic B2cb
+orthorhombic Bbm2
+orthorhombic Bb2b
+orthorhombic Bba2
+orthorhombic Bbab
+orthorhombic A222
+orthorhombic A2122
+orthorhombic Am2a
+orthorhombic Ama2
+orthorhombic A2aa
+orthorhombic Abm2
+orthorhombic Ac2a
+orthorhombic Aba2
+orthorhombic Abaa
+orthorhombic I222
+orthorhombic Im2a
+orthorhombic Ima2
+orthorhombic I2cb
+orthorhombic Ibm2
+orthorhombic Ic2a
+orthorhombic Iba2
+orthorhombic Ibca
+orthorhombic F222
+orthorhombic F2dd
+orthorhombic Fd2d
+orthorhombic Fdd2
+orthorhombic Fddd
+tetragonal P4
+tetragonal P4212
+tetragonal P42
+tetragonal P42212
+tetragonal P41
+tetragonal P41212
+tetragonal P42mc
+tetragonal P-421c
+tetragonal P4bm
+tetragonal P42bc
+tetragonal P42cm
+tetragonal P4cc
+tetragonal P42nm
+tetragonal P4nc
+tetragonal P4/n
+tetragonal P42/n
+tetragonal P42/nmc
+tetragonal P4/nbm
+tetragonal P42/nbc
+tetragonal P42/ncm
+tetragonal P4/ncc
+tetragonal P42/nnm
+tetragonal P4/nnc
+tetragonal I4
+tetragonal I41
+tetragonal I41md
+tetragonal I4cm
+tetragonal I41cd
+tetragonal I41/a
+tetragonal I41/amd
+tetragonal I41/acd
+trigonal P3
+trigonal P31
+trigonal P31c
+trigonal P3c1
+trigonal R3
+trigonal R3c
+hexagonal P6
+hexagonal P63
+hexagonal P62
+hexagonal P61
+hexagonal P63mc
+hexagonal P63cm
+hexagonal P6cc
+cubic P23
+cubic P213
+cubic P4232
+cubic P4132
+cubic P-43n
+cubic Pa-3
+cubic Pn-3
+cubic Pn-3n
+cubic I23
+cubic I4132
+cubic I-43d
+cubic Ia-3
+cubic Ia-3d
+cubic F23
+cubic F4132
+cubic F-43c
+cubic Fd-3
+cubic Fd-3c
+EOT
+
+exit 0

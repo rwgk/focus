@@ -1,0 +1,10 @@
+SAMPLE NU-3 with 1-aminoadamantane as template
+START 8.00
+STEP 10
+PLOT
+SCALE 4
+YLEN 4
+POSN
+BROAD
+SENS 500
+RUN

@@ -1,0 +1,34 @@
+#! /usr/bin/perl -w
+
+$progn = $0;
+$progn =~ s/.*\///;
+
+if ($#ARGV == -1) {
+  die "usage: $progn NewLabel [strudat_file]\n";
+}
+else {
+  $NewLabel=$ARGV[0];
+  shift;
+}
+
+$iBlock=0;
+
+while (<>) {
+  if (! $iBlock) {
+    $iBlock=1 if (/^\*/);
+  }
+  else {
+    $iBlock++;
+    if ($iBlock > 5) {
+      if (/T[^a-zA-Z]/) {
+        s/T/$NewLabel/;
+      }
+      elsif (/[^a-zA-Z]/) {
+        $iBlock=0;
+      }
+    }
+  }
+  print;
+}
+
+__END__

@@ -1,0 +1,39 @@
+Simple test:
+  unique_sysabs .
+
+    You should get a list with 188 space group names.
+
+  unique_sysabs mono c
+
+    You should get a list with 2 space group names.
+
+
+Usage:
+  sysabs_xmgr
+
+    You should get a message saying that the file sysabs_xmgr.def
+    was created and needs to be customized.
+    The changes you have to make to sysabs_xmgr.def should be
+    fairly obvious. Make sure the StepScanFile has 2-Theta in
+    the first column and counts in the second column (free format).
+    There is no harm if there are more data in columns 3, 4, ...
+
+  sysabs_xmgr
+
+    Hopefully you do get no more (error) messages when running
+    sysabs_xmgr again. The script reads the definitions in
+    sysabs_xmgr.def and creates files like xmgr.00.P222,
+    xmgr.01.P2212, ...
+    The numbers in the middle are chosen such that the space group
+    names are listed in the same order as in the International
+    Tables (Table 3.2).
+    If you do not like certain settings, modify sysabs_xmgr.def
+    and run sysabs_xmgr again. Repeat until everything is to
+    your liking.
+    The systematically absent hkl ticks are in red and plotted
+    first. hkl ticks for allowed reflections are in blue and
+    plotted over the red ticks. If a blue tick covers a red
+    one, you can have a reflection at the tick position.
+    If a red tick is not covered (which is of course in general
+    the case) but you see a peak in the profile at the tick
+    position, the corresponding space group cannot be correct.

@@ -1,0 +1,10 @@
+cp entire focus-etc directory
+
+edit cshrc:
+< else if ($opsys =~ osf1) then
+<   set exedir = exe-tru64
+
+# rm package_notes
+# rm -rf exe-tru64
+# rm dls76/makefile.tru64
+# rm kriber/src/tru64.mak

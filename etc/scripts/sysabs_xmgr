@@ -1,0 +1,159 @@
+#! /bin/csh -f
+
+set noglob
+
+if (! -f sysabs_xmgr.def) then
+echo 'Creating file "sysabs_xmgr.def".'
+cat << EOT > sysabs_xmgr.def
+# Definitions for sysabs_xmgr command
+
+set crystal_system = "" # Choices: tric mono ortho tetra trig hex cubic
+set centring_type = ""  # Choices: P A B C I R F or empty string.
+
+set UnitCell = ""
+set Lambda = "CuA1"
+set TwoThetaEnd = "75"
+
+set StepScanFile = "" # Name of file with stepscan data.
+set CountShift = "0" # This number is added to counts in stepscan file.
+
+set TickHeight = "100" # Height of hkl ticks (in counts).
+
+set KeepFocusInput = "no" # yes or no
+
+exit 0 # Do not remove this line!
+
+# sysabs_xmgr.def XMGR DEFINITIONS START
+@ world xmin 0
+@ world xmax 30
+@ world ymin 0
+@ world ymax 1000
+@ xaxis tick major 10
+@ xaxis tick minor 5
+@ yaxis tick major 1000
+@ yaxis tick minor 200
+# sysabs_xmgr.def XMGR DEFINITIONS END
+
+EOT
+echo 'Please customize the file and run this command again.'
+exit 0
+endif
+
+source sysabs_xmgr.def
+
+if ("X$crystal_system" == X) then
+  echo 'ERROR: "crystal_system" not defined in file "sysabs_xmgr.def".'
+  exit 1
+endif
+if ("X$UnitCell" == X) then
+  echo 'ERROR: "UnitCell" not defined in file "sysabs_xmgr.def".'
+  exit 1
+endif
+if ("X$Lambda" == X) then
+  echo 'ERROR: "Lambda" not defined in file "sysabs_xmgr.def".'
+  exit 1
+endif
+if ("X$TwoThetaEnd" == X) then
+  echo 'ERROR: "TwoThetaEnd" not defined in file "sysabs_xmgr.def".'
+  exit 1
+endif
+if ("X$StepScanFile" == X) then
+  echo 'ERROR: "StepScanFile" not defined in file "sysabs_xmgr.def".'
+  exit 1
+endif
+if ("X$CountShift" == X) then
+  echo 'ERROR: "CountShift" not defined in file "sysabs_xmgr.def".'
+  exit 1
+endif
+if ("X$TickHeight" == X) then
+  echo 'ERROR: "TickHeight" not defined in file "sysabs_xmgr.def".'
+  exit 1
+endif
+if (! $?KeepFocusInput) then
+  set  KeepFocusInput = "no"
+endif
+
+if (! -f "$StepScanFile") then
+  echo 'ERROR: Cannot open file "'"$StepScanFile"'".'
+  exit 1
+endif
+
+set tA=/var/tmp/tmp$$A
+set tB=/var/tmp/tmp$$B
+set tC=/var/tmp/tmp$$C
+set tD=/var/tmp/tmp$$D
+set tE=/var/tmp/tmp$$E
+
+onintr CLEAN
+
+set spgrs = (`unique_sysabs "$crystal_system" "$centring_type"`)
+
+set iPlot = 0
+
+foreach sgtab ($spgrs)
+  set sg = "$sgtab"
+  if ("$sg" =~ *_*) set sg = "Hall $sg"
+  set lPlot = (`echo $iPlot | awk '{ printf "%2.2d\n", $1 }'`)
+  set xmgrinp = (`echo "xmgr.${lPlot}.${sgtab}" | tr "/" "_"`)
+
+  echo "$xmgrinp"
+
+  echo "Title $sg" > $tA
+  echo "SpaceGroup $sg" >> $tA
+  echo "UnitCell $UnitCell" >> $tA
+  echo "Lambda  $Lambda" >> $tA
+  echo "ProfileStartEndStep 0 $TwoThetaEnd" >> $tA
+  echo "End" >> $tA
+
+  focus -List_hkl $tA | section - List_hkl | grep -v '#' | awk '{ print $5 }' | sed 's/$/ '"$TickHeight"'/' > $tB
+
+  echo '# generated with sysabs_xmgr' > "$xmgrinp"
+  echo '@ title "'"$sg"'"' >> "$xmgrinp"
+  echo '@ kill s0' >> "$xmgrinp"
+  echo '@ kill s1' >> "$xmgrinp"
+  echo '@ kill s2' >> "$xmgrinp"
+  echo '@ with g0' >> "$xmgrinp"
+  echo '@ s1 symbol 12' >> "$xmgrinp"
+  echo '@ s1 symbol color 2' >> "$xmgrinp"
+  echo '@ s1 linestyle 0' >> "$xmgrinp"
+  echo '@ s2 symbol 12' >> "$xmgrinp"
+  echo '@ s2 symbol color 4' >> "$xmgrinp"
+  echo '@ s2 linestyle 0' >> "$xmgrinp"
+  echo '@ xaxis tick out' >> "$xmgrinp"
+  awk '/XMGR DEFINITIONS START/,/XMGR DEFINITIONS END/' \
+      sysabs_xmgr.def >> "$xmgrinp"
+
+  echo '@ type xy' >> "$xmgrinp"
+  awk '{ print $1+0, $2+('"$CountShift"') }' "$StepScanFile" >> "$xmgrinp"
+  echo '&' >> "$xmgrinp"
+
+  if ($iPlot == 0) cp $tB $tC
+
+  echo '@ type xy' >> "$xmgrinp"
+  diff $tC $tB | grep '^< ' | cut -c3- > $tD
+  if (`cat $tD | wc -l` == 0) then
+    echo '0 0' >> "$xmgrinp"
+  else
+    cat $tD >> "$xmgrinp"
+  endif
+  echo '&' >> "$xmgrinp"
+
+  echo '@ type xy' >> "$xmgrinp"
+  diff $tC $tD | grep '^< ' | cut -c3- > $tE
+  if (`cat $tE | wc -l` == 0) then
+    echo '0 0' >> "$xmgrinp"
+  else
+    cat $tE >> "$xmgrinp"
+  endif
+  echo '&' >> "$xmgrinp"
+
+  @ iPlot++
+end
+
+CLEAN:
+
+if ("$KeepFocusInput" == "yes") mv $tA sysabs_xmgr.focus_input
+
+rm -f $tA $tB $tC $tD $tE
+
+exit 0

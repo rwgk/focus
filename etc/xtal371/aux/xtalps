@@ -1,0 +1,201 @@
+%!PS-Adobe-3.0 
+%%Creator: XTAL3.7
+%%Title: PLOTX postp/postl/postpc/postlc postscript graphics dump
+%%CreationDate: 5/9/85 6:15
+%%BoundingBox: (atend)   
+%%Pages: (atend)   
+%%DocumentFonts: Helvetica-Bold
+%%+ Helvetica
+%%+ Symbol
+%%+ Helvetica-BoldOblique
+%%EndComments
+%%BeginProlog
+%                       XTAL3.7 POSTSCRIPT HEADER                               
+%
+%       Copyright (C) 2000, The Xtal System, The University of
+%             Western Australia, xtal@crystal.uwa.edu.au.
+%  Distributed under the GNU General Public Licence as published by
+%  the Free Software Foundation, in the hope that it will be useful
+%  but WITHOUT ANY WARRANTY. See the GNU General Public License
+%  for more details.
+%                                                                               
+%        NOTE:  To encapsulate single page Xtal PS files for inclusion as       
+%               images in other software, change the document header to:        
+%                             PS-Adobe-3.0 EPSF-3.0                             
+%                                                                               
+   /XTALPrintInColor true def                                                   
+%                                                                               
+% uncomment the next line to force black and white printing                     
+%                                                                               
+%/XTALPrintInColor false def                                                    
+%                                                                               
+% Xtal PostScript commands                                                      
+% draw an arrow        x1 y1 x2 y2  x3 y3  angle  A                             
+% change color         n K   where n= 0 - 7                                     
+% moveto               x1 y1 M                                                  
+% lineto               x1 y1 L                                                  
+% stroke               S                                                        
+% newpath              N                                                        
+% clip                 C                                                        
+% fill                 M L L L .... F                                           
+% save graphic state   s                                                        
+% restore graphicstate r                                                        
+% change linewidth     n W   where n=0 ...                                      
+% Set FontSize         n FS                                                     
+% Set FontAngle        n FA                                                     
+% draw text & erase    (text) /Erase  /Main   T                                 
+% draw symbol          (text)         /Greek  T                                 
+% draw italic & erase  (text) /Erase  /Italic T                                 
+% initialise document  pagwidth pageheight DOCUMENT                             
+% begin new page       xscale yscale pagwidth pageheight angle=(0|90) BEGINPAGE 
+% end page             ENDPAGE                                                  
+%                                                                               
+%  More tentatively ... (i.e. not implemented )                                 
+% initialise document  xscale yscale  pagetype DOCUMENT                         
+%                                                                               
+%                                                                               
+%   create a dictionary for all XTAL definitions                                
+%   --------------------------------------------                                
+%                                                                               
+/XtalDict 100 dict def %             room for 40 definitions                     
+%                                                                               
+%  Document definitions                                                         
+%  ---------------------------------------------------------                    
+%                                                                               
+/DOCUMENT {                                                                     
+        XtalDict begin                                                          
+        /paperheight exch def                                                   
+        /paperwidth exch def                                                    
+        /pagesave  0 def                                                        
+        /landscape 0 def                                                        
+        /FontAngle 0 def   /FA { /FontAngle exch def } bind def                 
+        /FontSize  0 def   /FS { /FontSize  exch def } bind def                 
+        /CurrColor 0 def
+        /str 10 string def                                                      
+        /cmap 256 array def          %  reserve a 256 colour map                
+        /M {moveto} def                                                         
+        /N {newpath} def                                                        
+        /W {setlinewidth} def                                                   
+        /L {lineto} def                                                         
+        /S {stroke} def                                                         
+        /F {closepath fill} bind def                                            
+        /C {clip}   def                                                         
+        /s {gsave}  def                                                         
+        /r {grestore}  def                                                      
+        /m1 { N 0 360 arc S } def       % type 1 mark -circle (x,y,rad)    
+        /m2 { 0 360 arc gsave clip 0.0400 .040 scale fill grestore } def    
+                                      % type 2 mark -filled circle (x,y,rad)  
+        /pats  [ <ffffffffffffffff>      % 8x8 solid fill
+                 <d1e3c5885c3e1d88>      % 8x8 basket weave 
+                 <3e418080e3140808>] def % 8x8 fish scale 
+
+        /spotfunction { exch  1 add 2 div 8 mul cvi dup 8 idiv 3 -1            
+             roll 1 add 2 div 8 mul cvi add  pat exch get                  
+             exch  8 mod  7 exch sub 1 exch bitshift and 0 ne                   
+             {/onbits  onbits 1 add def 1} {/offbits offbits 1 add def 0}      
+              ifelse 
+               } def                                                      
+
+        /P  { pats exch get /pat exch  def    
+              /onbits 0 def /offbits 0 def 
+               72 0 matrix defaultmatrix dtransform
+               dup mul exch dup mul add sqrt dup
+               24 div 8 div round dup 0 eq {pop 1} if 8 mul div
+               0.0 /spotfunction load setscreen    
+              {} settransfer offbits offbits onbits add div 
+              XTALPrintInColor 
+              { dup dup RED mul 3 1 roll GREEN mul exch BLUE mul setrgbcolor } 
+              { setgray } ifelse
+            } def
+                 
+                                                                                
+        /Main   /Helvetica-Bold def                                             
+        /Greek  /Symbol def                                                     
+        /Italic /Helvetica-BoldOblique def                                      
+        /Subs { FontAngle rotate currentpoint  FontSize 0.2 mul neg add         
+               moveto FontAngle neg rotate    FontSize 0.7 mul FS } bind def    
+        /Unsub {FontSize 0.7 div FS                                             
+                FontAngle rotate currentpoint FontSize 0.2 mul    add           
+               moveto FontAngle neg rotate } bind def                           
+        /Sups {FontAngle rotate currentpoint   FontSize 0.5 mul     add         
+               moveto FontAngle neg rotate    FontSize 0.7 mul FS } bind def    
+        /Unsup {FontSize 0.7 div FS                                             
+                FontAngle rotate currentpoint FontSize 0.5 mul neg add          
+               moveto FontAngle neg rotate } bind def                           
+        /T { findfont  FontSize scalefont setfont FontAngle rotate              
+             dup /Erase eq {pop currentpoint gsave N matrix currentmatrix       
+                            matrix setmatrix 4 1 roll moveto dup true           
+                            charpath pathbbox newpath 6 -1 roll setmatrix       
+                            4 copy moveto moveto 4 copy 4 -1 roll exch          
+                            lineto 3 -1 roll lineto lineto lineto closepath     
+                            1 setgray fill  grestore} if                        
+             show FontAngle neg rotate } bind def       % The text command      
+                                                                                
+        /arrowdict 14 dict def %               initialise arrow dictionary      
+         arrowdict begin /mtrx matrix def end                                   
+        /A { arrowdict begin                                                    
+            /headlength exch def      /halfheadthickness exch 2 div def         
+            /halfthickness exch 2 div def                                       
+            /tipy exch def            /tipx exch def                            
+            /taily exch def           /tailx exch def                           
+            /dx tipx tailx sub def    /dy tipy taily sub def                    
+            /arrowlength dx dx mul dy dy mul add sqrt def                       
+            /angle dy dx atan def                                               
+            /base arrowlength headlength sub def                                
+            /savematrix mtrx currentmatrix def                                  
+            tailx taily translate angle rotate                                  
+            0 halfthickness neg moveto base halfthickness neg lineto            
+            base halfheadthickness neg lineto arrowlength 0 lineto              
+            base halfheadthickness lineto base halfthickness lineto             
+            0 halfthickness lineto closepath savematrix setmatrix               
+           end } def                                                            
+                                                                                
+XTALPrintInColor    % Boolean                                                   
+          {                                                                     
+             cmap 0  [1.00 1.00 1.00] put % White not black                     
+             cmap 1  [1.00 0.00 0.00] put % Red                                 
+             cmap 2  [0.00 1.00 0.00] put % Green                               
+             cmap 3  [0.00 0.00 1.00] put % Blue                                
+             cmap 4  [1.00 1.00 0.00] put % Yellow                              
+             cmap 5  [0.00 1.00 1.00] put % Sky Blue                            
+             cmap 6  [1.00 0.00 1.00] put % Magenta      
+             cmap 7  [0.00 0.00 0.00] put % Black not white                     
+            /K { dup /CurrColor exch def % save current color
+                 cmap exch get dup dup % define XTAL color command              
+                 0 get /RED   exch store                                        
+                 1 get /GREEN exch store                                        
+                 2 get /BLUE  exch store                                        
+                 RED GREEN BLUE setrgbcolor                                     
+               } bind def }                                                     
+           { /K {  pop }  def }        % define XTAL color as black&w           
+           ifelse                                                               
+        clippath pathbbox  N           % get printable page                     
+        /URY exch def /URX exch def /LLY exch def /LLX exch def                 
+        end                                                                     
+        } def    % End of document and dictionary definitions                   
+                                                                                
+/BEGINPAGE {                                                                    
+        XtalDict begin                                                          
+        3.86 setmiterlimit                                                      
+        /landscape exch 90 eq def      %  remove angle from stack               
+        landscape {90 rotate  0 exch neg translate  pop }                       
+                  {pop pop}                                                     
+                  ifelse                                                        
+        LLX LLY translate            %  translate to clipping origin          
+        URX LLX sub URY LLY sub div  %  clipping path aspect ratio
+        paperwidth paperheight div ge %  page aspect ratio ge clip path ratio?
+        {URY LLY sub paperheight div dup} %  scale y vals to clipping area    
+        {URX LLX sub paperwidth  div dup} %  scale x vals to clipping area     
+        ifelse scale                 % scale page to fit in clipping region    
+        scale                        % apply PLOTX xscale and yscale from stack
+        /orgmatrix matrix def                                                   
+        gsave                                                                   
+        } def                                                                   
+/ENDPAGE {                                                                      
+       grestore                                                                 
+        end                % end of XtalDict                                    
+        showpage                                                                
+        restore                                                                 
+        } def                                                                   
+%                                                                               
+%%EndProlog                                                                     

@@ -1,0 +1,54 @@
+#! /bin/csh -f
+
+set noglob
+
+if (! -e divide.aaa || ! -e squared.dat || ! -e fips_boostr) then
+cat << EOT
+  This script helps you to find the optimal BOOSTR for the
+  Xtal DIVIDE module (written by M.A. Estermann).
+  You have to prepare the Xtal master file "divide.aaa" by
+  running STARTX, ADDREF, SORTRF, GENEV, and finally DIVIDE 
+  with the keyword "DIVFMU". The second file you need is
+  named "squared.dat", which has to contain a few - say 6 -
+  cycles of calls to FOURR - SHAPE - RFOURR - DIVIDE.
+  The COMPID in all input files has to be "ZAP".
+  The third file needed is "fips_boostr", which is simply a list
+  of the BOOSTR trial values.
+  The output is three numbers per tested BOOSTR:
+  BOOSTR, the number of the cycle with best 'AVE OV - AVE NOV',
+  and the corresponding best (smallest) value.
+EOT
+  exit 1
+endif
+
+set tA = /tmp/tmp$$A
+set tB = /tmp/tmp$$B
+
+onintr CLEAN
+
+set   TRIALS = (`sed 's/#.*//' fips_boostr`)
+if ($#TRIALS == 0) then
+  echo 'ERROR: Cannot find BOOSTR trial values in file "fips_boostr".'
+  exit 1
+endif
+
+foreach boostr ($TRIALS)
+  sed 's/^BOOSTR .*/BOOSTR '"$boostr"'/' squared.dat > $tA.dat
+  cp divide.aaa zap.aaa
+  xtal $tA
+  grep '[0-9] NEW$' $tA.lst > $tB
+  echo -n $boostr" "
+  grep -n NEW $tB | sort +1n | head -1 | tr -s ":NEW " "     "
+  unset noglob
+  rm zap.???
+  set noglob
+end
+
+CLEAN:
+
+rm -f $tA.dat $tA.lst $tB
+unset noglob
+(rm -f zap.???) >& /dev/null
+set noglob
+
+exit 0

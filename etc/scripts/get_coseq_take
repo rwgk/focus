@@ -1,0 +1,17 @@
+#! /bin/csh -f
+
+set progn = $0
+set progn = $progn:t
+
+if      ($#argv == 2) then
+  set Intro = F
+else if ($#argv == 3) then
+  set Intro = "$3"
+else
+  echo 'usage: '${progn}' focus-log-file section-take-file [Intro]'
+  exit 1
+endif
+
+section -blockno="${Intro}%4.4d" $1 coseq -take=$2 | cut -d" " -f1,3- | coseq_reduce
+
+exit 0

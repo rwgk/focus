@@ -1,0 +1,22 @@
+#! /bin/csh -f
+
+set noglob
+
+set delimiter='------------------------------------------------------------------------'
+
+foreach f ($*)
+  set ti = (`head -4 $f | tail -1 | cut -c8-`)
+  set rf = (`head -3 $f | tail -1 | cut -c10-`)
+  set sg = (`grep "SPGR =" $f | cut -c60-`)
+  set uc = (`head -2 $f`)
+  set uc = (`echo "$uc" | cut -d" " -f-6`)
+  echo '*'"$f:r"
+  echo "$ti"
+  echo "$rf"
+  echo "$sg"
+  echo " "$uc
+  tail +5 $f | cut -c6-40
+  echo ${delimiter}
+end
+
+exit 0

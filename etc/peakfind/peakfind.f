@@ -1,0 +1,3819 @@
+
+C
+C
+C        GENERAL PURPOSE X-RAY POWDER DIFFRACTION PROGRAM
+C        ================================================
+C
+C
+C
+C                             MF634A0
+C
+C
+C              THIS PROGRAM HAS BEEN WRITTEN TO HANDLE DIGITAL DATA
+C              FROM AN X-RAY POWDER DIFFRACTOMETER.
+C              THE DATA INPUT IS EITHER FROM PAPER TAPE, WHICH IS FIRST
+C              CONVERTED TO CARD IMAGES AND STORED ON MAGNETIC TAPE BY
+C              THE PROGRAM APTTR2A, OR FROM CARDS. BOTH FORMS OF INPUT
+C              CAN BE USED IN THE SAME JOB.
+C              THE PROGRAM HAS MANY FUNCTIONS. THESE ARE CONTROLLED
+C              BY A SERIES OF KEYWORDS AND KEY VALUES THAT PRECEED THE
+C              DIGITAL DATA.
+C
+C
+C              FLOW DIAGRAM FOR SUBROUTINES
+C              ============================
+C
+C  ******** ********
+C  *      * *      *************************************************
+C  * MAIN *** RDPT *    *       *        *       *        *        *
+C  *      * *      * ******* ******* ******** ******** *******   ******
+C  ******** ******** *IDENT* *IWORD* *KEYNUM* *RDDATA* *CHECK*   *LOGS*
+C       *       *    ******* ******* ******** ******** *******   ******
+C       *       *
+C       *       ************************************************
+C       *       *      *      *       *        *        *      *
+C       *       *    ***** ******* ******** ******** ******* *******
+C       *       *    *SUM* *BUNCH* *SMOOTH* *INTEGR* *HALFW* *RATIO*
+C       *       *    ***** ******* ******** ******** ******* *******
+C       *       *
+C       *       *    ******* ***** ****** ******
+C       *       ******PEAKS***DAP***TEST***BASE*
+C       *            ******* ***** ****** ******
+C       *
+C       *   *********
+C       *   *       ********************************
+C       ***** DCONV *      *                *      *
+C           *       *  ********* ******* ******* *****
+C           *********  *PREPAR * *SNCAL* *BISRT* *FFT*
+C                  *   ********* ******* ******* *****
+C                  *
+C                  ***************
+C                         *      *
+C                      ****** ******* ********
+C                      *CDDF* *CYCLE***REPORT*
+C                      ****** ******* ********
+C
+C
+C              THE FOLLOWING CALCOMP ROUTINES ARE ALSO USED :-
+C              PLOTS  PLOT  SYMBOL  AXIS  NUMBER  PLOT99
+C
+C
+C              THE FOLLOWING DATA SETS ARE USED :-
+C              5    CARD INPUT
+C              6    LINE PRINTER OUTPUT
+C              7    CARD PUNCH OUTPUT
+C              8    DATE (MSYS.DATELIB)
+C              9    MAGNETIC TAPE HOLDING TRANSLATION OF THE PAPER TAPE
+C              10   TEMPORARY FILE FOR STORING DATA
+C              15   FILE TO USE WITH THE INDEXING PROGRAM TREOR
+C              20)
+C              21)  LINE PRINTERS FOR OUTPUT FROM SUBROUTINE REPORT
+C              22)
+C              23)
+C
+C***********************************************************************
+C
+C
+C***********************************************************************
+C
+C              COMMON AREAS USED THROUGHOUT THE PROGRAM
+C
+C              NAME   SIZE(BYTES)  USE
+C
+C              D      16K          THE DIGITAL SCAN DATA IS HELD HERE
+C              ARITH  16K          USED AS A GENERAL WORK AREA
+C              INFO   612          GENERAL INFORMATION ON IS STORED HERE
+C                                  MAINLY FOR USE IN THE DECONVOLUTION
+C                                  SECTION OF THE PROGRAM
+C                                  NATSTO    THE NUMBER OF DATA POINTS
+C                                            STORED FOR EACH REF LINE
+C                                  STPSTO    THE STEPSIZE FOR EACH OF
+C                                            THE STORED REF LINES
+C                                  DASTO   INTEGRATED AREA OF THE STORED
+C                                          REF PEAKS
+C                                  PSTO    POSITION (DEG 2THETA) OF THE
+C                                          STORED REF PEAKS
+C                                  IRESLT )
+C                                  IHKL   )INFORMATION FOR REPORT.
+C                                  IPHASE )
+C
+C                                  IPKAR     AREA OF THE CURRENT PEAK
+C                                  NREF    NO OF REF LINE FOR CURRENT PK
+C                                  NPTSS   THE NUMBER OF DATA POINTS
+C                                          STORES ON FILE
+C                                  NPR     THE DEVICE NO OF THE FIRST OF
+C                                          L LINR PRINTERS FOR REPORT
+C                                          OUTPUT (NEGATIVE BEFORE FIRST
+C                                          OUTPUT)
+C                                  WIDE    THE WIDTH OF THE STORED REF
+C                                          PEAKS
+C                                  THETA2  THE POSITION (DEG 2THETA) OF
+C                                          THE CURRENT PEAK
+C              A      76           TITLE   THE TITLE OF THE CURRENT
+C                                          SAMPLE
+C                                  XL      THE LENGTH OF THE CURRENT
+C                                          PLOT IN INCHES
+C                                  PPI     THE NUMBER OF POINTS BEING
+C                                          PLOTTED PER INCH
+C              DATA   32           IDATE   HOLDS THE DATE
+C                                          (SEE SUBROUTINE IDENT)
+C              PEEKS  1204         PEAK POSITIONS AND INTENSITIES FROM
+C                                  THE PEAK FINDING ROUTINE.
+C                                  ID      PK POSITIONS (1000/D)
+C                                  INTR    RELATIVE INTENSITIES (1-100)
+C                                  NPEAKS  THE NUMBER OF PEAKS
+C              POS)                USED BY THE PEAK FINDING ROUTINE
+C              T  )
+C              X  )
+C
+C***********************************************************************
+C
+C
+C
+C TEMP..
+c     CHARACTER*10 KNAME,LNAME
+c     DOUBLE PRECISION NAME,NNAME(100),INAME,MNAME,KNAMEZ,LNAMEZ
+      INTEGER TITLE,DATA,DATE(8)
+      integer ndat
+      parameter(ndat = 32768)
+      integer ndat2
+      parameter(ndat2 = 16384)
+      COMMON /ARITH / REF(ndat2),SAMP(ndat2)
+      COMMON /D     / DATA(ndat)
+      COMMON /A     / TITLE(20),XL,PPI,IFILE
+      COMMON /INFO  / NPTSTO(10),STPSTO(10),IASTO(10),PSTO(10),IRESLT(70
+     +),IHKL(4),IPHASE(24),IPKAR,NREF,NPTSS,NPR,WIDE(10),THETA2,IDIS
+        COMMON/DEVICE/IPLOUT
+C
+C              NPR IS THE FIRST OF FOUR LINEPRINTERS FOR REPORT OUTPUT,
+C              IT IS INITIALLY SET NEGATIVE AND RESET FIRST TIME THROUGH
+C              REPORT
+C
+C              DATA CONTAINS RAW DATA FROM PAPER TAPE
+C              REF CONTAINS THE INSTRUMENT LINE
+C              SAMP CONTAINS THE OBSERVED LINE
+C
+C
+C*************************************************
+C              INPUT-OUTPUT DEVICE NUMBERS.
+C              LRPRNT IS THE DEVICE NO. OF THE LINE PRINTER
+C              ID IS REFERENCE NUMBER OF THE DISK FILE
+C              CONTAINING THE REFERENCE LINE
+      DATA LRPRNT/23/,IN/5/,KOUNT/0/,ID/27/,IT/40/,IF/20/
+C
+C            NPTSTO IS CLEARED TO SHOW THAT NO PEAKS ARE STORED
+      DO 110 J=1,10
+110     NPTSTO(J)=0
+      NPTSS=0
+C
+      NPR=-20
+C
+C
+C
+C
+C              INITIALISE X-COORDINATE PLOTTING VARIABLE
+C              SETS UP A PLOTTING BUFFER
+      XL=0.0
+C      CALL PLOTS (0)
+C
+C
+C
+  120 CALL RDPT (IEND,MIN1,JK,STEPS,POSIT,LRPRNT,IN,ID,DATE)
+C
+C
+C              IEND IS AN END OF DATA MARKER.
+C              MIN1 IS THE FIRST MINIMUM POINT IN THE DATA.
+C              JK IS THE NUMBER OF DATA POINTS BETWEEN MINIMUM POINTS.
+C              STEPS IS THE NUMBER OF STEPS THAT THE MOTOR MOVES
+C              DURING THE COUNTING INTERVAL.
+C              POSIT IS THE POSITION OF THE PEAK IN DEGREES THETA, IT
+C              IS USED TO CALCULATE MEAN CRYSTALLITE SIZE IN
+C              SUBROUTINE CYCLE.
+C
+C
+C              IEND NOT EQUAL 0 MEANS END OF DATA SET FOUND
+      IF(IEND.NE.0) GO TO 130
+C
+      CALL DCONV (MIN1,JK,STEPS,LRPRNT,ID,POSIT,DATE)
+      GO TO 120
+C
+C
+C
+C              SUBROUTINE PLOT99 PRODUCES THE "END OF PLOT" MESSAGE AND
+C              THE "TAPE CAN BE PLOTTED" MESSAGE WHICH TELLS THE
+C              OPERATORS THAT THE PLOT HAS BEEN SUCCESSFUL.
+C
+130     CONTINUE
+C130    CALL PLOT (XL,-11.0,-3)
+c       WRITE(23,1)MNAME
+c1      FORMAT(X,'NEW NAME IS ',A10)
+C       CALL PLOT99 (72.0)
+        IPLOUT=24
+C       CALL NAMCHG (MNAME)
+C       CALL MCLOSE (27,NAME,NNAME,NREN,NDISP,5,0)
+        DO 135 I=20,25
+135     CLOSE(UNIT=I)
+      STOP
+      END
+      SUBROUTINE ACCESS (IACC,IN,IW,ICD,MAGTPE,NPTSS,RTITLE)
+      INTEGER TITLE(14),ATITLE(14),AT1,AT2,AT3,AT4,SAMP,REF,RTITLE(14)
+      EQUIVALENCE (TITLE(1),IT1),(TITLE(2),IT2),(TITLE(3),IT3),(TITLE(4)
+     +,IT4),(ATITLE(1),AT1),(ATITLE(2),AT2),(ATITLE(3),AT3),(ATITLE(4),A
+     +T4)
+        DATA SAMP/'SAMP'/,REF/'REF'/
+C              READ TITLE LINE OF DATA TO BE LOCATED
+      READ(IN,10,END=90) ATITLE
+   10 FORMAT(20A4)
+      IF(AT1.NE.SAMP.AND.AT1.NE.REF) GO TO 70
+      IN=MAGTPE
+   20 READ(MAGTPE,10,END=50) TITLE
+      IF(IT1.EQ.AT1.AND.IT2.EQ.AT2.AND.IT3.EQ.AT3.AND.IT4.EQ.AT4) GO TO
+     +30
+      GO TO 20
+C
+C              DATA FOUND
+   30 IACC=1
+      DO 40 J=1,14
+   40 RTITLE(J)=TITLE(J)
+      RETURN
+C
+C              DATA NOT LOCATED, END OF TAPE REACHED
+   50 WRITE(IW,60)
+   60 FORMAT(' ***DATA NOT LOCATED, TAPE REWOUND')
+      REWIND MAGTPE
+      IN=ICD
+      NPTSS=0
+      RETURN
+C
+C              WRONG ACCESS LINE
+   70 WRITE(IW,80)
+   80 FORMAT(' ***ACCESS LINE DOES NOT START WITH SAMPLE OR REF')
+      NPTSS=0
+      RETURN
+C
+C              END OF CARD DECK FOUND WHEN TRYING TO READ ACCESS LINE
+   90 WRITE(IW,100)
+  100 FORMAT(' ***WHERE IS THE ACCESS LINE CARD')
+      IACC=-1
+      RETURN
+C
+      END
+      SUBROUTINE BASEL (IO)
+C
+C              PART OF THE PEAK FINDING ROUTINE WRITTEN BY D ALEXANDER
+C
+      integer nbas
+      parameter(nbas = 2000)
+      INTEGER BAS(3,nbas),IVL
+      COMMON /X     / BAS,IVL,I0
+      IVL=IVL+1
+      BAS(1,IVL)=BAS(1,nbas)
+      BAS(2,IVL)=BAS(2,nbas)
+      BAS(3,IVL)=BAS(3,nbas)
+C     WRITE(6,5)BAS(1,IVL),BAS(2,IVL),BAS(3,IVL),IVL
+C 005 FORMAT(4I6)
+      K2=0
+      IC=1
+      KK1=0
+   10 J=1
+   20 KK2=KK1+J
+      BAS(1,KK2)=BAS(1,IC)
+      BAS(2,KK2)=BAS(2,IC)
+      BAS(3,KK2)=BAS(3,IC)
+      IF(J-1) 30,40,30
+   30 IF(BAS(3,IC)-1) 40,50,40
+   40 J=J+1
+      IC=IC+1
+      GO TO 20
+   50 K2=J
+   60 K1=1
+      I=2
+      I1=KK1+1
+      X1=BAS(1,I1)
+      Y1=BAS(2,I1)
+   70 I2=KK1+I
+      X2=BAS(1,I2)
+      Y2=BAS(2,I2)
+      IF(X2.EQ.X1) X2=X1+.1
+      GRAD1=(Y2-Y1)/(X2-X1)
+      IF(K2-2) 80,90,80
+   80 IF(J-2) 100,90,100
+   90 CONTINUE
+      KK1=KK1+1
+      IF(IVL-IC) 160,160,10
+  100 I3=I2+1
+      X3=BAS(1,I3)
+      Y3=BAS(2,I3)
+      IF(X3.LE.X2) X3=X2+.1
+      GRAD2=(Y3-Y2)/(X3-X2)
+      IF(GRAD2-GRAD1) 120,110,110
+C POSSIBLE BASE PT
+  110 K1=K1+1
+      I2=K1+KK1
+      BAS(1,I2)=X2
+      BAS(2,I2)=Y2
+      X1=X2
+      Y1=Y2
+  120 I=I+1
+      IF(K2-I-1) 130,70,70
+  130 K1=K1+1
+      I2=K1+KK1
+      BAS(1,I2)=X3
+      BAS(2,I2)=Y3
+      IF(K1-K2) 140,150,140
+  140 K2=K1
+      GO TO 60
+  150 KK1=KK1+K1-1
+      IF(IVL-IC) 160,160,10
+  160 IVL=KK1+1
+      RETURN
+      END
+      SUBROUTINE BISRT (A,M)
+C
+C
+C              SUBROUTINE BISRT IS USED TO SORT
+C              THE DATA INTO BIT REVERSED ORDER
+C              PRIOR TO DOING THE TRANSFORM.
+C
+      DIMENSION A(2050),K(12)
+      EQUIVALENCE (K(12),K1),(K(11),K2),(K(10),K3),(K(9),K4)
+      EQUIVALENCE (K(8),K5),(K(7),K6),(K(6),K7),(K(5),K8)
+      EQUIVALENCE (K(4),K9),(K(3),K10),(K(2),K11),(K(1),K12)
+      N=2**(M+1)
+      K(1)=N
+      DO 10 L=2,M
+   10 K(L)=K(L-1)/2
+      DO 20 L=M,11
+   20 K(L+1)=2
+      IJ=2
+      DO 40 J1=2,K1,2
+      DO 40 J2=J1,K2,K1
+      DO 40 J3=J2,K3,K2
+      DO 40 J4=J3,K4,K3
+      DO 40 J5=J4,K5,K4
+      DO 40 J6=J5,K6,K5
+      DO 40 J7=J6,K7,K6
+      DO 40 J8=J7,K8,K7
+      DO 40 J9=J8,K9,K8
+      DO 40 J10=J9,K10,K9
+      DO 40 J11=J10,K11,K10
+      DO 40 JI=J11,K12,K11
+      IF(IJ-JI) 30,40,40
+   30 T=A(IJ-1)
+      A(IJ-1)=A(JI-1)
+      A(JI-1)=T
+      T=A(IJ)
+      A(IJ)=A(JI)
+      A(JI)=T
+   40 IJ=IJ+2
+      RETURN
+      END
+      SUBROUTINE BUNCH (NPTS,NBUN,STEPS)
+C
+C              SUBROUTINE TO BUNCH DATA IN UNITS OF NBUN
+C
+      INTEGER DATA
+      integer ndat
+      parameter(ndat = 32768)
+      COMMON /D     / DATA(ndat)
+      NPTS=NPTS/NBUN
+      STEPS=STEPS*NBUN
+      L=0
+      DO 20 J=1,NPTS
+      ISUM=0
+      DO 10 K=1,NBUN
+      L=L+1
+   10 ISUM=ISUM+DATA(L)
+   20 DATA(J)=ISUM
+      LP=23
+      WRITE(LP,30) NBUN,(DATA(J),J=1,NPTS)
+   30 FORMAT(///' DATA BUNCHED BY A FACTOR OF',I3/(8I8))
+      RETURN
+      END
+      SUBROUTINE CDDF (JJ,LP)
+C
+C
+C              SUBROUTINE TO DIVIDE THE SAMPLE FOURIER COEFFICIENTS BY
+C              THOSE OF THE REFERENCE LINE
+C
+C
+      integer ndat2
+      parameter(ndat2 = 16384)
+      COMMON /ARITH / REF(ndat2),SAMP(ndat2)
+      COMMON/FDIS  / FCSCAL,LAST,AA(50)
+      J2=JJ/2+2
+      JL=(J2*9)/10
+      JL=(JL/2)*2
+      SMAX=0.0
+      DO 10 I=JL,J2,2
+      S=SAMP(I-1)*SAMP(I-1)+SAMP(I)*SAMP(I)
+      IF(S.GT.SMAX) SMAX=S
+   10 CONTINUE
+      TOL=SMAX*4.0
+      LAST=2
+C
+      DO 30 I=2,J2,2
+C
+C              ALWAYS PUT THE LAST VALUE TO ZERO TO AVOID A SINGLE ONE
+      IF(I.EQ.J2) GO TO 20
+C
+      Y=SAMP(I-1)*SAMP(I-1)+SAMP(I)*SAMP(I)
+      IF(Y.LT.TOL) GO TO 20
+C              IGNORE ALL VALUES AFTER A GIVEN NUMBER OF ZEROS (5).
+      IF(I.GT.LAST+10) GO TO 20
+      X=REF(I-1)*REF(I-1)+REF(I)*REF(I)
+      A=(SAMP(I-1)*REF(I-1)+SAMP(I)*REF(I))/X
+      B=(SAMP(I)*REF(I-1)-SAMP(I-1)*REF(I))/X
+      SAMP(I-1)=A
+      SAMP(I)=B
+      LLAST=LAST
+      LAST=I
+      GO TO 30
+   20 SAMP(I-1) = 0.0
+      SAMP(I)=0.0
+C
+C              SINGLE NON ZERO VALUES ARE PUT TO ZERO
+      IF(I.LE.4) GO TO 30
+      IF(SAMP(I-5).NE.0.0) GO TO 30
+      SAMP(I-2)=0.0
+      SAMP(I-3)=0.0
+C              STORE THE POSITION OF THE LAST NON ZERO VALUE
+C              PICK UP THE POSITION OF THE PREVIOUS NON ZERO VALUE
+      LAST=LLAST
+C
+C
+   30 CONTINUE
+      WRITE(LP,40) (SAMP(J),J=1,LAST)
+   40 FORMAT(' FOURIER COEFFICIENTS'/(4E12.4))
+      JL=J2+2
+      JK=J2-2
+      DO 50 I=JL,JJ,2
+      SAMP(I)=-SAMP(JK)
+      SAMP(I-1)=SAMP(JK-1)
+   50 JK=JK-2
+C
+C
+      RETURN
+      END
+      SUBROUTINE CHECK (NPTS,IW)
+C
+C              SUBROUTINE TO CHECK FOR SPURIOUS DATA POINTS
+C
+      INTEGER DATA,DELTA,DEL,RM
+      integer ndat
+      parameter(ndat = 32768)
+      COMMON /D     / DATA(ndat)
+      DO 20 J=4,NPTS
+      MEAN=(DATA(J)+DATA(J-2))/2
+      DELTA=IABS(DATA(J)-DATA(J-2))
+      DEL=IABS(DATA(J-1)-MEAN)
+      AMEAN=MEAN
+      RM=5.0*SQRT(AMEAN)
+      IF(DEL.LT.2*DELTA) GO TO 20
+      IF(DEL.LT.RM) GO TO 20
+      IF(DEL.LT.(IABS(DATA(J-2)-DATA(J-3))*2)) GO TO 20
+      K=J-1
+C      WRITE(IW,10) K
+C   10 FORMAT(30('*')//' DATA ERROR CORRECTED AT POINT',I4//30('*'))
+      DATA(J-1)=MEAN
+   20 CONTINUE
+      RETURN
+      END
+      SUBROUTINE CYCLE (JJ,STEPS,XMULT,POSIT,LP,IDIS,DATE)
+C
+C
+C              SUBROUTINE CYCLE CYCLES THE DECONVOLUTED
+C              LINE DATA SO THAT THE PEAK IS AT THE
+C              CENTRE. THIS SIMPLIFIES THE MEASUREMENT
+C              OF THE HALF-WIDTH AND CLARIFIES THE
+C              PLOTTED OUTPUT.
+C
+C
+      INTEGER DATE(8)
+      integer ndat2
+      parameter(ndat2 = 16384)
+      COMMON /ARITH / REF(ndat2),SAMP(ndat2)
+      COMMON /A     / TITLE(20),XL,PPI,IFILE
+C      COMMON /A     / TITLE(14),XL,PPI
+      COMMON/FDIS  / FCSCAL,LAST,AB(50)
+      DIMENSION LIT(4),IANNO(4)
+      DIMENSION X(ndat2),Y(ndat2)
+      EQUIVALENCE (Y(1),SAMP(1)),(X(1),REF(1))
+      DATA IANNO/' DEG','REES','2THE','A   '/
+      DATA LIT/'DECO','VOLU','EDPE','AK  '/,IBL/'    '/
+      YMAX=0.0
+      NPTS=0.0
+      NPTS=0
+C              FOR CONVENIANCE,SET UP A REAL ONLY ARRAY , USING
+C              REF WHICH IS NOT NOW NEEDED
+      DO 10 I=1,JJ,2
+      NPTS=NPTS+1
+   10 REF(NPTS)=SAMP(I)
+      IPOS=0
+C              NOW FIND MAXIMUM AND ITS LOCATION
+      DO 20 I=1,NPTS
+      IF(REF(I).LE.YMAX) GO TO 20
+      YMAX=REF(I)
+      IPOS=I
+   20 CONTINUE
+      J=NPTS/2
+      IJ=NPTS
+      NPOS=IPOS
+C              NOW DO CYCLIC SHIFT SO THAT THE MAXIMUM IS IN THE
+C              MIDDLE OF THE NEW ARRAY Y
+      DO 40 II=1,2
+      DO 30 I=J,IJ
+      Y(I)=REF(IPOS)
+      IPOS=IPOS+1
+      IF(IPOS.GT.NPTS) IPOS=1
+   30 CONTINUE
+      IJ=J-1
+      J=1
+   40 CONTINUE
+C
+C              FIND THE BASE LINE
+      SUM=0.0
+      K=NPTS/20
+      DO 50 J=1,K
+   50 SUM=SUM+Y(J)
+      JK=NPTS-K+1
+      DO 60 J=JK,NPTS
+   60 SUM=SUM+Y(J)
+      SUM=SUM/(K+K)
+      HALF=(YMAX-SUM)/2.0+SUM
+C
+C
+C              NOW FIND HALF-WIDTH
+C
+      I=NPTS/2
+   70 I=I-1
+      IF(Y(I).GE.HALF) GO TO 70
+      XLHS=I+(HALF-Y(I))/(Y(I+1)-Y(I))
+C
+      I=NPTS/2
+   80 I=I+1
+      IF(Y(I).GE.HALF) GO TO 80
+      RHS=I-(HALF-Y(I))/(Y(I-1)-Y(I))
+C
+      WIDE=RHS-XLHS
+      THETA2=WIDE*STEPS/1000.0
+C              WIDE IS HALF-WIDTH IN SAMPLES
+C              THETA2 IS HALF-WIDTH IN DEGREES
+      MAX=YMAX*XMULT+0.5
+      FACT=1.0
+      XLAND=1.5403
+      BETA=THETA2*3.14159/180.0
+      CRYST=(FACT*XLAND)/(BETA*COS(POSIT*3.14159/180.0))
+C
+C
+      WRITE(LP,90)
+   90 FORMAT(' DECONVOLUTED PEAK'/)
+      WRITE(LP,100) THETA2
+  100 FORMAT(' HALF HEIGHT WIDTH (DEGREES 2 THETA)=',F10.3/)
+      WRITE(LP,110) CRYST
+  110 FORMAT(' MEAN CRYSTALLITE SIZE (ANGSTROMS)  =',F10.2/)
+C
+C
+      CALL REPORT (TITLE,CRYST,POSIT,LP,DATE)
+C
+      IF(IDIS.EQ.1) CALL DIST (TITLE,CRYST,POSIT,LP,DATE)
+C
+C
+C              PLOTTING SECTION NOW FOLLOWS
+C
+C      CALL PLOT (0.0,0.0,-3)
+      YMIN=10000.0
+      DO 120 IK=1,NPTS
+      IF(Y(IK).LT.YMIN) YMIN=Y(IK)
+  120 CONTINUE
+      FAC=(YMAX-YMIN)/10.0
+      IPEN=3
+      DO 130 I=1,NPTS
+      XPOS=FLOAT(I-1)/PPI
+      YPOS=(Y(I)-YMIN)/FAC
+C      CALL PLOT (XPOS,YPOS,IPEN)
+  130 IPEN=2
+C      CALL SYMBOL (-0.25,0.0,0.14,LIT,90.0,25)
+      XX=XLHS/PPI
+      YY=(HALF-YMIN)/FAC
+C              MOVE WITH PEN UP TO START OF HALF-WIDTH LINE
+C      CALL PLOT (XX,YY,3)
+      XX=RHS/PPI
+C              DRAW HALF-WIDTH LINE
+C      CALL PLOT (XX,YY,2)
+C              NOW ANNOTATE LINE WITH ITS VALUE
+C      CALL SYMBOL (XX,YY,0.14,IBL,0.0,2)
+      XX=XX+0.3
+C      CALL NUMBER (XX,YY,0.14,THETA2,0.0,3)
+      XX=XX+0.85
+C      CALL SYMBOL (XX,YY,0.14,IANNO,0.0,20)
+C              PRINT THE AVERAGE CRYSTALLITE SIZE
+C
+      XX=RHS/PPI+0.5
+      YY=YY-0.25
+C      CALL NUMBER (XX,YY,0.14,CRYST,0.0,-1)
+      XX=XX+0.7
+C      CALL SYMBOL (XX,YY,0.14,9H ANGSTROM,0.0,9)
+C
+C              NOW RESET ORIGIN
+      IXL=NPTS/IFIX(PPI)+4
+      XL=IXL
+C      CALL PLOT (XL,0.0,-3)
+      XL=0.0
+      RETURN
+      END
+      SUBROUTINE DAP (IO,NP0,NPTL,IPAR,DEGR)
+C
+C              PART OF THE PEAK FINDING ROUTINE WRITTEN BY D ALEXANDER
+C
+      INTEGER IPAR(10)
+      INTEGER STH,STH1,STH2,BFLG
+      INTEGER IL2,NPTL,F,FF,IC3,FD
+c     INTEGER Y,O1,OO1,O2,IB,ILB,IB1,NB,L,N,L1,I,J,K,K1
+      INTEGER Y,O1,OO1,O2,IB,ILB,IB1,NB,L,N,L1,I,J
+      integer nbas
+      parameter(nbas = 2000)
+      INTEGER P3,P4,P5,P6,BAS(3,nbas)
+      INTEGER DATA
+      integer ndat
+      parameter(ndat = 32768)
+      COMMON /D     / DATA(ndat)
+      DIMENSION DEL1(4),DEL2(4)
+      COMMON /MATHS / C1(ndat),C2(ndat)
+      COMMON /POS   /SPEC(150),ISPEC(3,150),C3(ndat)
+      COMMON /T     / O1,OO1,O2,O6,P6,Y6,TI1,TI2,L,N,I9,FF,F,FD,IB1,STP,
+     +STH,BFLG,C12,O4,O5,P4,P5,Y4,Y5,DEL1,DEL2,IBF,IB,SF,SB,NPC,LZ,ISP(1
+     +50)
+      COMMON /X     / BAS,IVL,I2
+      NPTS=NPTL
+      IF(NPTS.GT.ndat) NPTS=ndat
+      TI1=3.28
+C              IPAR(2)  PERCENT CHANGE IN TI1
+      IF(IPAR(2).NE.0) TI1=3.28+0.0328*FLOAT(IPAR(2))
+      TI2=1.
+C              IPAR(1) .NE. 0 TO SET TI2 TO 0
+      IF(IPAR(1).NE.0) TI2=0.0
+      TI3=2.0
+      NB=4
+      I2=4
+      IB2=1
+      I9=5
+      TI3=(TI3*.488)**(2.)
+      I2=I2+1
+      IB2=IB2-2
+      IB1=0
+C RETURN TO HERE IF BASE OVERFLOW
+   10 CONTINUE
+C SPECTRUM ZEROING
+      DO 20 N=1,150
+      SPEC(N)=0.0
+      ISP(N)=0
+      DO 20 I=1,3
+      ISPEC(I,N)=0
+   20 CONTINUE
+      NP0=0
+      NPC=0
+C NEW BRACKET RUN
+   30 IB1=IB1+1
+      IBF=1
+      IF(IB1.GT.NB) GO TO 710
+   40 Y=1
+      OO1=0
+      O2=0
+      O5=0.0
+      O6=0.0
+      Y5=1.E-14
+      Y6=Y5
+      P5=0
+      P6=0
+      F=0
+      FF=0
+      IB=2**(IB1+IB2)
+      ILB=2*IB
+      IBF1=(NPTS-4)/(IB*64)
+      IF(IB1.LT.I2) IVL=1
+C
+C              BUNCH DATA AND DERRIVATIVES BUT NOT FIRST TIME ROUND
+      IF(IB1.EQ.1) GO TO 60
+C
+      JK=1
+      NPTS=NPTS/2
+      DO 50 J=1,NPTS
+      DATA(J)=DATA(JK)+DATA(JK+1)
+   50 JK=JK+2
+   60 CONTINUE
+      DO 70 J=1,NPTS
+      C1(J)=0.0
+      C2(J)=0.0
+   70 C3(J)=0.0
+      IZI=NPTS-4
+      CMAX=0.0
+      DO 80 N=5,IZI
+      NP4=DATA(N+4)
+      NP3=DATA(N+3)
+      NP2=DATA(N+2)
+      NP1=DATA(N+1)
+      NP0=DATA(N)
+      NM4=DATA(N-4)
+      NM3=DATA(N-3)
+      NM2=DATA(N-2)
+      NM1=DATA(N-1)
+      B4=FLOAT(NP4+NM4)
+      B3=FLOAT(NP3+NM3)
+      B2=FLOAT(NP2+NM2)
+      B1=FLOAT(NP1+NM1)
+      B0=FLOAT(NP0)
+      A4=FLOAT(NP4-NM4)
+      A3=FLOAT(NP3-NM3)
+      A2=FLOAT(NP2-NM2)
+      A1=FLOAT(NP1-NM1)
+C      I=N-4
+      I=N
+      C1(I)=(1.16*B4+14.9*B3+92.54*B2+276.84*B1+398.9*B0)/1170.
+      C2(I)=(3.95*A4+38.21*A3+158.2*A2+236.6*A1)/1368.9
+      C3(I)=(12.35*B4+83.07*B3+177.87*B2-74.61*B1-398.9*B0)/1602.
+      IF(C1(I).GT.CMAX)CMAX=C1(I)
+   80 CONTINUE
+C     WRITE(6,4000) (C1(I),C2(I),C3(I),I=1,NPTS)
+C4000 FORMAT(' C1, C2, C3 '/(12F10.2) )
+      DO 90 J=1,4
+   90 C1(J)=C1(5)+(5-J)/2
+      BAS(2,1)=C1(5)
+      A1=6.1
+      B1=BAS(2,1)
+      STP1=A1
+      STP2=A1
+      STH1=B1
+      STH2=B1
+      BAS(1,1)=1
+      BAS(3,1)=1
+      BAS(2,nbas)=C1(NPTS-4)
+      BAS(1,nbas)=NPTS-4
+      BAS(3,nbas)=1
+  100 CONTINUE
+      L=1
+      IL2=0
+      NVC=NPTS-1
+      N=0
+  110 N=N+1
+      IF(N-NVC) 130,130,120
+  120 GO TO 670
+  130 CONTINUE
+      CP2=C2(N)
+      CP3=C3(N)
+      GO TO (140,140,200,260,340) , Y
+  140 IF(CP2) 150,180,180
+  150 IF(CP3) 160,170,170
+  160 Y=4
+      O1=7
+      GO TO 400
+  170 Y=5
+      O1=1
+      GO TO 400
+  180 IF(CP3) 190,570,570
+  190 Y=3
+      O1=0
+      GO TO 400
+  200 IF(CP2) 210,240,240
+  210 IF(CP3) 220,230,230
+  220 Y=4
+      O1=8
+      GO TO 400
+  230 Y=5
+      O1=2
+      GO TO 400
+  240 IF(CP3) 570,250,250
+  250 Y=2
+      O1=5
+      GO TO 400
+  260 IF(CP2) 300,270,270
+  270 IF(CP3) 280,290,290
+  280 Y=3
+      O1=3
+      GO TO 400
+  290 Y=2
+      O1=9
+      GO TO 400
+  300 IF(CP3) 570,310,310
+  310 CONTINUE
+      IF(Y-4) 330,320,330
+  320 IF(F.EQ.0) F=1
+  330 IF(IB1.LT.I2) FF=1
+      Y=5
+      O1=-1
+      GO TO 400
+  340 IF(CP2) 380,350,350
+  350 IF(CP3) 360,370,370
+  360 Y=3
+      O1=4
+      GO TO 400
+  370 Y=2
+      O1=10
+      GO TO 400
+  380 IF(CP3) 390,570,570
+  390 Y=4
+      O1=6
+  400 CONTINUE
+C     WRITE(6,4001)N,CP2,CP3,Y,O1
+C4001 FORMAT(' ',I5,2F10.2,I2,I3)
+      IF(CP3.LT.0.) GO TO 420
+      STH2=STH1
+      STP2=STP1
+      STH1=C1(N)
+  410 STP1=((IBF-1)*64+N)*IB-IB/2
+  420 CONTINUE
+      IF((IB1.GE.I2).AND.((O2.EQ.3).OR.(O2.EQ.4))) GO TO 460
+      IF((IB1.GE.I2).AND.(O2.GT.8)) GO TO 460
+      A1=STP1
+      B1=STH1
+      IF(O1.GT.5) GO TO 430
+      A1=STP2
+      B1=STH2
+  430 CONTINUE
+      IF(O2.LT.2) GO TO 460
+      CALL TEST (IL2,IO,CMAX,DEGR)
+C              CHECH FOR OVERFLOW OF BASE ARRAY
+      IF(IVL.LT. nbas - 5) GO TO 460
+      WRITE(IO,440) NPTS,C1(N),N,IB
+  440 FORMAT(I10,F10.3,2I10)
+      WRITE(IO,450)
+  450 FORMAT(' BASE ARRAY OVERFLOW')
+      GO TO 10
+C CYCLE CHANGE
+  460 IF(OO1.EQ.8) GO TO 500
+      IF(OO1.EQ.3) GO TO 470
+      IF((OO1.EQ.1).OR.(OO1.EQ.4).OR.(OO1.EQ.9)) GO TO 480
+      O3=O4
+      Y3=Y4
+      P3=P4
+      O4=O5
+      Y4=Y5
+      P4=P5
+      GO TO 490
+  470 O3=0.0
+      O4=0.0
+      Y3=1.E-14
+      Y4=Y3
+      P3=1
+      P4=1
+      GO TO 490
+  480 O3=O5
+      Y3=Y5
+      P3=P5
+      O4=0.0
+      Y4=1.E-14
+      P4=1
+  490 O5=O6
+      Y5=Y6
+      P5=P6
+      GO TO 510
+  500 O5=O5+O6
+      Y5=Y5+Y6
+      P5=P5+P6
+  510 O6=0.0
+      Y6=1.E-14
+      P6=0
+      L=L1
+      L1=N
+      O2=OO1
+      OO1=O1
+      STP=A2
+      A2=A1
+      STH=B2
+      B2=B1
+      DEL1(1)=DEL2(1)
+      DEL1(2)=DEL2(2)
+      DEL1(3)=DEL2(3)
+      DEL1(4)=DEL2(4)
+      I=1
+  520 I=I-1
+      IC2=3+I
+      IC3=N+I
+      IF(IC3.EQ.0) GO TO 530
+      DEL2(IC2)=C1(IC3)
+      IF(IC2-1) 550,550,520
+  530 IF(N.EQ.2) GO TO 540
+      DEL2(1)=C11
+      DEL2(2)=C12
+      GO TO 550
+  540 DEL2(1)=C12
+  550 IF(N.LT.64) DEL2(4)=C1(N+1)
+      IF(N.EQ.64) DEL2(4)=C13
+      DEL2(4)=C1(N+1)
+      IF(O1.EQ.8) SF=SLP1
+      IF(N.EQ.1) GO TO 560
+      IF(O2.EQ.8) SB=AMIN1(CP2,C2(N-1))
+      SLP1=CP2
+      IF(CP2.LT.C2(N-1)) SLP1=C2(N-1)
+      GO TO 570
+  560 SLP1=CP2
+      IF(CP2.LT.C22) SLP1=C22
+      IF(O2.EQ.8) SB=AMIN1(CP2,C22)
+  570 P6=P6+1
+      O6=O6+CP3
+      Y6=Y6+CP2
+C EXAMINE BASELINE TEST STATUS
+      IF(IB1.GE.I2) GO TO 110
+      IF((Y.NE.5).OR.(P6.NE.4)) GO TO 580
+      IF(F.NE.1) GO TO 110
+      F=2
+      GO TO 590
+  580 IF((F.NE.2).OR.(FD.NE.2)) GO TO 110
+  590 CONTINUE
+C FLATNESS TEST:RMS D2Y :SUM 4
+C     SUM=0.
+C     I=1
+C 600 I=I-1
+C     IF(I.EQ.-4) GO TO 660
+C     IC3=N+I
+C     SUM=SUM+C3(IC3)*C3(IC3)
+C     IF(IC3-1) 610,610,600
+C 610 IF(N-4) 620,660,660
+C 620 IF(N-2) 630,640,650
+C 630 SUM=SUM+C30*C30
+C 640 SUM=SUM+C31*C31
+C 650 SUM=SUM+C32*C32
+C VARIANCE ESTIMATED FROM LAST PT HT
+C 660 SUM=SUM/C1(N)
+C     WRITE(IO,777)SUM
+C 777 FORMAT(F10.3)
+C     IF(SUM.GT.TI3) GO TO 110
+C     IF(F.GT.0) F=3
+C     IF(FD.GT.0) FD=3
+      GO TO 110
+  670 CONTINUE
+C 900 GO TO 990
+  680 CONTINUE
+  690 CONTINUE
+      IBF=IBF-1
+C SWITCH TEST ROUTINE FOR BASELINE CORN AND FLUSH
+      IL2=2
+      CALL TEST (IL2,IO,CMAX,DEGR)
+      NP0=NPC
+  700 GO TO 30
+  710 RETURN
+      END
+      SUBROUTINE DCONV (MIN1,JK,STEPS,LRPRNT,ID,POSIT,DATE)
+C              THE PROGRAM IS USED TO CALCULATE MEAN
+C              CRYSTALLITE SIZE AFTER HAVING FOUND THE
+C              DECONVOLUTED HALF WIDTH. THE DECONVOLUTION,
+C              OR GETTING RID OF THE INSTRUMENT BROADENING,
+C              IS ACHIEVED BY THE FOURIER TRANSFORM OF THE
+C              SAMPLE BEING DIVIDED BY THE FOURIER
+C              TRANSORM OF THE REFERENCE
+C**********************************************************************
+        DOUBLE PRECISION NAME
+      integer ndat
+      parameter(ndat = 32768)
+      integer ndat2
+      parameter(ndat2 = 16384)
+      integer ndat22
+      parameter(ndat22 = 15)
+      INTEGER TWOM(ndat22),DATE(8)
+      INTEGER DATA,TITLE
+      DIMENSION S(256)
+      COMMON /ARITH / REF(ndat2),SAMP(ndat2)
+      COMMON /D     / DATA(ndat)
+      COMMON /A     / TITLE(20),XL,PPI,IFILE
+C      COMMON /A     / TITLE(14),XL,PPI,IFILE
+        COMMON/FILE  /JFILE
+      COMMON /INFO  / NPTSTO(10),STPSTO(10),IASTO(10),PSTO(10),IRESLT(70
+     +),IHKL(4),IPHASE(24),IPKAR,NREF,NPTSS,NPR,WIDE(10),THETA2,IDIS
+      COMMON/FDIS  / FCSCAL,LAST,AB(50)
+c     DATA TWOM/2,4,8,16,32,64,128,256,512,1024,2048/
+C              TWOM CONTAIN 2**1 TO 2**11
+      DATA KKEY1/'SAMP'/
+      DATA ALAM/1.5405/,PI/3.1416/
+        DATA IG/1/,NAME/'U01.DAT'/
+C
+      NSTO=8
+C
+C              SETS A NEW ORIGIN AFTER RAW DATA HAS BEEN PLOTTED
+C      CALL PLOT (XL,0.0,-3)
+      XL=0.
+C
+C              THIS LOOP FINDS WHICH POWER OF 2 THAT JK (THE NUMBER
+C              OF RAW DATA POINTS) IS BELOW
+C              THE FOURIER TRANSFORM PROGRAM REQUIRES THAT THE
+C              NUMBER OF DATA POINTS IS A POWER OF 2.
+C
+      twom(1) = 2
+      do 9 i = 2, ndat22
+        twom(i) = twom(i - 1) * 2
+9     continue
+
+      DO 10 I=1, ndat22 - 1
+      IF(JK.GT.TWOM(I)) GO TO 10
+      NPTS=TWOM(I)
+      M=I
+      GO TO 30
+   10 CONTINUE
+C
+      WRITE(LRPRNT,20)
+   20 FORMAT(//' ***TOO MANY DATA POINTS FOR DECONVOLUTION, THE MAXIMUM
+     +IS 1024')
+      RETURN
+C
+C
+C
+C
+C              JK IS DOUBLED BECAUSE THERE ARE JK REAL AND
+C              JK IMAGINARY NUMBERS
+C
+C              NOW FILL UP THE 1,3,5,7.ETC POINTS IN SAMP WITH JK RAW
+C              DATA POINTS,AND 2,4,6,8.ETC WITH ZEROES
+C              MIN1 IS FIRST MINIMUM POINT IN DATA
+C
+   30 J=JK+JK
+      I=MIN1+1
+      DO 40 K=1,J,2
+      SAMP(K)=DATA(I)
+      I=I+1
+   40 SAMP(K+1)=0.0
+C              NOW ZERO SAMP ARRAY UP TO NEXT POWER OF 2
+      I=J+1
+      J=NPTS+NPTS
+      DO 50 K=I,J
+   50 SAMP(K)=0.0
+      WRITE(LRPRNT,60) NREF
+   60 FORMAT(' REF PEAK NO.',I2/)
+      IF(NREF.GT.NSTO) GO TO 80
+C              FIRST 4K OF FILE USED TO STORE CURRENT DATA
+      IFILE=NREF*4-3+16
+C
+C              NOW TEST FOR INSTRUMENT OR OBSERVED
+        NUNIT=1
+        NACCES=2
+        NMODE=1
+        NDEV=1
+c       NREC=4096
+        NOUT=5
+        NERROR=0
+C       CALL MOPEN (NUNIT,NAME,NACCES,NMODE,NDEV,NREC,NOUT,NERROR)
+        JFILE=NREF
+        IF(TITLE(1).EQ.KKEY1) GO TO 70
+        WRITE(ID)  (SAMP(K),K=1,J,2)
+C       WRITE(5,121)  (SAMP(K),K=1,J,2)
+        POSIT2=POSIT*2.0
+C       WRITE(5,75) STEPS,J,IPKAR,POSIT2,THETA2
+C75     FORMAT(F10.4,2I7,F10.4,F10.4)
+        WRITE(IG, rec=JFILE) STEPS,J,IPKAR,POSIT2,THETA2
+C       CALL MCLOSE (NUNIT,NAME,NNAME,NREN,NDISP,NOUT,NERROR)
+        RETURN
+70      CONTINUE
+        READ(IG, rec=JFILE) STEPSS,J2,IPKARR,POST22,THET22
+        STPSTO(NREF)=STEPSS
+        NPTSTO(NREF)=J2
+        IASTO(NREF)=IPKARR
+        PSTO(NREF)=POST22
+        WIDE(NREF)=THET22
+C       WRITE(5,75) STEPSS,J2,IPKARR,POST22,THET22
+C       CALL MCLOSE(NUNIT,NAME,NNAME,NREN,NDISP,NOUT,NERROR)
+CC     C       READS IN NEXT SET OF DATA IF ANY
+C
+C
+      RSTEPS=STPSTO(NREF)
+      JJ=NPTSTO(NREF)
+      IF(JJ.NE.0) GO TO 100
+   80 WRITE(LRPRNT,90)
+   90 FORMAT(//' ***PEAK NO. TOO BIG OR PEAK NOT STORED***')
+      RETURN
+C
+C              CHECK WIDTH OF REF LINE AGAINST SAMPLE. NO POINT IN
+C              DECONVOLUTION IF THE REF IS BROADER THAN THE SAMPLE!!
+  100 IF(THETA2.GT.WIDE(NREF)) GO TO 120
+C       WRITE(5,105)THETA2,WIDE(NREF)
+C105    FORMAT(2(F10.3))
+      WRITE(LRPRNT,110)
+  110 FORMAT(' SAMPLE PEAK WIDER THAN REFERENCE PEAK,'/' NO DECONVOLUTIO
+     +N WILL BE DONE'/' CRYSTALLITE SIZE',' GREATER THAN 1000 ANGSTROMS'
+     +)
+      CALL REPORT (TITLE,9999.9,POSIT,LRPRNT,DATE)
+      RETURN
+C
+C
+  120 READ(ID) (REF(K),K=1,JJ,2)
+C       WRITE(5,121) (REF(K),K=1,JJ,2)
+C121    FORMAT(8F10.2)
+      DO 130 K=2,JJ,2
+C              ZERO IMAGINARY PART OF REFERENCE DATA
+  130 REF(K)=0.0
+C
+C              IN THE NEXT SECTION OF PROGRAM WE MAKE SURE THAT THE
+C              RANGE, THAT IS STEPS AND NO. POINTS , ARE EQUAL IN
+C              BOTH THE REFERENCE AND OBSERVED DATA
+C
+      IF(ABS(STEPS-RSTEPS).LE.0.01) GO TO 200
+      IF(STEPS-RSTEPS) 140,140,170
+  140 NCOM=RSTEPS/STEPS+0.1
+      IF(ABS((NCOM*STEPS)-RSTEPS).GT.0.1) GO TO 320
+C              SAMP ARRAY WILL BE COMBINED IN NCOM'S
+C              J CONTAINS NEW NO. POINTS IN SAMP
+      J=((J/2)/NCOM)*2
+      STEPS=RSTEPS
+      IK=1
+      DO 160 K=1,J,2
+      SUM=0.0
+      DO 150 KK=1,NCOM
+      SUM=SUM+SAMP(IK)
+  150 IK=IK+2
+  160 SAMP(K)=SUM
+      GO TO 200
+C
+  170 NCOM=STEPS/RSTEPS+0.1
+      IF(ABS((NCOM*RSTEPS)-STEPS).GT.0.1) GO TO 320
+C              IN THIS CASE TAKE EVERY NCOM'TH POINT IN REF ARRAY
+C              JJ IS NEW NO. POINTS IN REF ARRAY
+      JJ=((JJ/2)/NCOM)*2
+      RSTEPS=STEPS
+      IK=1
+      DO 190 K=1,JJ,2
+      SUM=0.0
+      DO 180 KK=1,NCOM
+      SUM=SUM+REF(IK)
+  180 IK=IK+2
+  190 REF(K)=SUM
+C              WE NOW HAVE EQUAL STEPPING INTERVALS IN BOTH ARRAYS ,
+C              NO. POINTS IN EACH ARRAY MUST NOW BE SET EQUAL
+C              JJ FOR REF  AND  J FOR SAMP
+  200 IF(J-JJ) 210,250,230
+  210 I=J+1
+C              MORE POINTS IN REF THAN SAMP , SAMP IS EXPANDED
+      DO 220 K=I,JJ
+  220 SAMP(K)=0.0
+      J=JJ
+      GO TO 250
+C
+  230 I=JJ+1
+C              MORE POINTS IN SAMP THAN REF , REF IS EXPANDED
+      DO 240 K=I,J
+  240 REF(K)=0.0
+      JJ=J
+  250 DO 260 K=1,ndat22
+C              EQUAL NO. POINTS,CHECK IT IS A POWER OF 2
+      IF(JJ/2.GT.TWOM(K)) GO TO 260
+      NPTS=TWOM(K)
+      M=K
+      GO TO 270
+  260 CONTINUE
+  270 I=JJ+1
+      II=NPTS+NPTS
+      DO 280 K=I,II
+      REF(K)=0.0
+  280 SAMP(K)=0.0
+C              NOW MULTIPLY REAL PARTS OF BOTH ARRAYS BY 1/NPTS
+      AA=1.0/NPTS
+      DO 290 K=1,II,2
+      REF(K)=REF(K)*AA
+  290 SAMP(K)=SAMP(K)*AA
+C
+C              SUBROUTINE PREPAR PLACES THE PEAK,IN BOTH THE OBSERVED
+C              AND INSTRUMENT DATA,AT THE CENTRE.
+C
+      CALL PREPAR (II)
+C
+C              SUBROUTINES SNCAL,BISRT AND FFT ARE USED IN THE FOURIER
+C              TRANSFORM. SNCAL IS USED TO CONSTRUCT A TABLE OF SINES,
+C              BISRT TO DO A BINARY SORT OF THE DATA AND FFT TO
+C              PERFORM THE TRANSFORM USING THE COOLEY-TUKEY FOURIER
+C              TRANSFORM ALGORITHM.
+C
+C
+C              BOTH ARRAYS ARE NOW READY TO BE TRANSFORMED
+      CALL SNCAL (S,M)
+      CALL BISRT (SAMP,M)
+      CALL BISRT (REF,M)
+      CALL FFT (SAMP,S,M)
+      CALL FFT (REF,S,M)
+      DO 300 K=2,II,2
+      REF(K)=-REF(K)
+  300 SAMP(K)=-SAMP(K)
+      XMULT=REF(1)
+C
+C              NOW CALL CDDF TO PERFORM THE DECONVOLUTION BY DOING A
+C              COMPLEX DIVISION OF THE TRANSFORMED OBSERVED LINE BY
+C              THE TRANSFORMED INSTRUMENT LINE.
+C
+      CALL CDDF (II,LRPRNT)
+C
+C       PUT NON-ZERO COSINE COEFFICIENTS INTO SEPARATE ARRAY,
+C       AB, FOR USING IN CRYSTALLITE SIZE DISTRIBUTION ANALYSIS
+C
+      JL = LAST-1
+      IF(JL.GT.99)JL=99
+      DO 305 I = 1,JL,2
+      AB(I/2+1) = SAMP(I)
+  305 CONTINUE
+C
+      AA=NPTS*STEPS*PI/180000.0
+      FCSCAL=ALAM/(AA*COS(POSIT*3.1416/180.0))
+      WRITE(LRPRNT,310) FCSCAL
+  310 FORMAT(' FOURIER SCALE=',F6.2,' ANGSTROMS'/)
+C
+C
+C              RESULTING ARRAY IS STORED IN SAMP , WE NOW DO
+C              THE REVERSE TRANSFORMATION TO GET THE DECONVOLUTED LINE.
+      CALL BISRT (SAMP,M)
+C
+      CALL FFT (SAMP,S,M)
+C              SUBROUTINE CYCLE CYCLES THE DECONVOLUTED LINE DATA SO
+C              THAT THE PEAK IS AT THE CENTRE. THIS SIMPLIFIES THE
+C              MEASUREMENT OF THE HALF-WIDTH AND CLARIFIES THE PLOTTING.
+C
+      CALL CYCLE (II,STEPS,XMULT,POSIT,LRPRNT,IDIS,DATE)
+      RETURN
+C
+C
+  320 WRITE(LRPRNT,330) STEPS,RSTEPS
+  330 FORMAT(///' ***THE NUMBER OF STEPS PER SAMPLE POINT (',F5.0,') AND
+     + THE NUMBER PER REFERENCE POINT (',F5.0,')'/' ARE NOT INTEGRAL MUL
+     +TIPLES OF EACH OTHER. NO DECONVOLUTION CAN BE DONE')
+      RETURN
+      END
+      SUBROUTINE DIST (TITLE,CRYST,POSIT,LPRNT,DATE)
+C
+C         SUBROUTINE TO CALCULATE A CRYSTALLITE SIZE
+C         DISTRIBUTION FROM THE FOURIER COSINE COEFFICIENTS
+C         USING THE WARREN-AVERBACH METHOD
+C
+      INTEGER DATE(8)
+      DIMENSION TITLE(14),AA(50),AD(48),CSIZE(48),ICSIZE(48)
+      DIMENSION Y(45)
+      COMMON /INFO  / NPTSTO(10),STPSTO(10),IASTO(10),PSTO(10),IRESLT(70
+     +),IHKL(4),IPHASE(24),IPKAR,NREF,NPTSS,NPR,WIDE(10),THETA2,IDIS
+      integer ndat2
+      parameter(ndat2 = 16384)
+      COMMON /ARITH / REF(ndat2),SAMP(ndat2)
+      COMMON/FDIS  / FCSCAL,LAST,AA
+      DATA BLANK,XD /'  ',' *'/
+      LP=LPRNT
+      JK = LAST/2
+      IF(JK.GT.50)JK=50
+C
+C       NORMALISE FOURIER COEFFICIENTS
+C
+      ANF = 1.0/AA(1)
+      DO 10 I=1,JK
+   10 AA(I) = AA(I)*ANF
+C
+C     CHECK WHERE SECOND DIFFERENTIAL OF FOURIER COEFFICIENTS IS ZERO
+C
+      DO 11 I=2,4
+      DIFF = AA(I) - 2.0*AA(I+1) + AA(I+2)
+      NN = I
+      IF (DIFF.GE.0.0) GO TO 12
+   11 CONTINUE
+   12 SL1 = AA(NN) - AA(NN+1)
+      FMS = (AA(NN) + (NN-1)*SL1)/SL1
+      FMS = FMS*FCSCAL
+      SLOPE=AA(2)-AA(3)
+      AZERO=AA(2)+SLOPE
+C
+C       CORRECT DATA FOR HOOK EFFECT
+C
+      IF(AZERO.LE.1.0) GO TO 30
+      AA(1)=AZERO
+      AMF = 1.0/AZERO
+      DO 20 I=1,JK
+   20 AA(I) = AA(I)*AMF
+   30 ASUM2=0.0
+      FIB=0.0
+      DO 25 I=1,JK
+      FIB=FIB+AA(I)
+   25 CONTINUE
+      FIB = FIB*2.0-1.0
+      RANGE = 1.5405/(FCSCAL*COS(POSIT*3.14159/180.0))
+      FIB = RANGE/FIB
+      FIBS = 1.5405/(FIB*COS(POSIT*3.14159/180.0))
+      JM=JK-4
+C
+C       CALCULATE SECOND DIFFERENTIAL OF DATA
+C
+      DO 40 I=1,JM
+      AD(I)=2.0*AA(I)-AA(I+1)-2.0*AA(I+2)-AA(I+3)+2.0*AA(I+4)
+      IF(AD(I).LT.0.0) AD(I)=0.0
+      ASUM2=ASUM2+AD(I)
+40    CONTINUE
+      DO 50 I=1,JM
+      AD(I)=100.0*AD(I)/ASUM2
+      B=I+1
+      CSIZE(I)=B*FCSCAL
+   50 CONTINUE
+      WRITE(LP,51)
+   51 FORMAT(' FOURIER COSINE COEFFICIENTS NORMALISED AND'/' CORRECTED F
+     +OR THE HOOK EFFECT')
+      WRITE (LP,52) (AA(J),J = 1,JK)
+52      FORMAT(4F12.4)
+C       CALL PLOT(0.0,0.0,-3)
+        XLEN=JK
+        DEL=1.0
+        IF(JK.LT.10)    GO TO 55
+        XLEN=XLEN/2.0
+        DEL=2.0
+55      CONTINUE
+C55     CALL AXIS(0.0,0.0,18HINTERVAL/FREQUENCY,-18,XLEN,0.0,0.0,DEL)
+C      CALL AXIS(0.0,0.0,21HCOSINE FOURIER SERIES,21,10.0,90.0,0.0,0.0+0.
+C     +1)
+C       CALL PLOT(0.0,0.0,-3)
+        IPEN=3
+        IF(JK.GT.10)    GO TO 57
+        DO 56 J=1,JK
+        XX=J-1
+        YY=(AA(J)*10.0)
+C       CALL PLOT(XX,YY,IPEN)
+56      IPEN=2
+        GO TO 59
+57      DO 58 J=1,JK
+        XX=FLOAT(J-1)/2.0
+        YY=(AA(J)*10.0)
+C       CALL PLOT(XX,YY,IPEN)
+58      IPEN=2
+59      CONTINUE
+        XLEN=(JK+2.0)
+C       CALL PLOT (XLEN,0.0,-3)
+      WRITE(LP,60) FMS
+   60 FORMAT(' FOURIER AVERAGE SIZE BY NUMBER = ',F7.1,' ANGSTROMS')
+      WRITE (LP,61) FIBS
+   61 FORMAT(' FOURIER INTEGRAL BREADTH SIZE = ',F7.1,' ANGSTROMS (K=1.0
+     +)')
+      WRITE(LP,70)
+   70 FORMAT(' CRYSTALLITE SIZE DISTRIBUTION'///)
+      WRITE(LP,80)
+   80 FORMAT(5X,30('*'))
+      WRITE(LP,90)
+   90 FORMAT(5X,'* CRYSTALLITE  *  PERCENTAGE *')
+      WRITE(LP,100)
+  100 FORMAT(5X,'*    SIZE',6X,'*',13X,'*')
+      WRITE(LP,80)
+      DO 120 I=1,JM
+      WRITE(LP,130)
+      DO 115 J = 1,45
+  115 Y(J) = BLANK
+      IAD = AD(I) + 0.5
+      IF(IAD.GT.44) IAD=44
+      Y(IAD+1) = XD
+        WRITE(LP,110) CSIZE(I),AD(I),Y
+110     FORMAT(5X,'*',3X,F8.2,3X,'*',4X,F5.2,4X,'*',4X,'.',2X,45A2)
+  120 CONTINUE
+      WRITE(LP,130)
+  130 FORMAT(5X,'*',14X,'*',13X,'*')
+      WRITE(LP,80)
+C       LP=IABS(NPR)
+C       CALCULATE SURFACE AREA
+        CUMA=0.0
+        CUMV=0.0
+        DO 131 I=1,JM
+        IX=I+1
+        CUMA=CUMA+(IX**2)*AD(I)
+        CUMV=CUMV+(IX**3)*AD(I)
+131     CONTINUE
+        SA=3333.33*CUMA/(CUMV*FCSCAL)
+        WRITE(LP,132)
+132     FORMAT(///' THIS CORRESPONDS TO A SURFACE')
+        WRITE(LP,133) SA
+133     FORMAT(' AREA OF',F7.0)
+        WRITE(LP,134)
+134     FORMAT(' ASSUMING CUBIC SHAPED CRYSTALLITES'/////)
+      IFMS=FMS+0.5
+      DO 140 I=1,JM
+  140 ICSIZE(I)=CSIZE(I)+0.5
+C     DO 360 L=1,4
+      WRITE(LP,150) DATE
+  150 FORMAT(8X,'****  CRYSTALLITE SIZE DISTRIBUTION  ****',8X,8A1)
+      WRITE(LP,160) (TITLE(J),J=1,5),IRESLT,IPHASE
+  160 FORMAT(' XRD  ',3A5,A1/' YOUR REF  ',70A1/' PHASE    ',24A1)
+      WRITE(LP,170)
+  170 FORMAT('   FOURIER AVERAGE SIZE BY NUMBER')
+      IF(IFMS.LT.1000) GO TO 190
+      WRITE(LP,180)
+  180 FORMAT(T26,'>1000 ANGSTROMS')
+      GO TO 290
+  190 IF(IFMS.LT.500) GO TO 210
+      WRITE(LP,200) IFMS
+  200 FORMAT(T26,I3,'  +-100 ANGSTROMS')
+      GO TO 290
+  210 IF(IFMS.LT.250) GO TO 230
+      WRITE(LP,220) IFMS
+  220 FORMAT(T26,I3,'  +-50 ANGSTROMS')
+      GO TO 290
+  230 IF(IFMS.LT.100) GO TO 250
+      WRITE(LP,240) IFMS
+  240 FORMAT(T26,I3,' +-10 ANGSTROMS')
+      GO TO 290
+  250 IF(IFMS.LT.70) GO TO 270
+      WRITE(LP,260) IFMS
+  260 FORMAT(T26,I2,' +-4 ANGSTROMS')
+      GO TO 290
+  270 WRITE(LP,280) IFMS
+  280 FORMAT(T26,I2,' +-2 ANGSTROMS')
+  290 CONTINUE
+      WRITE(LP,300) IHKL
+  300 FORMAT('   THIS WAS DETERMINED FROM THE INITIAL VALUE OF THE FIRST
+     + DERIVATIVE'/'   OF THE FOURIER COEFFICIENTS FOR THE ',4A1,' LINE
+     +WITH RESPECT TO FOURIER'/'   NUMBER, NEGLECTING STRAIN BROADENING.
+     +  THE FOURIER AVERAGE SIZE IS A')
+      WRITE (LP,301) IHKL
+  301 FORMAT('   MEAN COLUMN LENGTH WITH RESPECT TO NUMBER,PERPENDICULAR
+     + TO THE ',4A1,'PLANES,'/'   AND AS SUCH EMPHASISES THE SMALLER COL
+     +UMNS')
+      RATIO=CRYST/FMS
+      WRITE(LP,310) RATIO
+  310 FORMAT('   (NOTE THAT THE FOURIER METHOD TYPICALLY GIVES A RESULT
+     + ABOUT HALF THAT'/'   OBTAINED FROM THE PEAK WIDTH AT HALF HEIGHT
+     +.IN THIS CASE THE TWO'/'   RESULTS ARE IN THE RATIO  1 : ',F4.2,'
+     +)'//)
+      WRITE(LP,80)
+      WRITE(LP,90)
+      WRITE(LP,100)
+      WRITE(LP,80)
+      DO 330 I=1,JM
+      WRITE(LP,130)
+      DO 325 J = 1,45
+  325 Y(J) = BLANK
+      IAD = AD(I) + 0.5
+      IF (IAD.GT.44) IAD=44
+      Y(IAD+1) = XD
+        WRITE(LP,326) ICSIZE(I),AD(I),Y
+326     FORMAT(5X,'*',5X,I4,5X,'*',4X,F5.1,4X,'*',4X,'.',2X,45A2)
+  330 CONTINUE
+      WRITE(LP,130)
+      WRITE(LP,80)
+      WRITE (LP,340) IHKL
+  340 FORMAT('   THE CRYSTALLITE SIZE DISTRIBUTION IS A DISTRIBUTION OF
+     +COLUMN LENGTHS'/'   WITH RESPECT TO NUMBER, PERPENDICULAR TO THE '
+     +,4A1,' PLANES.'/'   IT IS OBTAINED FROM THE SECOND DERIVATIVE OF T
+     +HE FOURIER COEFFICIENTS.'/'   INACCURACIES IN THE FOURIER COEFFICI
+     +ENTS MAY GIVE RISE TO OSCILLATIONS'/'   IN THE DISTRIBUTIONS WHICH
+     + ARE NOT MEANINGFUL.'/'   RESULTS ARE INTENDED NOT TO GIVE RELIABL
+     +E ABSOLUTE VALUES'/'   BUT TO GIVE A GENERAL INDICATION OF THE TYP
+     +E OF DISTRIBUTION.')
+      WRITE(LP,350)
+  350 FORMAT(//' ',2X,55('*'))
+C 360 LP=LP+1
+      RETURN
+      END
+      SUBROUTINE FFT (A,S,M)
+C
+C
+C              SUBROUTINE FFT OBTAINS THE TRANSFORM
+C              USING THE COOLEY-TUKEY FOURIER
+C              TRANSFORM ALGORITHM.
+C
+C
+      DIMENSION A(2050),S(512)
+      N=2**M
+      N2=N+N
+      DO 10 I=1,N,2
+      II=I+I
+      I2=II-1
+      I3=II+1
+      I4=II+2
+      T=A(I2)
+      A(I2)=T+A(I3)
+      A(I3)=T-A(I3)
+      T=A(II)
+      A(II)=T+A(I4)
+   10 A(I4)=T-A(I4)
+      LEXPI=2
+      LEXP=8
+      I2=M-2
+      NPL=2**I2
+      DO 70 L=2,M
+      DO 20 I=2,N2,LEXP
+      II=I+LEXPI
+      I2=II+LEXPI
+      I3=I2+LEXPI
+      T=A(I-1)
+      A(I-1)=T+A(I2-1)
+      A(I2-1)=T-A(I2-1)
+      T=A(I)
+      A(I)=T+A(I2)
+      A(I2)=T-A(I2)
+      T=-A(I3)
+      TI=A(I3-1)
+      A(I3-1)=A(II-1)-T
+      A(I3)=A(II)-TI
+      A(II-1)=A(II-1)+T
+   20 A(II)=A(II)+TI
+      IF(L-2) 60,60,30
+   30 KLAST=N2-LEXP
+      I4=NPL
+      DO 50 J=4,LEXPI,2
+      NPJJ=N/4-I4
+      UR=S(NPJJ)
+      UI=S(I4)
+      ILAST=J+KLAST
+      DO 40 I=J,ILAST,LEXP
+      II=I+LEXPI
+      I2=II+LEXPI
+      I3=I2+LEXPI
+      T=A(I2-1)*UR-A(I2)*UI
+      TI=A(I2-1)*UI+A(I2)*UR
+      A(I2-1)=A(I-1)-T
+      A(I2)=A(I)-TI
+      A(I-1)=A(I-1)+T
+      A(I)=A(I)+TI
+      T=-A(I3-1)*UI-A(I3)*UR
+      TI=A(I3-1)*UR-A(I3)*UI
+      A(I3-1)=A(II-1)-T
+      A(I3)=A(II)-TI
+      A(II-1)=A(II-1)+T
+   40 A(II)=A(II)+TI
+   50 I4=I4+NPL
+   60 LEXPI=2*LEXPI
+      LEXP=2*LEXP
+   70 NPL=NPL/2
+      RETURN
+      END
+      SUBROUTINE GRAFIX(MAX,NPTS,DEG,SCALE,IRPLOT,ISPLOT,YLEN,YOFF,FACTO
+     +R,LPLOT,AMINLG,START,YSC)
+      INTEGER DATA,TITLE
+      COMMON /A     / TITLE(20),XL,PPI,IFILE
+C      COMMON /A     / TITLE(14),XL,PPI
+      integer ndat
+      parameter(ndat = 32768)
+      COMMON /D     / DATA(ndat)
+      AMAX=MAX
+C
+C
+C              IF PLOTTING ON TOP OF LAST DATA USE SAME X SCALE
+      IF(IRPLOT.NE.0) GO TO 990
+C
+C              <100 PTS    20 PTS/INCH
+C              <200 PTS    40 PTS/INCH
+C              >200 PTS   100 PTS/INCH
+      PPI=100.0
+      IF(NPTS.LT.200) PPI=40.0
+      IF(NPTS.LT.100) PPI=20.0
+C
+C              DPI=DEGREES PER INCH TO BE PLOTTED
+      DPI=DEG*PPI
+C
+C
+C              RESET SCALE IF A SET SCALE HAS BEEN REQUESTED
+      IF(SCALE.EQ.0.0) GO TO 1000
+      DPI=SCALE
+  990 PPI=DPI/DEG
+ 1000 CONTINUE
+C
+C
+C              RESET ORIGIN, XL IS ZERO FIRST TIME THRIUGH
+C              BUT IS RECALCULATED AFTER EACH PLOT
+C
+      AP=0.0
+      IF(IRPLOT.EQ.0.AND.ISPLOT.EQ.0) AP=XL
+C      CALL PLOT (AP,YOFF,-3)
+C
+C              PLOT TITLE ON Y AXIS, OFFSET IF A REPLOT
+      AD=-0.5
+      IF(IRPLOT.NE.0) AD=-0.75
+      NCHAR=YLEN*7.0
+      IF(NCHAR.GT.68) NCHAR=68
+C      CALL SYMBOL (AD,0.0,0.14,TITLE,90.0,NCHAR)
+C
+C
+C              PLOT RAW DATA
+C              STORE Y SCALE FOR USE BY HALFW
+      YSC=AMAX/YLEN
+      FAC=FACTOR*YLEN/AMAX
+      IPEN=3
+      DO 1010 J=1,NPTS
+      YY=(FLOAT(J)-0.5)/PPI
+      X=DATA(J)*FAC
+C              CHECK THAT X IS WITHIN SCALE
+      IF(X.GT.YLEN) X=YLEN
+      IF(X.LT.0.0) X=0.0
+C      CALL PLOT (YY,X,IPEN)
+ 1010 IPEN=2
+C
+C              DO NOT REPEAT THE AXIS IF THIS PLOT IS ON TOP OF THE LAST
+      IF(IRPLOT.NE.0) GO TO 1030
+C
+C              DRAW IN THE X AXIS
+C
+C              LENGTH OF PLOT IN INCHES
+      AXLEN=FLOAT(NPTS/IFIX(PPI)+1)
+C
+C      CALL AXIS (0.0,0.0,14HDEGREES 2THETA,-14,AXLEN,0.0,START,DPI)
+C      IF(LPLOT.EQ.0) CALL AXIS (0.0,0.0,6HCOUNTS,6,YLEN,90.0,0.0,YSC)
+      IF(LPLOT.EQ.0) GO TO 1020
+      YSCL=YSC/1000.0
+C      CALL AXIS (0.0,0.0,10HLOG COUNTS,10,YLEN,90.0,AMINLG,YSCL)
+ 1020 CONTINUE
+      AXL=IFIX(NPTS/PPI)+4
+      IF(AXL.GT.XL.OR.(IRPLOT.EQ.0.AND.ISPLOT.EQ.0)) XL=AXL
+ 1030 CONTINUE
+C
+      RETURN
+      END
+      SUBROUTINE HALFW(JK,MIN1,IPOS,IW,DEG,NPTS,POSIT,YSC,START)
+C
+C              SUBROUTINE TO FIND THE HALF WIDTH OF A PEAK AFTER
+C              REMOVING BASELINE
+C
+C              NPTS  NO. OF POINTS
+C              DEG   DEGREES 2THETA PER POINT
+C              IW    LINE PRINTER DEVICE NO.
+C              IPOS  THE POSITION OF THE LARGEST DATA POINT
+C              MIN1  POSITION OF THE LEFT HAND MINIMUM
+C              JK    NO. OF POINTS BETWEEN LEFT AND RIGHT HAND MINIMA
+C              POSIT PEAK POSITION IN DEGREES THETA
+C              YSC   Y SCALE (COUNTS/INCH) USED FOR PLOTTING
+C              START START POSITION OF THE DIFFRACTOMETER.
+C                THE POSITION OF THE FIRST DATA POINT IS HALF A
+C                COUNTING INTERVAL LATER BECAUSE THE DIFFRACTOMETER
+C                IS CONTINUALLY SCANNING.
+C
+C***********************************************************************
+C
+      integer ndat
+      parameter(ndat = 32768)
+      integer ndat2
+      parameter(ndat2 = 16384)
+      INTEGER IBASE(ndat),DATA
+      COMMON /D     / DATA(ndat)
+      COMMON /ARITH / REF(ndat2),SAMP(ndat2)
+      COMMON /A     / TITLE(20),XL,PPI,IFILE
+C      COMMON /A     / TITLE(14),XL,PPI
+      COMMON /INFO  / NPTSTO(10),STPSTO(10),IASTO(10),PSTO(10),IRESLT(70
+     +),IHKL(4),IPHASE(24),IPKAR,NREF,NPTSS,NPR,PWIDTH(10),THETA2,IDIS
+      EQUIVALENCE (IBASE(1),REF(1))
+      DIMENSION IANNO(4)
+      DATA IANNO/' DEG','REES','2THE','A   '/
+      DATA IBL/' '/
+C
+C
+C              CHECK THAT THE MAXIMUM IS NOT TOO CLOSE TO EITHER END
+      IF(IPOS.LT.10.OR.IPOS.GT.NPTS-10) GO TO 260
+C
+C***********************************************************************
+C
+C              NEXT SECTION CALCULATES AND REMOVES BASELINE FROM DATA
+C              AND FINDS THE INTEGRAL AREA OF THE PEAK
+C
+      DO 10 J=1,3000
+   10 IBASE(J)=0
+C              GO THROUGH BASE LINE REMOVAL ROUTINE TWICE
+      DO 130 IB=1,2
+      I=IPOS
+C              IPOS IS POSITION OF MAXIMUM DATA POINT
+      MIN=1000000
+   20 I=I-1
+      IF(I.EQ.2) GO TO 30
+C              CHECK FOR START OF DATA
+      IF(DATA(I).GT.MIN) GO TO 20
+      MIN=DATA(I)
+      MIN1=I
+C              RECORD VALUE AND POSITION OF THIS MINIMUM
+      GO TO 20
+C              NOW AVERAGE OVER 10 POINTS ABOUT THE MINIMUM
+   30 IF(MIN1.LT.5)GO TO 40
+      K=MIN1+1
+      J=MIN1-2
+      GO TO 50
+   40 K=MIN1+3
+      J=MIN1
+   50 ISUM=0
+      DO 60 I=J,K
+   60 ISUM=ISUM+DATA(I)
+      IB7=ISUM/4
+C              NOW FIND SECOND MINIMUM IN SAME WAY AS FIRST
+      MIN=1000000
+      I=IPOS
+   70 I=I+1
+      IF(I.EQ.(NPTS-1)) GO TO 80
+      IF(DATA(I).GT.MIN) GO TO 70
+      MIN=DATA(I)
+      MIN2=I
+      GO TO 70
+   80 IF(MIN2.GT.(NPTS-5))GO TO 90
+      K=MIN2+2
+      J=MIN2-1
+      GO TO 100
+   90 K=MIN2
+      J=MIN2-3
+  100 ISUM=0
+      DO 110 I=J,K
+  110 ISUM=ISUM+DATA(I)
+      IBN7=ISUM/4
+C              POSITIONS AND VALUES OF THE TWO MINIMUM POINTS ARE NOW
+C              CONTAINED IN MIN1 , MIN2 , IB7 AND IBN7
+C
+C              THESE VARIABLES ARE NOW USED TO REMOVE THE BASELINE
+      J=3
+      K=NPTS-2
+      ISUM=0
+      JK=MIN2-MIN1
+      JB=IBN7-IB7
+      DO 120 I=J,K
+      IBCOR=(JB*(I-MIN1))/JK+IB7
+      DATA(I)=DATA(I)-IBCOR
+      IBASE(I)=IBASE(I)+IBCOR
+  120 ISUM=ISUM+DATA(I)
+  130 CONTINUE
+C
+C
+C              FIND PEAK AREA AND CENTROID BETWEEN MINIMA
+      ISUM=0
+      IDD=0
+      DO 140 J=MIN1,MIN2
+      ISUM=ISUM+DATA(J)
+  140 IDD=IDD+DATA(J)*(J-MIN1)
+      CG=FLOAT(MIN1)+FLOAT(IDD)/FLOAT(ISUM)
+C              CALCULATE POSITION OF PEAK CENTROID IN DEGREES 2THETA
+C              ALLOWING FOR FIRST POINT NOT BEING AT TRUE START
+      PCG=START+(CG-0.5)*DEG
+C
+C              CALCULATE THE POSITION OF THE ALPHA 1 COMPONENT FROM
+C              THE POSITION OF THE CENTROID (ASSUME CU RADIATION).
+      PI=3.14159
+      RCG=PCG*PI/180.0
+      TH2A1=2.0*ASIN(1.5405*SIN(RCG*0.5)/1.5418)
+      TH2A1=TH2A1*180.0/PI
+C
+C
+C
+C              IPKAR IS THE PEAK AREA
+C              MAX IS THE PEAK HEIGHT LESS BASE LINE
+      IPKAR=ISUM
+      MAX=DATA(IPOS)
+C
+C***********************************************************************
+C
+C              CALCULATE THE INTEGRAL WIDTH
+      WIDTHI=(FLOAT(ISUM)/FLOAT(MAX))*DEG
+      HALF=FLOAT(MAX)/2.0
+C              HALF CONTAINS HEIGHT OF HALF-WIDTH LINE
+C
+C              NOW FIND THE REQUIRED WIDTH
+      I=IPOS
+  150 I=I-1
+      IF(I.EQ.0) GO TO 260
+      IF(DATA(I).GE.(MAX/2)) GO TO 150
+      XLHS=I+(HALF-DATA(I))/(DATA(I+1)-DATA(I))
+C              XLHS CONTAINS THE X-COORDINATE OF THE LEFT-HAND
+C              SIDE OF THE HALF-WIDTH LINE
+      ILHS=I-10
+      I=IPOS
+  160 I=I+1
+      IF(I.GT.NPTS) GO TO 260
+      IF(DATA(I).GE.(MAX/2)) GO TO 160
+      RHS=I-(HALF-DATA(I))/(DATA(I-1)-DATA(I))
+C              RHS CONTAINS THE X-COORDINATE OF THE RIGHT-HAND
+C              SIDE OF THE HALF-WIDTH LINE
+      IRHS=I+10
+      THETA2=(RHS-XLHS)*DEG
+C              THETA2 IS WIDTH IN DEGREES
+      WIDE = RHS - XLHS
+C              WIDE IS WIDTH IN SAMPLES
+C
+C              CALCULATE AND PRINT THE RATIO OF THE HALF HEIGHT WIDTH
+C              TO THE INTEGRAL WIDTH
+      RATIO=THETA2/WIDTHI
+C
+C              POSIT IS THE PEAK POSITION IN DEGREES THETA, NOT 2THETA
+      P2=POSIT*2.0
+C
+C
+      WRITE(IW,170) P2
+  170 FORMAT(' PEAK MAXIMUM  (DEGREES 2 THETA)    =',F10.2/)
+      WRITE(IW,180) PCG
+  180 FORMAT(' PEAK CENTROID (DEGREES 2 THETA)    =',F10.3/)
+      WRITE(IW,190) TH2A1
+  190 FORMAT(' ALPHA 1 PEAK(CALC DEGREES 2 THETA) =',F10.3/)
+      WRITE(IW,200) THETA2
+  200 FORMAT(' HALF HEIGHT WIDTH (DEGREES 2 THETA)=',F10.3/)
+      WRITE(IW,210) WIDTHI
+  210 FORMAT(' INTEGRAL WIDTH (DEGREES 2 THETA)   =',F10.3/)
+      WRITE(IW,220) RATIO
+  220 FORMAT(' HALF HEIGHT WIDTH / INTEGRAL WIDTH =',F10.2/)
+      WRITE(IW,230) MAX
+  230 FORMAT(' PEAK HEIGHT (LESS BASE LINE)       =',I10/)
+      WRITE(IW,240) IBASE(IPOS)
+  240 FORMAT(' BASE LINE (AT PEAK CENTRE)         =',I10/)
+      WRITE(IW,250) ISUM
+  250 FORMAT(' INTEGRAL PEAK AREA                 =',I10/)
+C
+C
+C              PLOT THE HALF PEAK WIDTH LINE AND LABEL THE PLOT
+C              WITH THE WIDTH
+C
+      XX=MIN1/PPI
+      YY=IBASE(MIN1)/YSC
+C      CALL PLOT (XX,YY,3)
+C              MOVES TO FIRST MIN. POINT
+      XX=MIN2/PPI
+      YY=IBASE(MIN2)/YSC
+C      CALL PLOT (XX,YY,2)
+C              LOWERS PEN AND MOVES TO SECOND MIN. POINT ,
+C              PLOTTING THE BASELINE
+      XX=(ILHS+10)/PPI
+      YY=HALF+IBASE(ILHS+10)
+      YY=YY/YSC
+C      CALL PLOT (XX,YY,3)
+C              MOVES TO LEFT-HAND START POINT OF LINE , PEN UP
+      XX=(IRHS-10)/PPI
+      YY=HALF+IBASE(IRHS-10)
+      YY=YY/YSC
+C      CALL PLOT (XX,YY,2)
+C              LOWERS PEN AND DRAWS HALF-HEIGHT LINE
+C      CALL SYMBOL (XX,YY,0.14,IBL,0.0,2)
+      XX=XX+0.3
+C      CALL NUMBER (XX,YY,0.14,THETA2,0.0,3)
+      XX=XX+0.85
+C              ANNOTATES HALF-HEIGHT LINE WITH ITS VALUE
+C      CALL SYMBOL (XX,YY,0.14,IANNO,0.0,20)
+C
+C              END OF HALF HEIGHT SECTION
+C
+      RETURN
+C
+C
+C***********************************************************************
+C
+  260 WRITE(IW,270)
+  270 FORMAT(//' ',50('*')//' DATA NOT SUITABLE FOR HALF HEIGHT',' MEASU
+     +REMENT',//' ',50('*'))
+      IPOS=0
+      RETURN
+      END
+      SUBROUTINE IDENT (IW,IN,ICD,IEND,PAPER,CARD,DATE)
+C
+C              SUBROUTINE TO READ AND CHECK XRD JOB NUMBER
+C*********     NECESSITY FOR KEYWORD JOB REMOVED 19/9/74
+C
+c     INTEGER ICARD(70)
+      INTEGER DATE(8)
+        LOGICAL PAPER,CARD
+      integer ldate(8)
+      data ldate / 'P   ', 'E   ', 'A   ', 'K   ',
+     +             'F   ', 'I   ', 'N   ', 'D   '/
+C     DATA DATE/'THIS',' JOB',' WAS',' RUN',' ON ','    ','    ','    '/
+C/    DATA JOB/'JOB '/,J0B/'J0B'/
+      do 9 j = 1, 8
+        date(j) = ldate(j)
+    9 continue
+      IEND=0
+C
+C              JUMP IF CARD HAVE ALREADY BEEN READ
+C/    IF(CARD) GO TO 100
+      IF(CARD) RETURN
+C     READ(8,10) DATE(6),DATE(7),DATE(8)
+C  10 FORMAT(10X,2A4,A1)
+C     DO 20 J=1,8
+C  20 IDATE(J)=DATE(J)
+C/             READ THE XRD JOB NUMBER FROM THE FIRST DATA CARD
+C/    READ(ICD,120,END=30) ICARD
+      CARD=.TRUE.
+C/    KEYW=IWORD(ICARD)
+C/    IF(KEYW.EQ.JOB.OR.KEYW.EQ.J0B) GO TO 50
+C/             FIRST DATA CARD DOES NOT START WITH JOB
+C/ 30 WRITE(IW,40)
+C/ 40 FORMAT(30(' FIRST DATA CARD DOES NOT START WITH JOB'/))
+C/    IEND=1
+C/    RETURN
+C/
+C/
+C/ 50 CALL KEYNUM (ICARD,NNJOB,XNUM)
+C/             PRINT THE JOB NUMBER AND LABEL THE PLOT WITH THE JOB NO.
+C/ 60 DO 70 JJ=1,20
+C/ 70 WRITE(IW,80) NNJOB,(DATE(J),J=4,8)
+C/ 80 FORMAT(' X-RAY DIFFRACTION JOB NUMBER',I3,5A4)
+C/    WRITE(IW,90)
+C/ 90 FORMAT(////)
+C               LABEL PLOT WITH XRD AND DATE
+C      CALL SYMBOL (0.0,0.0,0.49,10HX-R-D JOB ,90.0,10)
+C      CALL SYMBOL (0.5,0.0,0.28,DATE,90.0,40)
+C/    CALL NUMBER (0.0,5.0,0.49,FPN,90.0,-1)
+C/    FPN=NNJOB
+C      CALL PLOT (2.0,0.0,-3)
+      RETURN
+C/
+C/             RETURN IF CARD INPUT OR TAPE HAS ALREADY BEEN READ
+C/100 IF(IN.EQ.ICD.OR.PAPER) RETURN
+C/
+C/             THE FIRST ITEM ON A PAPER TAPE MUST BE THE WORD JOB
+C/             FOLLOWED BY THE SAME NUMBER AS ON THE FIRST DATA CARD
+C/110 READ(IN,120,END=180) ICARD
+C/120 FORMAT(70A1)
+C/    KEYW=IWORD(ICARD)
+C/    IF(KEYW.NE.JOB.AND.KEYW.NE.J0B) GO TO 110
+C/130 CALL KEYNUM (ICARD,NJOB,XNUM)
+C/    PAPER=.TRUE.
+C/    IF(NJOB.NE.NNJOB) GO TO 160
+C/             CORRECT PAPER TAPE LOADED
+C/    WRITE(IW,140)
+C/140 FORMAT(20(' CORRECT PAPER TAPE LOADED'/))
+C/    WRITE(IW,150)
+C/150 FORMAT('1')
+C/    RETURN
+C/
+C/160 WRITE(IW,170)
+C/170 FORMAT(30(' WRONG PAPER TAPE LOADED'/))
+C/    IEND=1
+C/    RETURN
+C/
+C/180 WRITE(IW,190)
+C/190 FORMAT(30(' PAPER TAPE ERROR. FIRST WORD NOT JOB'/))
+C/    IEND=1
+C/    RETURN
+      END
+      SUBROUTINE INTEGR (NPTS,START,IW,STEPS)
+C
+C              SUBROUTINE TO INTEGRATE DATA
+C
+      INTEGER DATA
+      integer ndat
+      parameter(ndat = 32768)
+      COMMON /D     / DATA(ndat)
+      ISUM=0
+      DO 10 J=1,NPTS
+   10 ISUM=ISUM+DATA(J)
+      ISUM=ISUM-NPTS*(DATA(1)+DATA(NPTS))/2
+      STOP=START+(STEPS*NPTS)/1000.0
+      WRITE(IW,20) START,STOP,ISUM
+   20 FORMAT(/' INTEGRATED COUNTS ABOVE BASELINE FROM',F6.2,' TO',F6.2,'
+     + DEGREES 2 THETA EQUALS',I10/)
+      RETURN
+      END
+      FUNCTION IWORD (KAR)
+C
+C     C         TAKES A LENGTH 4 ARRAY CONTAINING 4 A1 VARIABLES
+C              AND CONVERTS THEM INTO 1 A4 VARIABLE
+C
+      DIMENSION KAR(4)
+Crwgk        ENCODE(5,10,IVAL)(KAR(I),I=1,4)
+Crwgk   10 FORMAT(5A1)
+Crwgk        IWORD=IVAL
+      character  cival*4
+      write(cival, '(4A1)') (KAR(I),I=1,4)
+      read(cival, '(A4)') IWORD
+      RETURN
+      END
+      SUBROUTINE KEYNUM (CARD,NNUMB,XNUM)
+C
+C              SUBROUTINE TO READ THE NUMBER FOLLOWING A KEYWORD
+C              THE INTEGER PART IS RETURNED IN NNUMB (999 FOR ERROR)
+C              THE FRACTION PART IN XNUM WITH APPROPRIATE SIGN
+C
+      INTEGER CARD(70),DIGIT(10)
+      LOGICAL DIGITS,BLANK
+      DATA IBL/' '/,IDOT/'.'/,MINUS/'-'/
+      DATA DIGIT/'0','1','2','3','4','5','6','7','8','9'/
+      BLANK=.FALSE.
+      DIGITS=.FALSE.
+      NNUMB=0
+      XNUM=0.0
+      SIGN=1.0
+      DO 60 I=3,70
+      IF(CARD(I).NE.IBL) GO TO 10
+      BLANK=.TRUE.
+      IF(DIGITS) GO TO 80
+      GO TO 60
+   10 IF(.NOT.BLANK) GO TO 60
+      DO 20 K=1,10
+      IF(CARD(I).NE.DIGIT(K)) GO TO 20
+      DIGITS=.TRUE.
+      NNUMB=NNUMB*10+K-1
+      GO TO 60
+   20 CONTINUE
+      IF(CARD(I).EQ.IDOT.AND.DIGITS) GO TO 30
+      IF(CARD(I).NE.MINUS.OR.DIGITS) GO TO 70
+      SIGN=-1.0
+      GO TO 60
+   30 N=I+1
+      XNUM=0.0
+      XN=1.0
+      DO 50 J=N,70
+      IF(CARD(J).EQ.IBL) GO TO 80
+      DO 40 K=1,10
+      IF(CARD(J).NE.DIGIT(K)) GO TO 40
+      XNUM=XNUM+FLOAT(K-1)/(10.0**XN)
+      XN=XN+1.0
+      GO TO 50
+   40 CONTINUE
+      GO TO 70
+   50 CONTINUE
+      GO TO 70
+   60 CONTINUE
+   70 NNUMB=999
+      RETURN
+   80 NNUMB=NNUMB*IFIX(SIGN)
+      XNUM=XNUM*SIGN
+      RETURN
+      END
+      SUBROUTINE KRANGE(CARD,XNUM1,XNUM2)
+      INTEGER CARD(70),DIGIT(10)
+      LOGICAL DIGITS,BLANK,SECOND
+      DATA IBL/' '/,IDOT/'.'/,MINUS/'-'/
+      DATA DIGIT/'0','1','2','3','4','5','6','7','8','9'/
+      BLANK=.FALSE.
+      DIGITS=.FALSE.
+      SECOND=.FALSE.
+      XNUM1=0.0
+      XNUM2=0.0
+      NNUMB=0
+      N=5
+    5 DO 60 I=N,70
+      IF(CARD(I).NE.IBL)GO TO 10
+      BLANK=.TRUE.
+      IF(DIGITS)GO TO 80
+      GO TO 60
+   10 IF(.NOT.BLANK)GO TO 60
+      DO 20 K=1,10
+      IF(CARD(I).NE.DIGIT(K))GO TO 20
+      DIGITS=.TRUE.
+      NNUMB=NNUMB*10+K-1
+      GO TO 60
+   20 CONTINUE
+      IF(CARD(I).EQ.IDOT.AND.DIGITS)GO TO 30
+      IF(CARD(I).EQ.MINUS)GO TO 65
+      IF(CARD(I).NE.MINUS.OR.DIGITS)GO TO 70
+      GO TO 60
+   30 N=I+1
+      XNUM=0.
+      XN=1.0
+      DO 50 J=N,70
+      IF(CARD(J).EQ.IBL.AND.SECOND)GO TO 80
+      IF(CARD(J).EQ.IBL)GO TO 50
+      IF(CARD(J).EQ.MINUS)GO TO 65
+      DO 40 K=1,10
+      IF(CARD(J).NE.DIGIT(K))GO TO 40
+      XNUM=XNUM+FLOAT(K-1)/(10.0**XN)
+      XN=XN+1.0
+      GO TO 50
+   40 CONTINUE
+      GO TO 70
+   50 CONTINUE
+      GO TO 70
+   60 CONTINUE
+   65 SECOND=.TRUE.
+      N=I+1
+      IF(J.GT.I)N=J+1
+      GO TO 86
+   70 XNUM1=999.
+      RETURN
+   80 IF(.NOT.SECOND)GO TO 85
+      XNUM2=XNUM+FLOAT(NNUMB)
+      GO TO 100
+   85 N=J+1
+   86 XNUM1=XNUM+FLOAT(NNUMB)
+      NNUMB=0
+      BLANK=.FALSE.
+      DIGITS=.FALSE.
+      GO TO 5
+  100 RETURN
+      END
+      SUBROUTINE LOGS (NPTS,AMINLG)
+C
+C              THIS ROUTINE REPLACES THE VALUES IN ARRAY DATA BY THE
+C              LOG OF THE VALUE. THE SMALLEST LOG VALUE IS SUBTRACTED
+C              FROM ALL THE VALUES.
+C
+C               CALL VARIABLES NPTS       THE NUMBER OF VALUES
+C                             AMINLG    THE MINIMUM LOG VALUE
+C
+C
+      INTEGER DATA
+      integer ndat
+      parameter(ndat = 32768)
+      COMMON /D     / DATA(ndat)
+      DO 10 J=1,NPTS
+      A=DATA(J)
+   10 DATA(J)=ALOG10(A)*1000.0
+      MIN=10000
+      DO 20 J=1,NPTS
+      IF(DATA(J).LT.MIN) MIN=DATA(J)
+   20 CONTINUE
+      AMINLG=MIN/1000.0
+      DO 30 J=1,NPTS
+   30 DATA(J)=DATA(J)-MIN
+      RETURN
+      END
+      SUBROUTINE PEAKS (NPTS,OFFSET,IOUT,APOSN,XPTS,IPAR,YLEN,DEGR,MAXX)
+C
+C              SUBROUTINE TO FIND PEAK POSITIONS.
+C              (THIS ROUTINE CALLS DAP WHICH CALLS TEST,AND BASE.
+C              THESE ROUTINES WERE WRITTEN BY D ALEXANDER 1974)
+C
+C
+      integer ndat
+      parameter(ndat = 32768)
+      INTEGER ISDATA(ndat)
+      INTEGER IPAR(10)
+      INTEGER DATA,TITLE
+      INTEGER NOS(10)
+      COMMON /D     / DATA(ndat)
+      COMMON /A     / TITLE(20),XL,PPI,IFILE
+C      COMMON /A     / TITLE(14),XL,PPI
+      COMMON /POS   / SPEC(150),ISPEC(3,150),C3(ndat)
+      COMMON /PEEKS / ID(150),INTR(150),NPEAKS
+      DIMENSION DEG(150)
+      EQUIVALENCE (DEG(1),SPEC(1))
+      DATA IBL/'    '/,IAST/'**  '/,IPUNCH/25/
+C
+C
+      NDEX=15
+      ALAM=1.5405
+      RATIO=1.5443/ALAM
+C STORE DATA AND NO. OF POINTS
+      DO 10 J=1,NPTS
+   10 ISDATA(J)=DATA(J)
+      ISPTS=NPTS
+   20 CONTINUE
+      CALL DAP (IOUT,NPEAKS,NPTS,IPAR,DEGR)
+      IF(NPEAKS.GT.0) GO TO 37
+      WRITE(IOUT,35)
+   35 FORMAT(' NO PEAKS FOUND')
+      RETURN
+   37 DO 30 J=1,10
+   30 NOS(J)=0
+      DO 40 J=1,NPEAKS
+      I=ISPEC(3,J)/10
+   40 NOS(I)=NOS(I)+1
+      IP=1
+      I=NOS(1)
+      IF(I.EQ.0) GO TO 80
+      DO 50 J=2,10
+      IF(NOS(J).GT.I) GO TO 60
+   50 CONTINUE
+      GO TO 80
+C  60 IP=0
+   60 IP=1
+      WRITE(IOUT,70)
+   70 FORMAT(' MOST PEAKS NOT FOUND FIRST TIME THROUGH')
+   80 CONTINUE
+      DO 90 J=1,NPEAKS
+   90 DEG(J)=(SPEC(J)-0.5)/XPTS+OFFSET
+      MAX=0
+      DO 100 J=1,NPEAKS
+      IHT=ISPEC(1,J)-ISPEC(2,J)
+      IF(IHT.LE.MAX) GO TO 100
+C
+C           IPOS  AND XMAX  ARE, RESPECTIVELY,THE POSITION AN
+C              VALUE OF THE HIGHEST PEAK.
+C
+      IPOS=J
+      MAX=IHT
+  100 CONTINUE
+      WRITE(IOUT,110)
+  110 FORMAT(//' 2 THETA     D      1000/D INT  COUNTS BACKGROUND TYPE
+     +    D/INT')
+C
+C     WRITE(IOUT,120)
+C 120 FORMAT(T60,'D/INT')
+C
+      ISYM=IBL
+      IF(APOSN.GT.0.001)WRITE(IPUNCH,130)TITLE
+        IF(APOSN.GT.0.001)WRITE(IPUNCH,121)
+121     FORMAT('WEIGHTS')
+        IF(APOSN.GT.0.001)WRITE(IPUNCH,122)
+122     FORMAT('TOLERANCE 0.012')
+        IF(APOSN.GT.0.001)WRITE(IPUNCH,123)
+123     FORMAT('LINES')
+  130 FORMAT(20A4)
+      DO 240 J=1,NPEAKS
+C
+C
+C              DSPACE(J)  AND  INT(J)  ARE,RESPECTIVELY, THE ARRAY
+C              OF D-SPACINGS AND THE ARRAY OF PEAK INTENSITIES
+C              NORMALISED TO 100 .THESE TWO ARRAYS FORM THE MAIN
+C              DATA TO SUBROUTINE INPUT. THEY ARE PASSED BACK IN
+C              THE COMMON AREA /DATA/ .
+C
+C
+      DSP=ALAM/(2.0*SIN(0.5*DEG(J)*3.14159/180.0))
+      IDI=1000.0/DSP
+      ID(J)=IDI
+      INTEN=ISPEC(1,J)-ISPEC(2,J)
+      IF(INTEN.LT.0) INTEN=0
+      TEMP=0.5+100.*FLOAT(INTEN)/FLOAT(MAX)
+      INTREL=INT(TEMP)
+C     CORRECT FOR SMOOTHING
+      TEMP=1.11*FLOAT(INTEN)
+      INTEN=IFIX(TEMP)
+      INTR(J)=INTREL
+      IF(J.EQ.1) GO TO 140
+      ISYM=IAST
+      IF(ABS(DSP*RATIO-DL).GT.0.001) ISYM=IBL
+      IF(INTREL*4.GT.INTST*3) ISYM=IBL
+  140 WRITE(IOUT,150) DEG(J),DSP,ISYM,IDI,INTREL,INTEN,ISPEC(2,J),ISPEC(
+     +3,J),DSP,INTREL
+  150 FORMAT(' ',F7.2,F9.4,A2,I6,I5,I8,I9,I6,'    'F6.3,'  /',I3)
+      IF(INTREL.GE.1) THEN
+       WRITE(NDEX,151) DEG(J),INTREL
+  151  FORMAT(F10.4,I8)
+      END IF
+      IF(ISPEC(3,J).EQ.15.OR.ISPEC(3,J).GT.30)GO TO 155
+C     IF(DSP.GT.9.9.OR.DSP.LT.2.1)GO TO 155
+      IF(INTREL.LE.1)GO TO 155
+  155 CONTINUE
+C
+C     IF(DSP.GT.4.0) GO TO 170
+C     IF(DSP.LT.1.0) GO TO 190
+C     WRITE(IOUT,160) DSP,INTREL
+C 160 FORMAT(T57,F6.3,' /',I3)
+C     GO TO 210
+C 170 WRITE(IOUT,180) DSP,INTREL
+C 180 FORMAT( T57,F5.2,'C /',I3)
+C     GO TO 210
+C 190 WRITE(IOUT,200) DSP,INTREL
+C 200 FORMAT(T57,F7.4,'/',I3)
+  210 CONTINUE
+C
+      IF(APOSN.GT.0.001)WRITE(IPUNCH,220)DSP,INTREL
+  220 FORMAT(F10.4,I10)
+C
+C              PLOT PEAK POSITIONS
+      IF(IP.EQ.0) GO TO 230
+      XP=(DEG(J)-OFFSET)*XPTS/PPI
+C      CALL PLOT (XP,0.0,3)
+      YP=FLOAT(INTEN)*YLEN/FLOAT(MAXX)
+      IF(YP.GT.YLEN) YP=YLEN
+C      CALL PLOT (XP,YP,2)
+C
+  230 CONTINUE
+C
+C
+      INTST=INTREL
+      DL=DSP
+  240 CONTINUE
+      INTREL=0
+      IF(APOSN.NE.0.0) WRITE(IPUNCH,220)
+        IF(APOSN.GT.0.001)WRITE(IPUNCH,221)
+221     FORMAT(T17,' 999')
+        IF(APOSN.GT.0.001)WRITE(IPUNCH,222)
+222     FORMAT('RUN')
+      IF(IP.EQ.1) RETURN
+      WRITE(IOUT,250)
+  250 FORMAT(' DATA WILL NOW BE BUNCHED')
+      NPTS=ISPTS/2
+      ISPTS=NPTS
+      K=1
+      DO 260 J=1,NPTS
+      ISDATA(J)=ISDATA(K)+ISDATA(K+1)
+      DATA(J)=ISDATA(J)
+  260 K=K+2
+      PPI=PPI/2.0
+      XPTS=XPTS/2.0
+      GO TO 20
+      END
+      SUBROUTINE PREPAR (II)
+C
+C
+C              SUBROUTINE PREPAR TAKES BOTH THE
+C              INSTRUMENT AND OBSERVED LINES AND
+C              PLACES BOTH PEAKS AT THE SAME POSITION
+C              IN THE CENTRE OF THE ARRAY.
+C
+C
+      integer ndat
+      parameter(ndat = 32768)
+      integer ndat2
+      parameter(ndat2 = 16384)
+      COMMON /ARITH / REF(ndat2),SAMP(ndat2)
+      COMMON /D     / XX(ndat)
+      YMAX=0.0
+      IPOS=0
+C
+C               FIND SAMP MAX AND LOCATION
+C
+      DO 10 I=1,II,2
+      IF(SAMP(I).LE.YMAX) GO TO 10
+      YMAX=SAMP(I)
+      IPOS=I
+   10 CONTINUE
+      JJ=II/2-1
+C
+C           NOW CYCLE TO PLACE MAX IN CENTRE
+C
+      KK=II
+      DO 30 J=1,2
+      DO 20 I=JJ,KK,2
+      XX(I)=SAMP(IPOS)
+      XX(I+1)=SAMP(IPOS+1)
+      IPOS=IPOS+2
+      IF(IPOS.GT.II) IPOS=1
+   20 CONTINUE
+      KK=JJ-2
+      JJ=1
+   30 CONTINUE
+      DO 40 I=1,II
+   40 SAMP(I)=XX(I)
+      YMAX=0.0
+      IPOS=0
+C
+C     FIND REF MAX AND LOCATION
+C
+      DO 50 I=1,II,2
+      IF(REF(I).LE.YMAX) GO TO 50
+      YMAX=REF(I)
+      IPOS=I
+   50 CONTINUE
+      JJ=II/2-1
+      KK=II
+C
+C     NOW CYCLE TO PLACE MAX IN CENTRE
+C
+      DO 70 J=1,2
+      DO 60 I=JJ,KK,2
+      XX(I)=REF(IPOS)
+      XX(I+1)=REF(IPOS+1)
+      IPOS=IPOS+2
+      IF(IPOS.GT.II) IPOS=1
+   60 CONTINUE
+      KK=JJ-2
+      JJ=1
+   70 CONTINUE
+      DO 80 I=1,II
+   80 REF(I)=XX(I)
+      RETURN
+      END
+      SUBROUTINE RATIO (DATA,IW)
+C
+C              SPECIAL ROUTINE USED FOR ALUMINA SAMPLES
+C
+      integer ndat
+      parameter(ndat = 32768)
+      INTEGER DATA(ndat)
+      A1=DATA(2)
+      A2=DATA(5)
+      A3=DATA(10)
+      WRITE(IW,10) A1,A2,A3
+   10 FORMAT(' INTEGRATED COUNTS',3F7.0)
+      RATIOO=(A2-A3)/(A1-A3)
+      WRITE(IW,20) RATIOO
+   20 FORMAT(' THE CRYSTALLINITY RATIO IS',F7.2)
+      RATIOO=A2/A1
+      WRITE(IW,30) RATIOO
+   30 FORMAT(' PEAK AREA / VALLEY AREA ',F7.2)
+      RETURN
+      END
+      SUBROUTINE RDDATA (DATA,NPTS,NOMIT,N,IOUT)
+C
+C              SUBROUTINE TO READ DIGITAL DATA.
+C              ANY NO. OF VALUES PER LINE SEPARATED BY AT LEAST 1 BLANK
+C              ZERO AS FIRST ITEM ON A LINE ACTS AS TERMINATOR
+C
+C              CALL VARIABLES.
+C              DATA     ARRAY INTO WHICH VALUES ARE STORED
+C              N        THE DIMENSION OF THE ARRAY
+C              NPTS     THE NO OF VALUES READ
+C              NOMIT    THE NUMBER OF POINTS TO BE OMITTED BEFORE ANY
+C                       ARE STORED
+C              IN       THE INPUT DEVICE NO.
+C              IOUT     THE LINEPRINTER DEVICE NO.
+C
+      INTEGER CKOUNT,S,C,CMIN,CNIN
+      INTEGER DATA(N),DIGIT(10),CARD(70),CHAR,CARLEN
+      LOGICAL DIGITS,FIRST
+      DATA DIGIT/'0','1','2','3','4','5','6','7','8','9'/
+      DATA IBL/' '/,CARLEN/70/,S/'S'/,C/'C'/,CMIN/'-'/,CNIN/'9'/
+C
+      DATA IS/22/
+   10 NPTS=0
+      IOMIT=NOMIT
+   20 READ(IS,30,END=120) CARD
+   30 FORMAT(70A1)
+        IF(CARD(1).EQ.CMIN.AND.CARD(2).EQ.CNIN)  RETURN
+C
+C              THE LETTERS SC AT THE START OF THE LINE CAUSE ANY DATA
+C              SO FAR READ TO BE SCRUBBED.
+      IF(.NOT.(CARD(1).EQ.S.AND.CARD(2).EQ.C)) GO TO 50
+      WRITE(IOUT,40)
+   40 FORMAT(' ***DATA SCRUBBED, START AGAIN***')
+      GO TO 10
+C
+   50 CONTINUE
+      NNUMB=0
+      DIGITS=.FALSE.
+      FIRST=.TRUE.
+      DO 110 CKOUNT=1,CARLEN
+      CHAR=CARD(CKOUNT)
+      IF(CHAR.EQ.IBL) GO TO 80
+      DO 60 K=1,10
+      IF(CHAR.NE.DIGIT(K)) GO TO 60
+      DIGITS=.TRUE.
+      NNUMB=NNUMB*10+K-1
+      IF(CKOUNT.EQ.CARLEN) GO TO 80
+      GO TO 110
+   60 CONTINUE
+      WRITE(IOUT,70) CHAR,NPTS
+   70 FORMAT(' ***INVALID CHARACTER (',A1,') AFTER POINT',I5)
+      GO TO 110
+   80 IF(.NOT.DIGITS) GO TO 110
+      DIGITS=.FALSE.
+      IF(FIRST.AND.NNUMB.EQ.0) RETURN
+C              OMIT POINTS BEFORE STORING DATA IF IOMIT >0
+      IF(IOMIT.LE.0) GO TO 90
+      IOMIT=IOMIT-1
+      GO TO 100
+   90 CONTINUE
+      NPTS=NPTS+1
+      IF(NPTS.GT.N) GO TO 130
+      DATA(NPTS)=NNUMB
+  100 NNUMB=0
+      FIRST=.FALSE.
+  110 CONTINUE
+C              JUMP TO READ NEXT LINE
+      GO TO 20
+C
+C              SET NPTS -VE TO INDICATE END OF TAPE FOUND
+  120 NPTS=-NPTS
+      RETURN
+C
+C              TOO MANY POINTS TO FIT INTO ARRAY DATQ
+  130 WRITE(IOUT,140)
+  140 FORMAT(' ***TOO MANY POINTS IN THIS DATA SET***')
+      RETURN
+      END
+      SUBROUTINE RDPT (IEND,MIN1,JK,STEPS,POSIT,IW,IN,ID,DATE)
+C
+C
+C
+C              GENERAL PURPOSE PROGRAM TO HANDLE DIGITAL DATA FROM AN
+C              X-RAY POWDER DIFFRACTOMETER
+C
+C
+C              IEND      SET TO END FOR END MARKER
+C              MIN1     )
+C              JK       ) VARIABLES USED BY DECONVOLUTION ROUTINE
+C              STEPS    ) WHICH IS CALLED FROM THE MAIN PROGRAM.
+C              POSIT    )
+C              IW        LINE PRINTER DEVICE NUMBER
+C              IN        CURRENT INPUT DEVICE NUMBER, CARD READER OR
+C                         DISC FILE HOLDING PAPER TAPE TRANSLATION, SET
+C                         FOR CARD READER ON FIRST ENTRY FROM MAIN.
+C              ID        DEVICE NO. OF THE RANDOM ACCESS FILE, DEFINED
+C                        IN MAIN AND USED TO STORE SCAN DATA
+C              IFILE     FILE POINTER FOR THE RANDOM ACCESS FILE
+C
+C
+C              MODIFIED TO ACCESS DATA STORED ON MAGNETIC TAPE USING
+C              THE KEYWORD ACCESS (JLY75) CALLS SUBROUTINE ACCESS
+C
+      DIMENSION ARMIN(20),ARMAX(20)
+      integer ndat
+      parameter(ndat = 32768)
+      integer ndat2
+      parameter(ndat2 = 16384)
+c     INTEGER DATA,CKOUNT,TITLE,CARD(70),WORD(4),DSTORE(ndat)
+      INTEGER DATA,       TITLE,CARD(70),WORD(4),DSTORE(ndat)
+      INTEGER STITLE(14),IPAR(10),DATE(8)
+C
+      LOGICAL PAPER,CARDS,GOPLOT
+C
+      COMMON /A     / TITLE(20),XL,PPI,IFILE
+C      COMMON /A     / TITLE(14),XL,PPI,IFILE
+      COMMON /ARITH / REF(ndat2),SAMP(ndat2)
+      COMMON /D     / DATA(ndat)
+      COMMON /INFO  / NPTSTO(10),STPSTO(10),IASTO(10),PSTO(10),IRESLT(70
+     +),IHKL(4),IPHASE(24),IPKAR,NREF,NPTSS,NPR,WIDE(10),THETA2,IDIS
+C
+      EQUIVALENCE (DSTORE(1),REF(1))
+      DATA KKEY1/'SAMP'/,KEY2/'STEP'/,KEY3/'MODE'/,KKEY4/'REFE'/
+      DATA KEY5/'STAR'/,KEY6/'DCON'/,KEY7/'DONT'/,KEY8/'READ'/
+      DATA KEY9/'RUN '/
+      DATA KEY10/'SCAL'/,KEY11/'PLOT'/,KEY12/'RPLO'/,KEY13/'POSN'/
+      DATA KEY14/'STOR'/,KEY15/'PUNC'/,KEY16/'CARD'/,KEY17/'TAPE'/
+      DATA KEY18/'SMOO'/,KEY19/'BUNC'/,KEY20/'SUM '/,KEY21/'FSD '/
+      DATA KEY22/'INTE'/,KEY23/'YLEN'/,KEY24/'YOFF'/,KEY25/'/R  '/
+      DATA KEY26/'/P  '/,KEY27/'/HKL'/,KEY28/'RATI'/,KEY29/'    '/
+      DATA KEY30/'BROA'/,KEY31/'SENS'/,KEY32/'SPLO'/,KEY33/'/   '/
+      DATA KEY34/'SODA'/,KEY35/'LPLO'/,KEY36/'LSPL'/,KEY37/'LRPL'/
+      DATA KEY38/'OMIT'/,KEY39/'REWI'/,KEY40/'ACCE'/,KEY41/'    '/
+      DATA KEY42/'DIST'/,KEY43/'AREA'/,KKEY44/'    '/
+        DATA PAPER/.FALSE./,CARDS/.FALSE./,GOPLOT/.FALSE./
+      DO 105 I=1,20
+      ARMIN(I)=0.0
+  105 ARMAX(I)=0.0
+C
+      DATA IBL/'    '/,NARRAY/ndat/
+C              NARRAY IS THE DIMENSION OF THE DATA ARRAY DATA
+C
+C
+C*************************************************
+C              INPUT-OUTPUT DEVICE NUMBERS.
+C              MAGTPE IS THE DEVICE NO OF THE MAG TPE ONTO WHICH THE
+C              PAPER TAPE IS COPPIED
+C              ICD IS THE CARD READER, AND IP IS THE PUNCH.
+C
+      DATA ICD/21/,MAGTPE/9/,IP/7/
+C
+C*************************************************
+C
+C
+C
+C**********************************************************************
+C
+C              START OF SECTION TO READ KEYWORDS AND KEYVALUES
+C
+C
+
+
+
+
+
+C                   OUTPUT FOR EACH SAMPLE STARTS ON A NEW PAGE
+C  10 WRITE(IW,20)
+10      CONTINUE
+C  20 FORMAT('1')
+      IPUN=0
+      NOMIT=0
+C
+C
+C              SUBROUTINE IDENT LOOKS FOR KEYWORD JOB ON THE FIRST
+C              DATA CARD AND AT THE START OF A PAPER TAPE, IEND=1 ON
+C              RETURN SIGNIFIES AN ERROR, PROGRAM STOPS
+   30 CALL IDENT (IW,IN,ICD,IEND,PAPER,CARDS,DATE)
+
+
+      IF(IEND.EQ.1) GO TO 1050
+C
+C
+C
+C              READ IN A LINE OF DATA, PROGRAM STOPS IF END OF DATA
+C              SET ENCOUNTERED. MAY BE END OF TAPE OR CARD DATA SET
+   40 READ(IN,50,END=1050) TITLE
+   50 FORMAT(20A4)
+C
+C
+C              LOOK FOR KEYWORDS PUNCH, CARD, TAPE AND REWIND
+      KKEYW=TITLE(1)
+      IF(KEYW.EQ.KEY15) IPUN=1
+      IF(KEYW.EQ.KEY16) IN=ICD
+      IF(KEYW.EQ.KEY17) IN=MAGTPE
+      IF(KEYW.EQ.KEY39) REWIND MAGTPE
+      IF(KEYW.EQ.KEY16.OR.KEYW.EQ.KEY17.OR.KEYW.EQ.KEY15) GO TO 30
+      IF(KEYW.EQ.KEY39) GO TO 30
+C
+C
+C              SET UP DEFAULT OPTIONS
+C              IPAR IS FOR PARAMETERS FOR THE PEAK FINDING ROUTINE
+C              IRESLT, IPHASE, IHKL HOLD DATA FOR PRINTING IN REPORT
+C
+   60 CONTINUE
+      DO 70 J=1,10
+   70 IPAR(J)=0
+      DO 80 J=1,70
+   80 IRESLT(J)=IBL
+      DO 90 J=1,24
+   90 IPHASE(J)=IBL
+      DO 100 J=1,4
+  100 IHKL(J)=IBL
+C                   THE DEFAULT MODE OF INPUT IS POINTS ONLY = 1
+C              THIS IMPLIES CONTINUOUS SCANNING OF THE GONIOMETER,
+C              ALL POSITIONS OF PEAKS AND LINES ASSUME THIS TYPE OF
+C              DATA. THE FIRST DATA POINT CORRESPONDS TO HALF A
+C              SAMPLE INTERVAL AFTER THE START OF THE SCAN.
+      MODE=1
+      NBUN=0
+      NSUM=0
+      NSM=0
+      IFSD=0
+      INTEG=0
+      START=0.0
+      ISTOR=0
+      IEND=0
+      IDONT=0
+      IREAD=0
+      IDCON=0
+      IDIS=0
+      KR=0
+      LPLOT=0
+      IPLOT=0
+      IRPLOT=0
+      ISPLOT=0
+      SCALE=0.0
+      FACTOR=1.0
+      IPOSN=0
+      APOSN=0.0
+      YOFF=0.0
+      YLEN=10.0
+      IRATIO=0
+      STEPS=20.0
+      DEG=1000.0/STEPS
+      IACC=0
+C
+C              TEST FOR KEYWORD ACCESS
+      IF(TITLE(1).NE.KEY40) GO TO 110
+C              CALL ROUTINE TO SEARCH MAGTAPE FOR REQUIRED DATA
+      CALL ACCESS (IACC,IN,IW,ICD,MAGTPE,NPTSS,TITLE)
+      IF(IACC) 1050,10,130
+  110 CONTINUE
+        IF(TITLE(1).EQ.KKEY44) GO TO 40
+C              TEST TO ENSURE THAT THE TITLE BEGINS 'SAMP' OR 'REF'
+      IF((TITLE(1).EQ.KKEY1).OR.(TITLE(1).EQ.KKEY4)) GO TO 130
+      WRITE(IW,120) TITLE(1)
+  120 FORMAT(' ***ERROR*** LINE STARTS WITH ',A4)
+C              STILL SEARCHING FOR LINE BEGINNING 'SAMP'
+      GO TO 40
+C
+  130 WRITE(IW,140) DATE,TITLE
+  140 FORMAT(' ',8A1//' ',20A4/)
+      IF(IPUN.NE.0) WRITE(IP,50) TITLE
+C
+C
+C              START OF LOOP TO LOOK FOR KEYWORDS OTHER THAN JOB, PUNCH,
+C              REWIND, TAPE, SAMPLE OR REF
+C
+  150 READ(IN,160,END=1050) CARD
+C              READS IN 1 COMPLETE LINE UNDER A1 FORMAT
+  160 FORMAT(70A1)
+C
+      WRITE(IW,170) CARD
+  170 FORMAT(' ',70A1)
+C
+      IF(IPUN.NE.0) WRITE(IP,160) CARD
+C
+C              PACK THE FIRST FOUR CHARACTERS, OR THE CHARACTERS UP TO
+C              THE FIRST BLANK IF THIS IS SOONER, INTO THE VARIABLE KEYW
+      DO 180 I=1,4
+  180 WORD(I)=IBL
+      DO 190 I=1,4
+      IF(CARD(I).EQ.IBL) GO TO 200
+  190 WORD(I)=CARD(I)
+  200 KEYW=IWORD(WORD)
+C
+C
+C
+C              TEST FOR KEYWORDS NOT FOLLOWED BY A VALUE
+C
+C              TEST FOR KEYWORD RUN
+      IF(KEYW.EQ.KEY9) GO TO 740
+C
+C
+C              KEYWORD STORE, FOLLOWING DATA IS JUST STORED
+      IF(KEYW.NE.KEY14) GO TO 210
+      ISTOR=1
+      GO TO 150
+  210 CONTINUE
+C
+C
+C              INTEGRATED INTENSITY WANTED, KEYWORD INTEGRAL
+      IF(KEYW.NE.KEY22) GO TO 220
+      INTEG=1
+      GO TO 500
+  220 CONTINUE
+C
+      IF (KEYW.EQ.KEY43) GO TO 500
+C
+C              NOT A KEYWORD WITHOUT A VALUE, READ FOLLOWING VALUE
+C
+      CALL KEYNUM (CARD,NNUMB,XNUM)
+C              NNUMB IS SET TO 999 IF AN ERROR BUT THIS PROG USES -1
+      IF(NNUMB.EQ.999) NNUMB=-1
+C
+C              TEST FOR ALLOWED KEYWORDS
+      IF(KEYW.EQ.KEY2) GO TO 700
+      IF(KEYW.EQ.KEY3) GO TO 530
+      IF(KEYW.EQ.KEY5) GO TO 650
+      IF(KEYW.EQ.KEY6) GO TO 480
+      IF(KEYW.EQ.KEY7) GO TO 560
+      IF(KEYW.EQ.KEY8) GO TO 590
+      IF(KEYW.EQ.KEY10) GO TO 680
+      IF(KEYW.EQ.KEY11) GO TO 360
+      IF(KEYW.EQ.KEY12) GO TO 430
+      IF(KEYW.EQ.KEY13) GO TO 390
+      IF(KEYW.EQ.KEY18) GO TO 330
+      IF(KEYW.EQ.KEY19) GO TO 370
+      IF(KEYW.EQ.KEY20) GO TO 380
+      IF(KEYW.EQ.KEY21) GO TO 340
+      IF(KEYW.EQ.KEY23) GO TO 400
+      IF(KEYW.EQ.KEY24) GO TO 410
+      IF(KEYW.EQ.KEY25) GO TO 240
+      IF(KEYW.EQ.KEY26) GO TO 260
+      IF(KEYW.EQ.KEY27) GO TO 280
+      IF(KEYW.EQ.KEY28) GO TO 300
+      IF(KEYW.EQ.KEY30) GO TO 310
+      IF(KEYW.EQ.KEY31) GO TO 320
+      IF(KEYW.EQ.KEY32) GO TO 460
+      IF(KEYW.EQ.KEY33) GO TO 150
+      IF(KEYW.EQ.KEY34) GO TO 730
+      IF(KEYW.EQ.KEY35) GO TO 350
+      IF(KEYW.EQ.KEY36) GO TO 450
+      IF(KEYW.EQ.KEY37) GO TO 420
+      IF(KEYW.EQ.KEY38) GO TO 610
+      IF(KEYW.EQ.KEY42) GO TO 490
+      IF(KEYW.EQ.KEY29)GO TO 150
+      IF(KEYW.EQ.KEY41)GO TO 150
+C
+C
+C              NON VALID KEYWORD, IGNORE LINE
+      WRITE(IW,230) KEYW
+  230 FORMAT(' ***ERROR. KEYWORD (',A4,') NOT ALLOWED***')
+      GO TO 150
+C
+C
+C
+C              KEYWORD /R (RESULT)
+  240 DO 250 J=4,70
+  250 IRESLT(J)=CARD(J)
+      GO TO 150
+C
+C              KEYWORD /P (PHASE)
+  260 DO 270 J=1,24
+  270 IPHASE(J)=CARD(J+3)
+      GO TO 150
+C
+C              KEYWORD /HKL
+  280 DO 290 J=1,4
+  290 IHKL(J)=CARD(J+5)
+      GO TO 150
+C
+C              KEYWORD RATIO
+  300 IRATIO=1
+      GO TO 150
+C
+C              KEYWORD BROAD  (FOR PEAK FINDING ROUTINE)
+  310 IPAR(1)=1
+      GO TO 150
+C
+C              KEYWORD SENSITIVITY TO MODIFY PEAK SEARCH SENSITIVITY
+  320 IPAR(2)=NNUMB
+      GO TO 150
+C
+C              KEYWORD SMOOTH
+  330 IF(NNUMB.EQ.-1) NNUMB=7
+      NSM=NNUMB
+      GO TO 150
+C
+C
+C              SET FULL SCALE FOR PLOT
+  340 IF(NNUMB.EQ.-1) NNUMB=0
+      IFSD=NNUMB
+      GO TO 150
+C
+C
+C              KEYWORD LPLOT (LOG PLOT)
+  350 LPLOT=1
+C
+C              KEYWORD PLOT
+  360 IPLOT=1
+      IF(NNUMB.EQ.-1) GO TO 150
+      FACTOR=FLOAT(NNUMB)+XNUM
+      GO TO 150
+C
+C
+C              KEYWORD BUNCH
+  370 IF(NNUMB.EQ.-1) NNUMB=1
+      NBUN=NNUMB
+      GO TO 150
+C
+C
+C              KEYWORD SUM (ADD SUCCESIVE SCANS)
+  380 IF(NNUMB.EQ.-1) NNUMB=0
+      NSUM=NNUMB
+      GO TO 150
+C
+C
+C              KEYWORD POSN (TO GIVE PEAK POSITIONS)
+C
+  390 IPOSN=1
+      APOSN=FLOAT(NNUMB)+XNUM
+      IF(NNUMB.EQ.-1) APOSN=0.0
+      GO TO 150
+C
+C
+C              KEYWORD YLEN (LENGTH OF Y AXIS)
+  400 IF(NNUMB.EQ.-1) GO TO 150
+      YLEN=FLOAT(NNUMB)+XNUM
+      GO TO 150
+C
+C
+C              KEYWORD YOFF (Y AXIS OFFSET)
+  410 IF(NNUMB.EQ.-1) GO TO 150
+      YOFF=FLOAT(NNUMB)+XNUM
+      GO TO 150
+C
+C
+C              KEYWORD LRPLOT (LOG REPEAT PLOT)
+  420 LPLOT=1
+C
+C              KEYWORD RPLOT
+  430 IRPLOT=1
+C              CHECK THAT DATA HAS ALREADY BEEN PLOTTED, IF NOT
+C              TREAT THIS KEYWORD AS IF IT WERE 'PLOT'
+      IF(GOPLOT) GO TO 440
+      IRPLOT=0
+      IPLOT=1
+  440 IF(NNUMB.EQ.-1) GO TO 150
+      FACTOR=FLOAT(NNUMB)+XNUM
+      GO TO 150
+C
+C
+C              KEYWORD LSPLOT (LOG STACK PLOT)
+  450 LPLOT=1
+C
+C              KEYWORD SPLOT(STACK PLOT)
+  460 ISPLOT=1
+C              CHECK THAT DATA HAS ALREADY BEEN PLOTTED, IF NOT
+C              TREAT THIS KEYWORD AS PLOT
+      IF(GOPLOT) GO TO 470
+      IPLOT=1
+      ISPLOT=0
+  470 IF(NNUMB.EQ.-1) GO TO 150
+      FACTOR=FLOAT(NNUMB)+XNUM
+      GO TO 150
+C
+C
+C              KEYWORD DCON
+  480 IF(NNUMB.EQ.-1) NNUMB=1
+      IDCON=NNUMB
+      GO TO 150
+C
+C
+C      KEYWORD DIST
+C
+  490 IDIS=1
+      GO TO 150
+C
+C       KEYWORD AREA
+C
+  500 CALL KRANGE(CARD,XNUM1,XNUM2)
+C           XNUM1 AND XNUM2 CONTAIN MIN AND MAX LIMITS IN
+C           DEGREES 2THETA FOR PEAK AREA DETERMINATION
+      IF(KR.GE.20)GO TO 150
+      KR=KR+1
+      ARMIN(KR)=XNUM1
+      ARMAX(KR)=XNUM2
+      GO TO 150
+C
+C         KEYWORD MODE
+  530 IF(NNUMB.NE.-1) GO TO 550
+      WRITE(IW,540)
+  540 FORMAT(' *****ERROR. MODE SET TO DEFAULT')
+C         GO TO LOOK FOR NEXT KEYWORD
+      GO TO 150
+  550 MODE=NNUMB
+      GO TO 150
+C
+C              KEYWORD 'DONT'
+  560 IF(NNUMB.NE.-1) GO TO 580
+      WRITE(IW,570) KEYW
+  570 FORMAT(' *****ERROR IN KEYWORD ',A4/)
+      IDONT=0
+      GO TO 150
+  580 IDONT=NNUMB
+      GO TO 150
+C
+C              KEYWORD 'READ'
+  590 IF(NNUMB.NE.-1) GO TO 600
+      WRITE(IW,570) KEYW
+      IREAD=NPTSS
+      GO TO 150
+  600 IREAD=NNUMB
+      GO TO 150
+C
+C              KEYWORD OMIT
+C              NOTE UNUSUAL RETURN AFTER THIS KEYWORD
+  610 IF(NNUMB.NE.-1) GO TO 630
+      WRITE(IW,620)
+  620 FORMAT(' ***ERROR*** KEYWORD OMIT IGNORED, INVALID NUMBER')
+      GO TO 640
+  630 NOMIT=NNUMB
+  640 GO TO 40
+C
+C         KEYWORD START
+  650 IF(NNUMB.NE.-1) GO TO 670
+      WRITE(IW,660)
+  660 FORMAT(' *****ERROR. START SET TO DEFAULT')
+      GO TO 150
+  670 START=FLOAT(NNUMB)+XNUM
+      GO TO 150
+C
+C              KEYWORD SCALE
+  680 IF(NNUMB.NE.-1) GO TO 690
+      WRITE(IW,570) KEYW
+      SCALE=0.0
+      GO TO 150
+  690 SCALE=FLOAT(NNUMB)+XNUM
+      GO TO 150
+C
+C              KEYWORD STEP
+  700 IF(NNUMB.NE.-1) GO TO 710
+      WRITE(IW,570)
+      GO TO 150
+  710 STEPS=FLOAT(NNUMB)
+  720 DEG=STEPS/1000.0
+C              DEG CONTAINS NO. DEGREES PER COUNT
+      GO TO 150
+C
+C              KEYWORD SODA FOR AMMONIA SODA PHASE IDENTIFICATION
+  730 ISODA=1
+      IPOSN=1
+      GO TO 150
+C
+C
+C              END OF KEYWORD READING SECTION
+C
+C**********************************************************************
+C              DATA READING SECTION
+C              ==== ======= =======
+C              COME HERE WHEN KEYWORD 'RUN' FOUND
+C
+C
+  740 IF(IREAD.EQ.0) GO TO 840
+C
+C
+C              GET DATA FROM THAT PREVIOUSLY STORED
+C
+      IF(NPTSS.NE.0) GO TO 760
+      WRITE(IW,750)
+  750 FORMAT(//' *** NO DATA HAS YET BEEN STORED ***')
+      GO TO 10
+  760 STEPS=SSTEPS
+      DO 770 J=1,14
+  770 TITLE(J)=STITLE(J)
+C
+C              IF THE KEYWORD READ HAS BEEN FOUND THEN THE PREVIOULY
+C              STORED DATA IS PICKED UP
+C              UNLESS A START ANGLE HAS BEEN SPECIFIED THE START IS
+C              CALCULATED FROM THE START OF THE STORED DATA AND THE
+C              NUMBER OF POINTS OMITTED
+C              THE KEYWORD DONT IS USED TO OMIT POINTS FROM THE START
+C              OF THE STORED DATA
+C              OMIT IS THE KEYWORD USED TO OMIT POINTS WHEN DATA IS
+C              BEINGREAD FROM CARD OR TAPE
+C
+      IF(START.LT.0.01)START=SSTART+IDONT*STEPS/1000.0
+      WRITE(IW,780) TITLE,START,STEPS
+  780 FORMAT(20A4/' START',F6.2,'  STEP',F5.0)
+      IF(IPUN.NE.0) WRITE(IP,790) TITLE,START,STEPS
+  790 FORMAT(20A4/'START ',F6.2/'STEP ',F6.0)
+      DEG=STEPS/1000.0
+C              IF IREAD IS NEGATIVE DATA TO BE READ BACKWARDS
+      IR=IABS(IREAD)
+      IF(IR+IDONT.GT.NPTSS) IR=NPTSS-IDONT
+      IF(IR.GT.0) GO TO 810
+      WRITE(IW,800)
+  800 FORMAT(//' ***LESS POINTS STORED THAN OMITTED ***')
+      GO TO 10
+C
+  810 INC=1
+      IST=IDONT+1
+      IF(IREAD.GT.0) GO TO 820
+      INC=-1
+      IST=IDONT+IR
+  820 IFILE=1
+      REWIND ID
+      READ(ID) DSTORE
+      DO 830 J=1,IR
+      DATA(J)=DSTORE(IST)
+  830 IST=IST+INC
+      NPTS=IR
+C
+      GO TO 900
+C
+C
+C              READ DATA FROM CARDS OR TAPE
+C
+C
+  840 NPTSS=0
+      CALL RDDATA (DATA,NPTS,NOMIT,NARRAY,IW)
+      IF(NPTS.LT.0) GO TO 1050
+      IF(NPTS.EQ.0) GO TO 10
+      IF(NOMIT.GT.0) START=START+DEG*NOMIT
+      IF(NPTS.LE.NARRAY) GO TO 860
+      NPTS=NARRAY
+      WRITE(IW,850) NARRAY
+  850 FORMAT(//' ***TOO MANY POINTS, FIRST',I5,' HAVE BEEN ACCEPTED')
+  860 CONTINUE
+C
+C
+      IF(MODE.EQ.1) GO TO 880
+C              MODE=2 INDICATES THAT EVERY OTHER DATA POINT IS A
+C              TIME WHICH IS TO BE IGNORED COMPLETELY,IE. THE PROGRAM
+C              ASSUMES ALL TIMES ARE THE SAME.
+      J=0
+      DO 870 I=1,NPTS,2
+      J=J+1
+  870 DATA(J)=DATA(I)
+      NPTS=J
+C
+C
+  880 CONTINUE
+C              THE FIRST TWO POINTS MAY BE SPURIOUS SO ARE IGNORED
+      DATA(1)=DATA(3)
+      DATA(2)=DATA(3)
+C
+C      CALL SUBROUTINE TO CHECK FOR SPURIOUS POINTS
+      CALL CHECK (NPTS,IW)
+C
+C
+C
+C              STORE DATA, STEPS, START, AND NPTS
+C      WRITE(IW,881)
+C  881 FORMAT(//' NOW AT THIS POINT ')
+      IFILE=1
+        ID=27
+      WRITE(ID) DATA
+      NPTSS=NPTS
+      SSTART=START
+      SSTEPS=STEPS
+      DO 890 J=1,14
+  890 STITLE(J)=TITLE(J)
+  900 CONTINUE
+C
+C              END OF DATA INPUT
+C
+C              RETURN TO CARD INPUT IF ACCESS DATA FROM TAPE
+      IF(IACC.EQ.1) IN=ICD
+C
+C              DO NOTHING ELSE IF ACCESS DATA FROM TAPE
+      IF(IACC.EQ.1) GO TO 10
+C
+C**********************************************************************
+C
+C
+C              SUM SUCCESIVE SCANS IF REQUESTED
+      IF(NSUM.GT.0) CALL SUM (NPTS,NSUM)
+C
+C              BUNCH DATA IF REQUESTED
+      IF(NBUN.LE.1) GO TO 920
+      CALL BUNCH (NPTS,NBUN,STEPS)
+      DEG=DEG*NBUN
+      IF(IPUN.NE.0) WRITE(IP,910) STEPS
+  910 FORMAT('STEP ',F5.0)
+  920 CONTINUE
+C
+C
+C              SMOOTH DATA IF REQUESTED
+      IF(NSM.NE.0) CALL SMOOTH (NPTS,NSM)
+C
+C
+C              PUNCH DATA ONTO CARDS IF REQUESTED
+      IF(IPUN.EQ.0) GO TO 960
+      WRITE(IW,930)
+  930 FORMAT(/' THE FOLLOWING DATA HAS BEEN PUNCHED ONTO CARDS'/)
+      DO 940 J=1,NPTS,8
+      K=J+7
+      NC=K/8
+      IF(K.GT.NPTS) K=NPTS
+      WRITE(IP,950) NC,(DATA(L),L=J,K)
+  940 WRITE(IW,950) NC,(DATA(L),L=J,K)
+  950 FORMAT(T75,I4,T1,8(2X,I6))
+      NC=NC+1
+      J=0
+      WRITE(IP,950) NC,J
+  960 CONTINUE
+C
+      IF(ISTOR.EQ.1) GO TO 10
+C
+C
+C              IF RATIO WANTED JUMP TO SUBROUTINE
+      IF(IRATIO.NE.1) GO TO 970
+      CALL RATIO (DATA,IW)
+      GO TO 10
+  970 CONTINUE
+C
+      IF(KR.EQ.0)GO TO 1045
+C     AREA OR INTEGRATE COUNTS
+C      CALL PLOT(XL,-YOFF,-3)
+      DO 1044 I=1,KR
+      IF(ARMAX(I).LE.ARMIN(I))GO TO 1044
+      JNK=(ARMAX(I)-ARMIN(I))/DEG
+      NPTM=(ARMIN(I)-START)/DEG
+      NPTM=NPTM+1
+      ARMIN(I)=START+FLOAT(NPTM-1)*DEG
+      NPTX=NPTM+JNK
+      IRMAX=0
+      K=0
+      DO 1041 J=NPTM,NPTX
+      K=K+1
+      DSTORE(K)=DATA(K)
+      DATA(K)=DATA(J)
+      IF(DATA(J).LT.IRMAX)GO TO 1041
+      IRMAX=DATA(J)
+      IRPOS=K
+ 1041 CONTINUE
+      XMAX=FLOAT(IRMAX)
+      DO 1030 IMAX=1,10
+      IF(XMAX.LE.10.0)GO TO 1032
+ 1030 XMAX=XMAX/10.0
+ 1032 IF(XMAX.LE.2.0)IRMAX=2
+      IF((XMAX.GT.2.0).AND.(XMAX.LE.4.0))IRMAX=4
+      IF((XMAX.GT.4.0).AND.(XMAX.LE.8.0))IRMAX=8
+      IF(XMAX.GT.8.0)IRMAX=10
+      IRMAX=IRMAX*10**(IMAX-1)
+      POST=(ARMIN(I)+(FLOAT(IRPOS)-0.5)*DEG)*0.5
+      CALL GRAFIX(IRMAX,JNK,DEG,SCALE,IRPLOT,ISPLOT,YLEN,YOFF,FACTOR,
+     +LPLOT,AMINLG,ARMIN(I),YSC)
+      WRITE(IW,1043)
+ 1043 FORMAT('1',60('*'))
+      WRITE(IW,1046)ARMIN(I),ARMAX(I)
+ 1046 FORMAT(' DATA FOR AREA BETWEEN ',F6.2,' AND ',F6.2,' DEGREES 2 THE
+     +TA')
+      WRITE(IW,1047)
+ 1047 FORMAT(' ',60('*'),//)
+      JNK=JNK+1
+      IF(INTEG.NE.0)CALL INTEGR (JNK,ARMIN(I),IW,STEPS)
+      IF(INTEG.EQ.0)CALL HALFW(JK,MIN1,IRPOS,IW,DEG,JNK,POST,YSC,ARMIN(
+     +I))
+C     WRITE(IW,20)
+      DO 1052 J=1,JNK
+      DATA(J)=DSTORE(J)
+ 1052 CONTINUE
+ 1044 CONTINUE
+      GO TO 10
+ 1045 CONTINUE
+C**********************************************************************
+C
+C              PLOTTING SECTION FOLLOWS
+C
+C
+C
+C              CONVERT COUNTS TO LOG COUNTS IF REQUESTED
+C              SUBROUTINE LOGS SUBTRACTS THE MINIMUM LOG VALUE AMINLG
+C              FROM ALL LOG VALUES.
+C              THE SUBTRACTED LOG VALUES ARE MULTIPLIED BY 1000 AND
+C              RETURNED AS INTEGERS.
+      IF(LPLOT.NE.0) CALL LOGS (NPTS,AMINLG)
+C
+C              NOW FIND OVERALL MAXIMUM
+      MAX=0
+      J=NPTS-2
+      DO 980 I=3,J
+      IF(DATA(I).LT.MAX) GO TO 980
+      MAX=DATA(I)
+      IPOS=I
+  980 CONTINUE
+      XMAX=FLOAT(MAX)
+      DO 990 IMAX=1,10
+      IF(XMAX.LE.10.0)GO TO 1000
+  990 XMAX=XMAX/10.0
+ 1000 IF(XMAX.LE.2.0)MAX=2
+      IF((XMAX.GT.2.0).AND.(XMAX.LE.4.0))MAX=4
+      IF((XMAX.GT.4.0).AND.(XMAX.LE.8.0))MAX=8
+      IF(XMAX.GT.8.0)MAX=10
+      MAX=MAX*10**(IMAX-1)
+C              ALLOW FOR POSITION OF FIRST POINT NOT BEING AT START
+      POSIT=(START+(FLOAT(IPOS)-0.5)*DEG)*0.5
+C        POSIT IS IN DEGREES THETA  ( NOT 2THETA )
+C
+C              SET MAX TO FSD IF IT HAS BEEN SPECIFIED
+      IF(IFSD.NE.0) MAX=IFSD
+      CALL GRAFIX(MAX,NPTS,DEG,SCALE,IRPLOT,ISPLOT,YLEN,YOFF,FACTOR,
+     +LPLOT,AMINLG,START,YSC)
+      GOPLOT=.TRUE.
+C
+C
+C              END OF PLOTTING SECTION
+C**********************************************************************
+C
+C              FIND PEAK POSITIONS IF REQUESTED)
+C
+      IF(IPOSN.EQ.0) GO TO 1040
+      XPTS=1.0/DEG
+      DEGR=DEG
+C     CALL PEAKS(NPTS,START,IW,APOSN,XPTS)
+      CALL PEAKS (NPTS,START,IW,APOSN,XPTS,IPAR,YLEN,DEGR,MAX)
+C              SUBROUTINE PEAKS DESTROYS DATA
+C
+C              RETURN PLOTTER TO TRUE BASELINE
+C      CALL PLOT (0.0,-YOFF,-3)
+      GO TO 10
+ 1040 CONTINUE
+C
+C***********************************************************************
+C
+      IHALF=0
+      IF(IRPLOT.EQ.0.AND.IPLOT.EQ.0.AND.ISPLOT.EQ.0) IHALF=1
+      IF(IHALF.EQ.1)CALL HALFW(JK,MIN1,IPOS,IW,DEG,NPTS,POSIT,YSC,START)
+C              IPOS=0 IS THE ERROR CONDITION MARKER FROM HALFW
+C              RETURN PLOTTER TO TRUE BASELINE
+C      CALL PLOT (0.0,-YOFF,-3)
+      IF(IPOS.EQ.0) GO TO 10
+C
+C
+C
+C              GO TO READ NEXT HEADER IF DECONVOLUTION NOT WANTED
+C
+      IF(IRPLOT.NE.0.OR.IPLOT.NE.0.OR.ISPLOT.NE.0) IDCON=0
+      IF(IDCON.EQ.0) GO TO 10
+      NREF=IDCON
+      GO TO 1060
+C
+C
+C
+ 1050 IEND=1
+ 1060 RETURN
+      END
+      SUBROUTINE REPORT (TITLE,CRYST,POSIT,LPRNT,DATE)
+C
+C              SUBROUTINE TO PRODUCE 4 COPIES OF APPARENT CRYSTALLITE
+C              SIZE RESULTS FOR ATTACHING DIRECTLY TO TEST NOTES
+C
+C
+      INTEGER DATE(8)
+      DIMENSION TITLE(14)
+      COMMON /INFO  / NPTSTO(10),STPSTO(10),IASTO(10),PSTO(10),IRESLT(70
+     +),IHKL(4),IPHASE(24),IPKAR,NREF,NPTSS,NPR,WIDE(10),THETA2,IDIS
+      INTEGER ETA,BLANK
+        DATA ETA/'ETA '/,BLANK/'    '/
+C
+C              NPR IS THE FIRST OF FOUR LINEPRINTERS TO BE USED FOR
+C              REPORT OUTPUT, IT IS NEGATIVE IF THIS ROUTINE HAS NOT
+C              BEEN USED BEFORE IN THIS JOB
+C
+C     IF(NPR.GT.0) GO TO 30
+C              WRITE HEADINGS FOR REPORTS
+C     NPR=IABS(NPR)
+      LP=23
+C     DO 20 L=1,4
+      WRITE(LP,10) DATE
+   10 FORMAT(' ',8A1,//,' ',70('*'))
+C  20 LP=LP+1
+C  30 CONTINUE
+C
+C
+C              PACK FIRST 4 SIGNIFICANT CHARACTERS OF IPHASE INTO KEYW
+      KEYW=BLANK
+      DO 40 J=1,20
+      IF(IPHASE(J).EQ.BLANK) GO TO 40
+      KEYW=IWORD(IPHASE(J))
+      GO TO 50
+   40 CONTINUE
+   50 CONTINUE
+C
+      ICRYST=CRYST+0.5
+      POS2=POSIT*2.0
+C     LP=NPR
+C     DO 250 L=1,4
+      WRITE(LP,60) DATE
+   60 FORMAT(' MEASUREMENT OF APPARENT CRYSTALLITE SIZE BY WEIGHT',2
+     +0X,8A1)
+      WRITE(LP,70) (TITLE(J),J=1,5),IRESLT,IPHASE
+   70 FORMAT(' XRD ',3A5,A1/' YOUR REF  ',70A1/' PHASE     ',24A1)
+C
+C              THE CRYSTALLITE SIZE IS ROUNDED AND AN ERROR QUOTED
+C              THE EXTENT OF ROUNDING AND THE ERROR DEPENDS ON THE VALUE
+C
+C              XTALLITE SIZE  ROUNDED TO NEAREST   ERROR
+C
+C                 >1000        QUOTED AS >1000
+C                 500-999           50             +-100
+C                 250-499           10             +-50
+C                 100-249            5             +-10
+C                  70-99             1             +-4
+C                   0-69             1             +-2
+C
+      WRITE(LP,80)
+   80 FORMAT(' APPARENT CRYSTALLITE SIZE BY WEIGHT')
+      IF(ICRYST.LT.1000) GO TO 100
+      WRITE(LP,90)
+   90 FORMAT(T28,'>1000 ANGSTROMS')
+      GO TO 200
+  100 IF(ICRYST.LT.500) GO TO 120
+      JCRYST=((ICRYST*2+50)/100)*50
+      WRITE(LP,110) JCRYST
+  110 FORMAT(T28,I4,' +-100 ANGSTROMS')
+      GO TO 200
+  120 IF(ICRYST.LT.250) GO TO 140
+      JCRYST=((ICRYST+5)/10)*10
+      WRITE(LP,130) JCRYST
+  130 FORMAT(T28,I3,' +-50 ANGSTROMS')
+      GO TO 200
+  140 IF(ICRYST.LT.100) GO TO 160
+      JCRYST=((ICRYST*2+5)/10)*5
+      WRITE(LP,150) JCRYST
+  150 FORMAT(T28,I3,' +-10 ANGSTROMS')
+      GO TO 200
+  160 IF(ICRYST.LT.70) GO TO 180
+      WRITE(LP,170) ICRYST
+  170 FORMAT(T28,I2,' +-4 ANGSTROMS')
+      GO TO 200
+  180 WRITE(LP,190) ICRYST
+  190 FORMAT(T28,I2,' +-2 ANGSTROMS')
+  200 CONTINUE
+      WRITE(LP,210) IHKL,POS2
+  210 FORMAT(' DETERMINED FROM THE FULL WIDTH AT HALF HEIGHT OF THE ',4A
+     +1,' LINE AT',F6.1/' DEGREES 2THETA AFTER DECONVOLUTION TO ','REMOV
+     +E INSTRUMENT BROADENING')
+      IF(KEYW.NE.ETA) GO TO 230
+C
+C              THE RATIO OF THE SAMPLE PEAK AREA TO THE REFERENCE PEAK
+C              AREA IS ONLY CALCULATED AND PRINTED FOR ETA ALUMINA
+C              SAMPLES.  THE RESULT IS DIVIDED BY 2 FOR HISTORICAL
+C              REASONS.
+C
+      R=FLOAT(IPKAR)/FLOAT(IASTO(NREF))
+      R=R*0.5
+      WRITE(LP,220) PSTO(NREF),R
+  220 FORMAT(/' THE RATIO OF THE AREA OF THIS SAMPLE PEAK TO THE ','REFE
+     +RENCE PEAK AT',/F6.1,' DEGREES 2 THETA IS',F6.2)
+  230 WRITE(LP,240)
+  240 FORMAT(/' ',70('*'))
+C 250 LP=LP+1
+      RETURN
+      END
+      SUBROUTINE SMOOTH (NPTS,NSM)
+C
+C              GAUSSIAN CONVOLUTE FUNCTION
+C
+      INTEGER D,S
+      integer ndat
+      parameter(ndat = 32768)
+      COMMON /D     / D(ndat)
+      COMMON /MATHS / S(ndat), dummy(ndat)
+C
+      L=NPTS-4
+      DO 10 J=5,L
+   10 S(J)=(1*(D(J-4)+D(J+4))+15*(D(J-3)+D(J+3))+93*(D(J-2)+D(J+2))+277*
+     +(D(J-1)+D(J+1))+399*D(J))/1171
+      DO 20 J=1,4
+   20 S(J)=S(5)
+      DO 30 J=L,NPTS
+   30 S(J)=S(L)
+      DO 40 J=1,NPTS
+   40 D(J)=S(J)
+      RETURN
+      END
+      SUBROUTINE SNCAL (S,M)
+C
+C
+C              SUBROUTINE SNCAL CALCULATES A TABLE
+C              OF SINES FOR USE IN OBTAINING THE
+C              FOURIER TRANSFORM.
+C
+C
+      DIMENSION S(512)
+      N=2**M
+      NT=N/4
+      MT=M-2
+      IF(MT) 60,60,10
+   10 THETA=0.785398163
+      DHELP=0.707106781
+      JSTEP=NT
+      JDIF=NT/2
+      S(JDIF)=DHELP
+      IF(MT-2) 60,20,20
+   20 DO 50 L=2,MT
+      THETA=THETA/2.0
+      JTEP2=JSTEP
+      JSTEP=JDIF
+      JDIF=JDIF/2
+      DHELP=SIN(THETA)
+      S(JDIF)=DHELP
+      JCI=NT-JDIF
+      DHELP=COS(THETA)
+      S(JCI)=DHELP
+      JLAST=NT-JTEP2
+      IF(JLAST-JSTEP) 50,30,30
+   30 DO 40 J=JSTEP,JLAST,JSTEP
+      JC=NT-J
+      JD=J+JDIF
+   40 S(JD)=S(J)*S(JCI)+S(JDIF)*S(JC)
+   50 CONTINUE
+   60 RETURN
+      END
+      SUBROUTINE SUM (NPTS,NSUM)
+C
+C              SUBROUTINE TO SUM SUCCESIVE SCANS.
+C              SCANS ALTERNATE IN DIRECTION
+C
+      INTEGER DATA
+      integer ndat
+      parameter(ndat = 32768)
+      COMMON /D     / DATA(ndat)
+      ISTART=NSUM+1
+      INC=-1
+   10 IADD=ISTART
+      IF(INC.EQ.-1) IADD=ISTART+NSUM-1
+      IF((ISTART+NSUM-1).GT.NPTS) GO TO 30
+      DO 20 ISUM=1,NSUM
+      DATA(ISUM)=DATA(ISUM)+DATA(IADD)
+   20 IADD=IADD+INC
+      ISTART=ISTART+NSUM
+      INC=-INC
+      GO TO 10
+C
+C
+   30 NPTS=NSUM
+      RETURN
+      END
+      SUBROUTINE TEST (IL2,IO,CMAX,DEGR)
+C
+C              PART OF THE PEAK FINDING ROUTINE WRITTEN BY D ALEXANDER
+C
+      REAL NOISE
+      INTEGER STH,BFLG,PKK,POINT
+      INTEGER FF,F,FD,IB1
+c     INTEGER OO1,BAS(3,800),LPL,LPM,P4,P5,PKC,PKC1,PKC2,NPC,BASE(2,300)
+      integer nbas
+      parameter(nbas = 2000)
+      INTEGER OO1,BAS(3,nbas),LPL,LPM,P4,P5,  PKC1,PKC2,NPC,BASE(2,nbas)
+      INTEGER O1,O2,P6,N,K,KK,LZ,L
+      DIMENSION IPB(4),SPA(3)
+      DIMENSION IPA(4,3),P(20),Q(20),PB(3,4),PA(5,3),DEL1(4),DEL2(4)
+      integer ndat
+      parameter(ndat = 32768)
+      COMMON /MATHS / C1(ndat),C2(ndat)
+      COMMON /POS   / SPEC(150),ISPEC(3,150),C3(ndat)
+      COMMON /T     / O1,OO1,O2,O6,P6,Y6,TI1,TI2,L,N,I9,FF,F,FD,IB1,STP,
+     +STH,BFLG,C12,O4,O5,P4,P5,Y4,Y5,DEL1,DEL2,IBF,IB,SF,SB,NPC,LZ,ISP(1
+     +50)
+      COMMON /X     / BAS,IVL,I0
+      IF(IL2.GT.0) GO TO 21
+      IL2=1
+      Q(1)=.297
+      Q(2)=.518
+      Q(3)=.642
+      Q(4)=.690
+      Q(5)=.703
+      Q(6)=.704
+      P(1)=.3107
+      P(2)=.494
+      P(3)=.526
+      P(4)=.488
+      P(5)=.454
+      P(6)=.443
+      DO 10 I=7,20
+      Q(I)=.704
+      P(I)=.440
+   10 CONTINUE
+      IC=2
+      PKC1=0
+      PKK=0
+      BFLG=1
+      IBSPT=1
+      BI=IB
+      BBI=5.0*BI
+      FIB=1.0/BI
+      BYI=1.5*BI
+      IPA(4,1)=0
+      IPA(4,2)=0
+      IPA(4,3)=0
+      DO 20 K=1,4
+      IPB(K)=0
+      DO 20 I=1,3
+      PB(I,K)=0.0
+   20 CONTINUE
+   21 continue
+      IF(L.LT.N) GO TO 30
+      IBFM=(IBF-2)*64
+      GO TO 40
+   30 IBFM=(IBF-1)*64
+   40 LPM=(IBFM+L)*IB-IB/2
+      LPM=L*IB-IB/2
+      IF((O2.NE.3).AND.(O2.NE.4).AND.(O2.LT.9)) GO TO 70
+C VALLEY LOAD
+      IVL=IVL+1
+      BAS(1,IVL)=LPM
+      BAS(2,IVL)=AMIN1(DEL1(2),DEL1(3))*FIB
+      BAS(3,IVL)=-1
+C     WRITE(6,45)BAS(1,IVL),BAS(2,IVL),IVL
+C  45 FORMAT(' VALLEY LOAD',3I6)
+      IF(IL2-2) 60,50,60
+   50 GO TO 280
+   60 GO TO 930
+   70 NOISE=ABS((DEL1(2)+DEL1(1)+DEL1(3)+DEL1(4))/4.)
+      NOISE=NOISE**(.5)
+      IF((O2.EQ.5).OR.(O2.EQ.2)) GO TO 80
+      GO TO 90
+   80 CONTINUE
+      IF(P4.GT.20) P4=20
+      E=-O4/(NOISE*P(P4))
+      E0=ABS(E*NOISE*Q(P4)/Y4)
+      IG=P4
+      IPA(1,3)=P4
+      IPA(3,3)=Y4
+      PA(3,3)=O4
+      GO TO 100
+   90 CONTINUE
+      IF(P5.GT.20) P5=20
+      E=-O5/(NOISE*P(P5))
+      E0=ABS(E*NOISE*Q(P5)/Y5)
+      IG=P5
+      IPA(1,3)=P5
+      IPA(3,3)=Y5
+      PA(3,3)=O5
+C NOISE SPECTRUM CHARACTERISTICS
+  100 THRESH=12.69/(1.0+TI2*2.53/E0)
+C     WRITE(6,101)LPM,THRESH,E,IPA(1,3),IPA(3,3),PA(3,3),O2
+C 101 FORMAT(I40,2F9.3,I4,I10,F10.2,I4)
+      IF(THRESH.LT.0.8) THRESH=0.8
+      IF(THRESH.GT.TI1) THRESH=TI1
+      IF(E.LT.THRESH) GO TO 130
+      PKKK=PKK
+      PKK=0
+      IF(BFLG.NE.1) GO TO 120
+      IF(IBSPT.GT.LPM) GO TO 120
+      BFLG=0
+      IBSPT=ndat
+      POINT=1
+      IF(PKKK.LT.2) GO TO 120
+      DO 105 IS=1,2
+      SPA(IS)=FLOAT(IPA(3,IS))/(FLOAT(IPA(1,IS))*DEGR*PA(2,IS))
+  105 SPA(IS)=ABS(SPA(IS))
+      IF((SPA(1).GT.0.25).OR.(SPA(2).GT.0.25))GO TO 120
+  110 IVL=IVL+1
+      BAS(1,IVL)=STP
+      BAS(2,IVL)=STH/IB
+      BAS(3,IVL)=1
+C     WRITE(6,115)BAS(1,IVL),BAS(2,IVL),IVL
+C 115 FORMAT(' FORCED BASE POINT',3I6)
+      GO TO (120,140) , POINT
+  120 CONTINUE
+      IPA(4,3)=1
+      GO TO 150
+  130 IPA(4,3)=0
+      PKK=PKK+1
+C PKK COUNTS ADJACENT NON EVENTS USED TO FORCE BASELINE
+      IF(PKK.NE.I9) GO TO 150
+      DO 135 IS=1,3
+      SPA(IS)=FLOAT(IPA(3,IS))/(FLOAT(IPA(1,IS))*DEGR*PA(2,IS))
+  135 SPA(IS)=ABS(SPA(IS))
+C     WRITE(6,136)SPA(1),SPA(2),SPA(3)
+C 136 FORMAT(3F10.3)
+      IF((SPA(1).GT.0.25).OR.(SPA(2).GT.0.25).OR.(SPA(3).GT.0.25))
+     +GO TO 138
+      POINT=2
+      BFLG=1
+      IBSPT=IFIX(STP)
+      PKK=0
+      GO TO 110
+  138 PKK=PKK-1
+      GO TO 150
+  140 CONTINUE
+  150 IPA(2,3)=O2
+C POSITION AND HEIGHT
+C CREST TOPS FOUND BY 3 PT QUADRATIC FIT ON SMOOTHED PTS
+C SINGLE PK ACCURACY BETTER THAN 1 PERCENT HLF WIDTH
+C SHOULDERS MID INFLECTION PTS PLUS .5 TOWARDS HIGH PTS
+C SHOULDER ACCURACY APPROX 10 PERCENT HLF WIDTH
+C     WRITE(6,155) LPM,O2
+C 155 FORMAT(' PK POS',I5,'  TYPE',I2)
+      PL=-(DEL1(4)-DEL1(2))/(2.*(DEL1(2)-2.*DEL1(3)+DEL1(4)))
+      PL=PL-(DEL1(3)-DEL1(1))/(2.0*(DEL1(1)-2.0*DEL1(2)+DEL1(3)))
+      PL=(PL-1.0)/2.0
+      IF(PL.LT.-1.) PL=-1.0
+      IF(PL.GT.0.) PL=0.
+      IF(O2.EQ.5) PL=-FLOAT(P4)/2.0
+      IF(O2.EQ.6) PL=FLOAT(P5-1)/2.0
+      IF((O2.EQ.2).OR.(O2.EQ.7)) PL=-0.5
+      LPL=PL
+      PL=PL*FLOAT(IB)
+      PA(1,3)=FLOAT(LPM)+PL
+      IF((O2.EQ.5).OR.(O2.EQ.6)) GO TO 160
+      PA(2,3)=AMAX1(DEL1(2),DEL1(3))*FIB
+      GO TO 170
+  160 IF(LPL.GT.1) LPL=1
+      IF(LPL.LT.-2) LPL=-2
+      PA(2,3)=DEL1(LPL+3)*FIB
+  170 CONTINUE
+C BASEPOINT ROUTINE GOVERNED BY F,FF SETTING
+C IF CURRENT EVENT VALLEY TYPE OR BACK SHOULDER AND FF=1
+C THEN POSSIBLE BASEPT.   BVH,BVP LOADED WITH HT AND POSN
+C WHEN FD=3
+      IF(FF.EQ.0) GO TO 220
+      FF=0
+      IF((F.EQ.0).AND.(FD.EQ.0)) GO TO 220
+      IF(N.EQ.1) BVH=C12*FIB
+      IF(N.GT.1) BVH=C1(N-1)*FIB
+      BVP=((IBF-1)*64+N-1)*IB-IB/2
+C VERIFICATION OF BASEPOINT IF O2 EVENT SIGNIFICANT
+      IF(IPA(4,3)) 190,190,180
+  180 FD=F
+  190 F=0
+      IF(FD-3) 220,200,220
+  200 FD=0
+  210 IVL=IVL+1
+C      WRITE(IO,777)IPA(4,3),O2,OO1,O1,P6,IPA(1,3),BVP
+C777    FORMAT(6I4,F9.2)
+      BAS(1,IVL)=BVP
+      BAS(2,IVL)=BVH
+      BAS(3,IVL)=1
+C     WRITE(6,215)BAS(1,IVL),BAS(2,IVL),IVL
+C 215 FORMAT(' BASE POINT',3I6)
+      IBSPT=BVP
+      BFLG=1
+  220 CONTINUE
+      IF(O2-8) 280,230,280
+  230 PA(4,3)=SF
+      PA(5,3)=SB
+C DECONVOLUTION CHECK
+C     WRITE(6,235)LPM,O2
+C 235 FORMAT(I60,I6)
+      IF(IPA(4,2)) 240,240,280
+  240 IF((IPA(4,1).EQ.1).AND.(IPA(4,3).EQ.1)) GO TO 250
+      GO TO 280
+  250 IF((IPA(2,1).EQ.8).AND.(IPA(2,2).EQ.8).AND.(IPA(2,3).EQ.8)) GO TO
+     +260
+      GO TO 280
+  260 W1=PA(4,1)+PA(5,1)
+      W3=PA(4,3)+PA(5,3)
+      IF((W1.GE.0.0).AND.(W3.LE.0.0)) GO TO 270
+      GO TO 280
+C DECONVOLUTION CONDITION SATISFIED
+  270 W0=PA(3,2)
+      W2=W0-W1+W3
+      W2=W0+(-PA(4,1)*W1-PA(5,3)*W3)*2./W2
+      E=-W2/(PA(2,2)**(.5)*P(4))
+      IF(E.GE.TI1) IPA(4,2)=1
+  280 IF(IPA(4,1)) 300,300,290
+  290 KK=1
+      PB(1,4)=PA(1,1)
+      PB(2,4)=PA(2,1)
+      PB(3,4)=FLOAT(IPA(1,1))
+      IPB(4)=IPA(2,1)
+      GO TO 310
+  300 KK=0
+  310 DO 320 I=1,4
+      DO 320 JJ=1,2
+      PA(I,JJ)=PA(I,JJ+1)
+      IPA(I,JJ)=IPA(I,JJ+1)
+  320 CONTINUE
+      PA(5,1)=PA(5,2)
+      PA(5,2)=PA(5,3)
+      IF(KK) 330,330,340
+  330 IF(IL2.EQ.1) GO TO 930
+      GO TO 700
+C BROAD PEAK FILTER
+  340 CONTINUE
+C     WRITE(6,345)LPM,O2,IL2,KK
+C 345 FORMAT(I60,3I6)
+C     WRITE(6,346)(IPB(I),I=1,4)
+C 346 FORMAT(I70,4I6)
+C     WRITE(6,347)((PB(I,J),I=1,3),J=1,4)
+C 347 FORMAT(/(70X,3F10.2))
+      GO TO (350,350,730) , IL2
+  350 IF((IPB(4).EQ.5).OR.(IPB(4).EQ.6)) GO TO 360
+      GO TO 460
+  360 IF((IPB(3).EQ.5).OR.(IPB(3).EQ.6)) GO TO 370
+      GO TO 420
+  370 IF((PB(1,4)-PB(1,3)).GE.(AMIN1(PB(3,4),PB(3,3))*BI)) GO TO 380
+      GO TO 430
+  380 IF(IPB(4)-6) 410,390,410
+  390 IF(IPB(3)-5) 400,430,400
+  400 IF((PB(1,4)-PB(1,3)).GT.(BBI*AMAX1(PB(3,3),PB(3,4)))) GO TO 450
+  410 IF(PB(3,4)-5.0) 500,500,450
+  420 IF((PB(1,4)-PB(1,3)).GE.(BI*AMIN1(PB(3,3),PB(3,4)))) GO TO 410
+  430 DO 440 I=1,3
+      PB(I,3)=PB(I,2)
+      PB(I,2)=PB(I,1)
+      PB(I,1)=0.0
+  440 CONTINUE
+      IPB(3)=IPB(2)
+      IPB(2)=IPB(1)
+      IPB(1)=0
+  450 GO TO 700
+  460 IF(IPB(3)-5) 480,470,480
+  470 IF((PB(1,4)-PB(1,3)).GE.(BI*AMIN1(PB(3,3),PB(3,4)))) GO TO 490
+      GO TO 430
+  480 IF((PB(1,4)-PB(1,3)).GE.(BI*AMIN1(PB(3,3),PB(3,4)))) GO TO 490
+      GO TO 430
+  490 CONTINUE
+C     WRITE(6,495)LPM,O2,PB(3,4)
+C 495 FORMAT(I60,I6,F10.2)
+      IF(PB(3,4).GT.8.0) GO TO 530
+  500 IF(PB(1,3)) 540,510,540
+  510 IPB(3)=IPB(4)
+      DO 520 I=1,3
+      PB(I,3)=PB(I,4)
+  520 CONTINUE
+  530 GO TO 700
+  540 IF((IPB(3).EQ.5).OR.(IPB(4).EQ.6))GO TO 550
+      GO TO 560
+  550 IF(IPB(4).EQ.5)GO TO 555
+      IF(IPB(3).EQ.6)GO TO 560
+      IF((PB(1,4)-PB(1,3)).LE.(1.2*BBI*AMIN1(PB(3,3),PB(3,4))))GO TO 560
+      IF(IPB(4).EQ.6) GO TO 700
+      GO TO 570
+  555 IF((PB(1,4)-PB(1,3)).GT.(BBI*AMAX1(PB(3,3),PB(3,4))))GO TO 570
+  560 GO TO 730
+  570 IPB(3)=IPB(4)
+      DO 580 I=1,3
+      PB(I,3)=PB(I,4)
+  580 CONTINUE
+      IF(PB(1,2)-0.0) 590,640,590
+  590 IF(IPB(2)-5) 640,600,640
+  600 CONTINUE
+  610 IF(IPB(1)-5) 620,650,620
+  620 IPB(2)=IPB(1)
+      IPB(1)=0
+      DO 630 I=1,3
+      PB(I,2)=PB(I,1)
+      PB(I,1)=0.0
+  630 CONTINUE
+  640 GO TO 700
+  650 IF(PB(1,1)) 660,680,660
+  660 IPB(1)=0
+      DO 670 I=1,3
+  670 PB(I,1)=0.0
+  680 IPB(2)=0
+      DO 690 I=1,3
+  690 PB(I,2)=0.0
+  700 IF(IL2.EQ.1) GO TO 720
+      IF(IL2.EQ.3) GO TO 710
+      IL2=3
+      GO TO 280
+  710 IF(O2.EQ.13) GO TO 730
+      O2=13
+      GO TO 280
+  720 GO TO 930
+  730 CONTINUE
+C COMPARISON AND SPECTRUM LOAD
+      IIL2=1
+      IF(O2.EQ.13) IIL2=IL2+KK
+      DO 820 IL1=1,IIL2
+      IF(IPB(IL1)) 740,820,740
+  740 IF(IB1.NE.1.AND.NPC.NE.0) GO TO 750
+      NPC=NPC+1
+      PKC1=PKC1+1
+      SPEC(NPC)=PB(1,IL1)
+      ISPEC(1,NPC)=IFIX(PB(2,IL1))
+      ISPEC(3,NPC)=IPB(IL1)+10*IB
+      ISP(NPC)=NPC
+C     WRITE(6,745)NPC,SPEC(NPC),ISPEC(1,NPC),ISPEC(3,NPC)
+C 745 FORMAT(I90,F10.2,2I10)
+      GO TO 820
+C FOR RUNS ON BRACKETTED DATA
+  750 II=IC-1
+C     WRITE(6,401) PB(1,IL1)
+C 401 FORMAT('  PB(1,IL1)',F9.2)
+      IF(II.GT.NPC) II=NPC
+      DO 760 IC=II,NPC
+      IF((PB(1,IL1)+BYI).LT.SPEC(IC)) GO TO 770
+      IF((PB(1,IL1)-BYI).LT.SPEC(IC)) GO TO 810
+  760 CONTINUE
+      IC=NPC+1
+      GO TO 800
+  770 NN=NPC
+      NCP=NPC-IC+1
+      DO 790 I1=1,NCP
+      NNS=NN+1
+      SPEC(NNS)=SPEC(NN)
+      DO 780 I2=1,3
+      ISPEC(I2,NNS)=ISPEC(I2,NN)
+  780 CONTINUE
+      NN=NN-1
+  790 CONTINUE
+  800 CONTINUE
+      SPEC(IC)=PB(1,IL1)
+      ISPEC(1,IC)=IFIX(PB(2,IL1))
+      ISPEC(3,IC)=IPB(IL1)+10*IB
+C ISP CONTAINS THE SUBSCRIPT OF ALL ELEMENTS ACCEPTED
+C DURING BRACKET RUN IB
+      PKC1=PKC1+1
+      ISP(PKC1)=IC
+      NPC=NPC+1
+      IC=IC+2
+      GO TO 820
+  810 IC=IC+1
+  820 CONTINUE
+      IF((IL2.EQ.3).AND.(O2.EQ.13)) GO TO 870
+  830 DO 840 IL1=1,3
+      IPB(IL1)=IPB(IL1+1)
+      DO 840 IL3=1,3
+      PB(IL3,IL1)=PB(IL3,IL1+1)
+  840 CONTINUE
+      IF(IL2.EQ.1) GO TO 850
+      IF(IL2.EQ.2) GO TO 860
+      O2=13
+      GO TO 280
+  850 GO TO 930
+  860 IL2=3
+      GO TO 280
+  870 CALL BASEL (IO)
+C     WRITE(6,798)((BAS(I,K),I=1,3),K=1,IVL)
+C 798 FORMAT('1',(3I8))
+      IF(IB.NE.1) GO TO 878
+      DO 875 I=1,2
+      DO 875 J=1,IVL
+      BASE(I,J)=BAS(I,J)
+  875 CONTINUE
+  878 IF(PKC1.EQ.0) GO TO 910
+      I=0
+      K=1
+      J=BASE(1,2)-BASE(1,1)
+      IF(J.EQ.0) J=1
+      SLB=FLOAT(BASE(2,2)-BASE(2,1))/FLOAT(J)
+  880 I=I+1
+      J=ISP(I)
+      IP=IFIX(SPEC(J))
+      IP2=BASE(1,K+1)-IP
+      IP1=IP-BASE(1,K)
+      IF(IP2.GE.0) GO TO 900
+  890 K=K+1
+      SLB=FLOAT(BASE(2,K+1)-BASE(2,K))
+      L=BASE(1,K+1)-BASE(1,K)
+      IF(L.EQ.0) L=1
+      SLB=SLB/FLOAT(L)
+      IP1=-IP2
+      IP2=BASE(1,K+1)-IP
+      IF((IP1.GE.0).AND.(IP2.GE.0)) GO TO 900
+      GO TO 890
+  900 ISPEC(2,J)=BASE(2,K)+IFIX(FLOAT(IP1)*SLB)
+      IF(I.GE.PKC1) GO TO 910
+      GO TO 880
+  910 PKC2=PKC1
+C      WRITE(IO,825)PKC2
+C825    FORMAT(I6)
+C WORKING ARRAYS ZEROED FOR NEXT BRACKET RUN
+      DO 920 I=1,PKC2
+      ISP(I)=0
+  920 CONTINUE
+      BAS(3,1)=1
+  930 RETURN
+      END

@@ -1,0 +1,254 @@
+//                                                                              
+//       Copyright (C) 2000, The Xtal System, The University of
+//             Western Australia, xtal@crystal.uwa.edu.au.
+//  Distributed under the GNU General Public Licence as published by
+//  the Free Software Foundation, in the hope that it will be useful
+//  but WITHOUT ANY WARRANTY. See the GNU General Public License
+//  for more details.
+//
+//  This file is used by  Xtal3.7 to specify molecular visualization 
+//  attributes for raytracing molecular images using the external program:
+//                      POVRAY      (Persistence Of Vision RAY tracer).     
+//            (available from http://www.povray.org/ )
+//                                                                              
+//  POVRAY (Persistence Of Vision RAY tracer) include file headers. 
+#include "shapes.inc"                                                           
+#include "metals.inc"                                                           
+#include "colors.inc"                                                           
+//  other possible includes                                                     
+/* 
+#include "finish.inc"                                                        
+#include "glass.inc"                                                         
+#include "metals.inc"                                                        
+#include "stones.inc"                                                        
+#include "woods.inc"                                                         
+*/
+global_settings {assumed_gamma 2.0}                                             
+/*
+   All Xtal atoms being displayed should have their X and Y 
+   coordinates within (+/-0.5,+/-0.5,z) i.e. no restrictions on Z.
+   However the extended objects corresponding to those atoms may 
+   extend beyond those boundaries.
+
+   Note that X is increasingly positive across the page from left to right
+   Note that Y is increasingly positive up  the page from bottom to top
+   Note that Z is increasingly positive from viewer looking into the page
+   i.e. a left handed coordinate system is used (as distinct from the 
+   right handed system more commonly used in crystallography)
+   The camera is positioned at 0,0,-7.2 and is focussed on 0,0,0
+   i.e. the centre of the molecule is the centre of the page. 
+*/
+camera { location < 0, 0, -100> look_at < 0, 0, 0> angle 5 } 
+light_source  { < 0,10, -20> color White }                                      
+light_source  { < 0,10, -15> color White }                                      
+light_source  { < 0, 5, -25> color White }                                      
+background { color SummerSky  }                                                 
+
+
+#declare texture_Cell = texture {     // for the unit cell faces
+                        pigment { color rgbf <0.92, 1.00, 0.97, 0.75> }         
+                        finish { ambient 0.1 diffuse 0.1 reflection 0.05        
+                                 refraction 0 ior 1.45 specular 0.8             
+                                roughness 0.003 phong 1 phong_size 400 } }      
+#declare texture_CellV= texture {     // for the unit cell vertices
+                        pigment { color rgbf <0.80, 0.98, 0.90, 0.00> }         
+                        finish { ambient 0.1 diffuse 0.1 reflection 0.05   
+                                 refraction 0 ior 1.45 specular 0.8             
+                                roughness 0.003 phong 1  } }      
+#declare texture_CellE= texture {    //  for the unit cell edges
+                        pigment { color rgbf <0.80, 0.98, 0.90, 0.30> }         
+                        finish { ambient 0.1 diffuse 0.3 reflection 0.5         
+                                 refraction 0 ior 1.45 specular 0.8             
+                                roughness 0.003 phong 1  } }      
+
+#declare texture_Calix= texture {     // for the unit cell faces
+                        pigment { color rgbf <0.92, 0.98, 0.97, 0.75> }
+                        finish { ambient 0.1 diffuse 0.1 reflection 0.10
+                                 refraction 0 ior 1.45 specular 0.8
+                                roughness 0.003 phong 1 phong_size 400 } }
+
+
+//  Boxes are used to carve octants out of spheres & ellipsoids
+#declare texture_Box = texture { 
+                         pigment { color rgb <0.0,0.45,0.0> } 
+                         normal  { bumps 1.0 scale 0.004 }
+                         finish  { phong 0.4  ambient 0.85 
+                                   reflection 0.05 specular 1 } } 
+// but which octant to choose ?
+#declare Box1 = object { box {<0,0,0>,<-1,-1,-1> texture {texture_Box} } }
+#declare Box2 = object { box {<0,0,0>,<-1,-1, 1> texture {texture_Box} } }
+#declare Box3 = object { box {<0,0,0>,<-1, 1,-1> texture {texture_Box} } }
+#declare Box4 = object { box {<0,0,0>,<-1, 1, 1> texture {texture_Box} } }
+#declare Box5 = object { box {<0,0,0>,< 1,-1,-1> texture {texture_Box} } }
+#declare Box6 = object { box {<0,0,0>,< 1,-1, 1> texture {texture_Box} } }
+#declare Box7 = object { box {<0,0,0>,< 1, 1,-1> texture {texture_Box} } }
+#declare Box8 = object { box {<0,0,0>,< 1, 1, 1> texture {texture_Box} } }
+#declare finish_Default = finish { phong 0.8  ambient 0.2 reflection 0.00} 
+#declare texture_Default  = texture { pigment { color Orange   } 
+                                      finish  { finish_Default } } 
+
+
+//#declare texture_Spec = 
+#declare Xtl_Textscale  = 1.0                                                   
+#declare Xtl_Textfont   = "timrom.ttf"                                          
+#declare texture_Text = texture { pigment { Gold } 
+                                  finish  { reflection .25 specular 1 } } 
+#declare texture_bond = texture { pigment { color LightGray       }  
+               finish { phong 0.8  diffuse 0.4 ambient 0.2 reflection 0.25} } 
+#declare texture_H    = texture { pigment { color White    } 
+                                  finish  { finish_Default } } 
+#declare texture_HE   = texture { texture_Default }
+#declare texture_LI   = texture { texture_Default }
+#declare texture_BE   = texture { texture_Default }
+#declare texture_B    = texture { pigment { color Cyan     } 
+                                  finish  { finish_Default        } } 
+#declare texture_C    = texture { pigment { color rgb <.3,.3,.3 > } 
+                                  finish  { finish_Default        } } 
+#declare texture_N    = texture { pigment { color Blue     } 
+                                  finish  { finish_Default } } 
+#declare texture_O    = texture { pigment { color Red      } 
+                                  finish  { finish_Default } } 
+#declare texture_F    = texture { pigment { color LimeGreen  } 
+                                  finish  { finish_Default } } 
+#declare texture_NE   = texture { texture_Default }
+#declare texture_NA   = texture { texture_Default }
+#declare texture_MG   = texture { texture_Default }
+#declare texture_AL   = texture { texture_Default }
+#declare texture_SI   = texture { T_Silver_2B }      // from metals.inc
+#declare texture_P    = texture { pigment { color Aquamarine  } 
+                                  finish  { finish_Default } } 
+#declare texture_S    = texture { pigment { color Yellow  } 
+                                  finish  { finish_Default } } 
+#declare texture_CL   = texture { pigment { color Green   } 
+                                  finish  { finish_Default } } 
+#declare texture_AR   = texture { texture_Default }
+
+#declare texture_K    = texture { texture_Default }
+#declare texture_CA   = texture { texture_Default }
+#declare texture_SC   = texture { texture_Default }
+#declare texture_TI   = texture { texture_Default }
+#declare texture_V    = texture { texture_Default }
+#declare texture_CR   = texture { texture_Default }
+#declare texture_MN   = texture { texture_Default }
+#declare texture_FE   = texture { texture_Default }
+#declare texture_CO   = texture { texture_Default }
+#declare texture_NI   = texture { texture_Default }
+#declare texture_CU   = texture { texture_Default }
+#declare texture_ZN   = texture { texture_Default }
+#declare texture_GA   = texture { texture_Default }
+#declare texture_GE   = texture { texture_Default }
+#declare texture_AS   = texture { texture_Default }
+#declare texture_SE   = texture { texture_Default }
+#declare texture_BR   = texture { pigment { color Brown  } 
+                                  finish  { finish_Default } } 
+#declare texture_KR   = texture { texture_Default }
+
+#declare texture_RB   = texture { texture_Default }
+#declare texture_SR   = texture { texture_Default }
+#declare texture_Y    = texture { texture_Default }
+#declare texture_ZR   = texture { texture_Default }
+#declare texture_NB   = texture { texture_Default }
+#declare texture_MO   = texture { texture_Default }
+#declare texture_TC   = texture { texture_Default }
+#declare texture_RU   = texture { texture_Default }
+#declare texture_RH   = texture { texture_Default }
+#declare texture_PD   = texture { texture_Default }
+#declare texture_AG   = texture { texture_Default }
+#declare texture_CD   = texture { texture_Default }
+#declare texture_IN   = texture { texture_Default }
+#declare texture_SN   = texture { texture_Default }
+#declare texture_SB   = texture { texture_Default }
+#declare texture_TE   = texture { texture_Default }
+#declare texture_I    = texture { pigment { color Med_Purple  } 
+                                  finish  { finish_Default } } 
+#declare texture_XE   = texture { texture_Default }
+
+#declare texture_CS   = texture { texture_Default }
+#declare texture_BA   = texture { texture_Default }
+#declare texture_LA   = texture { texture_Default }
+#declare texture_CE   = texture { texture_Default }
+#declare texture_PR   = texture { texture_Default }
+#declare texture_ND   = texture { texture_Default }
+#declare texture_PM   = texture { texture_Default }
+#declare texture_SM   = texture { texture_Default }
+#declare texture_EU   = texture { texture_Default }
+#declare texture_GD   = texture { texture_Default }
+#declare texture_TB   = texture { texture_Default }
+#declare texture_DY   = texture { texture_Default }
+#declare texture_HO   = texture { texture_Default }
+#declare texture_ER   = texture { texture_Default }
+#declare texture_TM   = texture { texture_Default }
+#declare texture_YB   = texture { texture_Default }
+#declare texture_LU   = texture { texture_Default }
+
+#declare texture_HF   = texture { texture_Default }
+#declare texture_TA   = texture { texture_Default }
+#declare texture_W    = texture { texture_Default }
+#declare texture_RE   = texture { texture_Default }
+#declare texture_OS   = texture { texture_Default }
+#declare texture_IR   = texture { texture_Default }
+#declare texture_PT   = texture { texture_Default }
+#declare texture_AU   = texture { texture_Default }
+#declare texture_HG   = texture { texture_Default }
+#declare texture_TL   = texture { texture_Default }
+#declare texture_PB   = texture { texture_Default }
+#declare texture_BI   = texture { texture_Default }
+#declare texture_PO   = texture { texture_Default }
+#declare texture_AT   = texture { texture_Default }
+#declare texture_RN   = texture { texture_Default }
+#declare texture_FR   = texture { texture_Default }
+#declare texture_RA   = texture { texture_Default }
+#declare texture_AC   = texture { texture_Default }
+
+#declare texture_TH   = texture { texture_Default }
+#declare texture_PA   = texture { texture_Default }
+#declare texture_U    = texture { texture_Default }
+#declare texture_NP   = texture { texture_Default }
+#declare texture_PU   = texture { texture_Default }
+#declare texture_AM   = texture { texture_Default }
+#declare texture_CM   = texture { texture_Default }
+#declare texture_BK   = texture { texture_Default }
+#declare texture_CF   = texture { texture_Default }
+#declare texture_ES   = texture { texture_Default }
+#declare texture_FM   = texture { texture_Default }
+#declare texture_MD   = texture { texture_Default }
+#declare texture_NO   = texture { texture_Default }
+#declare texture_LR   = texture { texture_Default }
+
+// feel free to  declare your own textures for the rest of the elements
+
+
+union {               //Xtal3.6.1 should close this union bracket 
+                                                                                
+/*          // the following are commented out                                  
+  plane { y, 500                                 // make some clouds  
+          texture { pigment { SkyBlue } 
+          finish  { ambient 1 diffuse 0} 
+                  }  
+          texture { pigment { bozo  turbulence .5  
+                    color_map {  [0 White]   [1 White filter 1] } }
+                    finish { ambient 1 diffuse 0 } 
+                   scale <1000, 250, 250>  rotate <5, 45, 0> 
+                  }
+        }            
+                                               // draw a checker board floor 
+  plane {y,-2.5      //  the -2.5 moves the floor lower of higher
+    pigment {checker Blue, White }
+    finish  { diffuse 0.2 ambient 0.4 reflection 0.1 }
+  }
+
+                                                                                
+
+                                               // or draw some sand dunes 
+ plane {y,-20                                  
+        texture {  pigment {  color <.85, .5, .15> }   
+                   finish  {    ambient .25 diffuse .6  crand .5 } 
+                   normal  {   ripples .35 turbulence .25  frequency 5 }
+                   scale 10        translate 50*x   
+            } 
+       }         
+*/
+
+/*********************End of Xtal3.6.1 prolog for POVRAY*******************/
+
+

@@ -1,0 +1,489 @@
+################# Mapping of CIF data names to Xtal bdf data ##################
+                  for use by the Xtal3.2 version of CIFIO.
+
+                             (Version Howard Flack 16 November 1994)       
+
+------------------------------------------------------------------------------
+CIF Data Name               Xtal Lrec  Idn1 Idn2 Nc| Prog Line Field Arc_flag
+------------------------------------------------------------------------------
+_audit_creation_date             hist    1_1    $34|                       
+_audit_creation_method           hist    1_1    $35|                       
+_audit_update_record                               |                          
+------------------------------------------------------------------------------
+00000000011111111112222222222333333333344444444445555555555666666666677777777778
+12345678901234567890123456789012345678901234567890123456789012345678901234567890
+--------------------------------------------------------------------------------
+_atom_site_label                 atom   14       24| 
+_atom_site_label_component_0     atom   14      $26|                       E
+_atom_site_label_component_1     atom   14      $27|                       E
+_atom_site_label_component_2     atom   14      $28|                       E
+_atom_site_label_component_3     atom   14      $29|                       E
+_atom_site_label_component_4     atom   14      $30|                       E
+_atom_site_label_component_5     atom   14      $31|                       E
+_atom_site_label_component_6     atom   14      $32|                       E
+_atom_site_type_symbol           atom   14      $26|                       E
+_atom_site_Wyckoff_symbol                          |  
+_atom_site_description                             |  
+_atom_site_disorder_group                          |                            
+_atom_site_calc_flag             atom   50        4|
+_atom_site_calc_attached_atom    atom   51       24|
+_atom_site_attached_hydrogens    atom   52         |
+_atom_site_thermal_displace_type atom   23      $01|                       A
+_atom_site_refinement_flags      atom   55        8|
+_atom_site_constraints           atom   57       40|
+_atom_site_restraints            atom   58       40|
+_atom_site_fract_x               atom    1(101)    | 
+_atom_site_fract_y               atom    2(102)    | 
+_atom_site_fract_z               atom    3(103)    | 
+_atom_site_Cartn_x                                 | 
+_atom_site_Cartn_y                                 | 
+_atom_site_Cartn_z                                 | 
+_atom_site_U_iso_or_equiv        atom    4(104)    | 
+_atom_site_occupancy             atom   11(111)    | 
+_atom_site_symmetry_multiplicity atom   21         | 
+_atom_site_chemical_conn_number                    |                            
+                                                   |
+_atom_site_aniso_label           atom   14      $25|                       
+_atom_site_aniso_type_symbol     atom   14      $26|                       E
+_atom_site_aniso_U_11            atom    5(105)    |                     
+_atom_site_aniso_U_22            atom    6(106)    | 
+_atom_site_aniso_U_33            atom    7(107)    | 
+_atom_site_aniso_U_12            atom    8(108)    | 
+_atom_site_aniso_U_13            atom    9(109)    | 
+_atom_site_aniso_U_23            atom   10(110)    | 
+                                                   |
+_atom_sites_solution_primary                       |
+_atom_sites_solution_secondary                     |
+_atom_sites_solution_hydrogens                     |
+                                                   |
+_atom_sites_Cartn_transform_axes                   | 
+_atom_sites_Cartn_tran_matrix_11                   | 
+_atom_sites_Cartn_tran_matrix_12                   | 
+_atom_sites_Cartn_tran_matrix_13                   | 
+_atom_sites_Cartn_tran_matrix_21                   | 
+_atom_sites_Cartn_tran_matrix_22                   | 
+_atom_sites_Cartn_tran_matrix_23                   |                   
+_atom_sites_Cartn_tran_matrix_31                   | 
+_atom_sites_Cartn_tran_matrix_32                   | 
+_atom_sites_Cartn_tran_matrix_33                   | 
+------------------------------------------------------------------------------
+_atom_type_symbol                scat   11        8|   
+_atom_type_analytical_mass_%     scat   98(99)     |            
+_atom_type_description                             |
+_atom_type_number_in_cell        scat    1         |           
+_atom_type_radius_bond           scat    5      D 2|     
+_atom_type_radius_contact        scat    6      D 2|       
+_atom_type_oxidation_number                        |          
+_atom_type_scat_source           scat   95       40|           
+_atom_type_scat_Cromer_Mann_a1   scat   12         | 
+_atom_type_scat_Cromer_Mann_b1   scat   13         |  
+_atom_type_scat_Cromer_Mann_a2   scat   14         |   
+_atom_type_scat_Cromer_Mann_b2   scat   15         |    
+_atom_type_scat_Cromer_Mann_a3   scat   16         |     
+_atom_type_scat_Cromer_Mann_b3   scat   17         |      
+_atom_type_scat_Cromer_Mann_a4   scat   18         |        
+_atom_type_scat_Cromer_Mann_b4   scat   19         |       
+_atom_type_scat_Cromer_Mann_c    scat   20         |         
+_atom_type_scat_dispersion_real  scat   20+d       |          
+_atom_type_scat_dispersion_imag  scat   60+d       |           
+_atom_type_scat_versus_stol_list                   |
+------------------------------------------------------------------------------
+_cell_special_details                              |
+_cell_length_a                   expl   13(23)     | _cell_pak_1 1
+_cell_length_b                   expl   14(24)     | _cell_pak_1 2
+_cell_length_c                   expl   15(25)     | _cell_pak_1 3
+_cell_angle_alpha                expl   19(26)  $06| _cell_pak_1 7         D
+_cell_angle_beta                 expl   20(27)  $06| _cell_pak_1 8         D
+_cell_angle_gamma                expl   21(28)  $06| _cell_pak_1 9         D
+_cell_volume                     expl   22(29)     | _cell_pak_6 1
+_cell_formula_units_Z            mole   13         | _symm_pak_1_8             
+_cell_measurement_temperature    expl   81         |                       
+_cell_measurement_pressure       expl   82         |                      
+_cell_measurement_radiation                        |                      
+_cell_measurement_wavelength     expl   89      D 6|                       
+_cell_measurement_refln_index_h                    | _thet_pak_  2   
+_cell_measurement_refln_index_k                    | _thet_pak_  3         
+_cell_measurement_refln_index_l                    | _thet_pak_  4         
+_cell_measurement_refln_theta                      | _thet_pak_  5         
+_cell_measurement_refln_wl_id                      | _thet_pak_  6         A
+_cell_measurement_reflns_used    expl   90         |                       
+_cell_measurement_theta_min      expl   91      D 2|                       
+_cell_measurement_theta_max      expl   92      D 2|                       
+------------------------------------------------------------------------------
+_chemical_name_systematic                          |
+_chemical_name_common                              |
+_chemical_name_mineral                             |
+_chemical_name_structure_type                      |
+_chemical_formula_sum                              |                      
+_chemical_formula_moiety                           |
+_chemical_formula_structural     mole   11       72|                       
+_chemical_formula_analytical                       |
+_chemical_formula_weight         mole   12         |                       
+_chemical_formula_weight_meas    mole   14         |                       
+_chemical_compound_source                          |
+_chemical_melting_point          expl   70         |                       
+                                                   |
+_chemical_conn_atom_number                         |
+_chemical_conn_atom_type_symbol                    |
+_chemical_conn_atom_nca                            |
+_chemical_conn_atom_nh                             |
+_chemical_conn_atom_charge                         |
+_chemical_conn_atom_display_x                      |                            
+_chemical_conn_atom_display_y                      |                            
+_chemical_conn_bond_atom_1                         |
+_chemical_conn_bond_atom_2                         |
+_chemical_conn_bond_type                           |
+------------------------------------------------------------------------------
+_computing_data_collection       expl  516       40|                       
+_computing_cell_refinement                         |
+_computing_data_reduction        hist    1_1    $07|
+_computing_structure_solution    hist    1_1    $08|
+_computing_structure_refinement  hist    1_1    $09|
+_computing_molecular_graphics    hist    1_1    $10|
+_computing_publication_material  hist    1_1    $11|
+------------------------------------------------------------------------------
+_database_code_CAS                                 |
+_database_code_CSD                                 |
+_database_code_ICSD                                |
+_database_code_PDF                                 |
+_database_code_MDF                                 |
+_database_code_NBS                                 |
+_database_journal_ASTM                             |
+_database_journal_CSD                              |
+------------------------------------------------------------------------------
+_diffrn_special_details                            |
+_diffrn_ambient_temperature      expl   71         |                        
+_diffrn_ambient_pressure         expl   72         |                       
+_diffrn_radiation_wavelength     expl    2      D 6|                       5
+_diffrn_radiation_wavelength_id                    |                            
+_diffrn_radiation_wavelength_wt  expl    6         |                       5
+_diffrn_radiation_type           expl   94      $02|                       A
+_diffrn_radiation_source         expl   93       20|                       
+_diffrn_radiation_monochromator  expl  512       40|                       
+_diffrn_radiation_detector                         |
+_diffrn_radiation_detector_dtime expl  547(548)    |                       
+_diffrn_radiation_filter_edge                      |
+_diffrn_radiation_inhomogeneity                    |
+_diffrn_radiation_polarisn_norm                    |                       
+_diffrn_radiation_polarisn_fract expl   52(53)     |                       
+_diffrn_measurement_device       expl   95       40|                       
+_diffrn_measurement_method       expl  511       40|                       
+                                                   |
+_diffrn_orient_matrix_type                         |                            
+_diffrn_orient_matrix_UB_11      expl   41         |                       
+_diffrn_orient_matrix_UB_21      expl   42         |                       
+_diffrn_orient_matrix_UB_31      expl   43         |                       
+_diffrn_orient_matrix_UB_12      expl   44         |                       
+_diffrn_orient_matrix_UB_22      expl   45         |                       
+_diffrn_orient_matrix_UB_32      expl   46         |                       
+_diffrn_orient_matrix_UB_13      expl   47         |                       
+_diffrn_orient_matrix_UB_23      expl   48         |                       
+_diffrn_orient_matrix_UB_33      expl   49         |                       
+_diffrn_orient_refln_index_h                       |
+_diffrn_orient_refln_index_k                       |
+_diffrn_orient_refln_index_l                       |
+_diffrn_orient_refln_angle_phi                     |
+_diffrn_orient_refln_angle_chi                     |
+_diffrn_orient_refln_angle_psi                     |
+_diffrn_orient_refln_angle_kappa                   |
+                                                   |
+_diffrn_standard_refln_code                        |
+_diffrn_standard_refln_index_h   expl  610         |                       3
+_diffrn_standard_refln_index_k   expl  611         |                       3
+_diffrn_standard_refln_index_l   expl  612         |                       3
+_diffrn_standards_number         expl  601         |                       
+_diffrn_standards_interval_count expl  602         |                       
+_diffrn_standards_interval_time  expl  604         |                       
+_diffrn_standards_decay_%        expl  603         |                       
+_diffrn_standards_scale_sigma                      |
+_diffrn_scale_group_code                           |
+_diffrn_scale_group_I_net                          |
+_diffrn_attenuator_code          expl  702         |                       2
+_diffrn_attenuator_scale         expl  703         |                       2
+                                                   |
+_diffrn_refln_index_h            refl    1      $21|                       H
+_diffrn_refln_index_k                              |
+_diffrn_refln_index_l                              |
+_diffrn_refln_counts_total       refl n000         |                           
+_diffrn_refln_counts_net         refl n003         |                           
+_diffrn_refln_counts_bg_1        refl n023         |                           
+_diffrn_refln_counts_bg_2        refl n024         |                           
+_diffrn_refln_counts_peak        refl n021         |                           
+_diffrn_refln_scale_group_code   refl n309         |                       A
+_diffrn_refln_attenuator_code    refl n026      $40|                       A  
+_diffrn_refln_intensity_net      refl n300         |                       
+_diffrn_refln_intensity_sigma    refl n301         |                       
+_diffrn_refln_sint/lambda        refl    2         |                       
+_diffrn_refln_wavelength         refl n210         |                       
+_diffrn_refln_wavelength_id                        |                            
+_diffrn_refln_crystal_id                           |                            
+_diffrn_refln_detect_slit_horiz  refl n052         |                       
+_diffrn_refln_detect_slit_vert   refl n053         |                            
+_diffrn_refln_elapsed_time       refl n014         |                            
+_diffrn_refln_angle_theta        refl n008      $03|                       
+_diffrn_refln_angle_omega        refl n007         |                       
+_diffrn_refln_angle_phi          refl n005         |                       
+_diffrn_refln_angle_chi          refl n006         |                       
+_diffrn_refln_angle_psi          refl n011         |                       
+_diffrn_refln_angle_kappa        refl n006         |                       
+_diffrn_refln_scan_mode          refl n051         |                       A
+_diffrn_refln_scan_mode_factor   refl n051         |                       
+_diffrn_refln_scan_mode_backgd   refl n046         |                       A
+_diffrn_refln_scan_width         refl n010         |                       
+_diffrn_refln_standard_code      refl n018         |                       A
+_diffrn_refln_fbcoeff_peak       refl n047         |                       
+_diffrn_refln_fbcoeff_bg_peak    refl n048         |                       
+_diffrn_refln_fbcoeff_bg_1       refl n049         |                       
+_diffrn_refln_fbcoeff_bg_2       refl n050         |                       
+                                                   |
+_diffrn_reflns_reduction_process expl  515       40|                       
+_diffrn_reflns_number            expl  521         |                       
+_diffrn_reflns_av_R_equivalents  expl  524      D 3|                       
+_diffrn_reflns_av_sigmaI/netI    expl  525      D 3|                       
+_diffrn_reflns_theta_min         expl  507      D 2|                       
+_diffrn_reflns_theta_max         expl  508      D 2|                       
+_diffrn_reflns_limit_h_min       expl  501         |                       
+_diffrn_reflns_limit_h_max       expl  502         |                       
+_diffrn_reflns_limit_k_min       expl  503         |                       
+_diffrn_reflns_limit_k_max       expl  504         |                       
+_diffrn_reflns_limit_l_min       expl  505         |                       
+_diffrn_reflns_limit_l_max       expl  506         |                       
+                                                   |
+_diffrn_reflns_transf_matrix_11  dset   61         |
+_diffrn_reflns_transf_matrix_21  dset   62         |
+_diffrn_reflns_transf_matrix_31  dset   63         |
+_diffrn_reflns_transf_matrix_12  dset   64         |
+_diffrn_reflns_transf_matrix_22  dset   65         |
+_diffrn_reflns_transf_matrix_32  dset   66         |
+_diffrn_reflns_transf_matrix_13  dset   67         |
+_diffrn_reflns_transf_matrix_23  dset   68         |
+_diffrn_reflns_transf_matrix_33  dset   69         |
+------------------------------------------------------------------------------
+_exptl_special_details           expl  562       40|
+_exptl_crystal_preparation                         |                            
+_exptl_crystal_description       expl  561       40|                       
+_exptl_crystal_colour            expl  560       40|                       
+_exptl_crystal_id                                  |                            
+_exptl_crystal_size_max          expl  551      D 3|                       
+_exptl_crystal_size_mid          expl  552      D 3|                       
+_exptl_crystal_size_min          expl  553      D 3|                       
+_exptl_crystal_size_rad          expl  541      D 3|                       
+_exptl_crystal_density_diffrn    expl   87      D 3|                       
+_exptl_crystal_density_meas      expl   85      D 3|                            
+_exptl_crystal_density_meas_temp expl   81         |                            
+_exptl_crystal_density_method                      |                            
+_exptl_crystal_F_000             mole   22         |                       
+                                                   |
+_exptl_crystal_face_index_h      expl  301         |                       4
+_exptl_crystal_face_index_k      expl  302         |                       4
+_exptl_crystal_face_index_l      expl  303         |                       4
+_exptl_crystal_face_perp_dist    expl  304         |                       4
+_exptl_crystal_face_diffr_phi                      |
+_exptl_crystal_face_diffr_chi                      |
+_exptl_crystal_face_diffr_psi                      |
+_exptl_crystal_face_diffr_kappa                    |
+_exptl_crystals_number                             |
+                                                   |
+_exptl_absorpt_process_details                     |                            
+_exptl_absorpt_coefficient_mu    expl   10      D 3|                       
+_exptl_absorpt_correction_type   expl  513       40|                       
+_exptl_absorpt_correction_T_min  expl  526         |                       
+_exptl_absorpt_correction_T_max  expl  527         |                       
+------------------------------------------------------------------------------
+_geom_special_details                              |
+_geom_bond_atom_site_label_1     bond   11       24|
+_geom_bond_atom_site_label_2     bond   21       24|
+_geom_bond_site_symmetry_1       bond   15      $36|
+_geom_bond_site_symmetry_2       bond   25      $36|
+_geom_bond_distance              bond   91(92)     |
+_geom_bond_publ_flag                               |
+                                                   |
+_geom_contact_atom_site_label_1  cont   11       24|
+_geom_contact_atom_site_label_2  cont   21       24|
+_geom_contact_site_symmetry_1    cont   15      $36|
+_geom_contact_site_symmetry_2    cont   25      $36|
+_geom_contact_distance           cont   91(92)     |
+_geom_contact_publ_flag                            |
+                                                   |
+_geom_angle_atom_site_label_1    angl   11       24|
+_geom_angle_atom_site_label_2    angl   21       24|
+_geom_angle_atom_site_label_3    angl   31       24|
+_geom_angle_site_symmetry_1      angl   15      $36|
+_geom_angle_site_symmetry_2      angl   25      $36|
+_geom_angle_site_symmetry_3      angl   35      $36|
+_geom_angle                      angl   91(92)     |
+_geom_angle_publ_flag                              |
+                                                   |
+_geom_torsion_atom_site_label_1  dihe   11       24|
+_geom_torsion_atom_site_label_2  dihe   21       24|
+_geom_torsion_atom_site_label_3  dihe   31       24|
+_geom_torsion_atom_site_label_4  dihe   41       24|
+_geom_torsion_site_symmetry_1    dihe   15      $36|
+_geom_torsion_site_symmetry_2    dihe   25      $36|
+_geom_torsion_site_symmetry_3    dihe   35      $36|
+_geom_torsion_site_symmetry_4    dihe   45      $36|
+_geom_torsion                    dihe   91(92)     |
+_geom_torsion_publ_flag                            |
+------------------------------------------------------------------------------
+_refine_special_details          sfls   11       40|
+_refine_ls_structure_factor_coef sfls   41      $04|                       A
+_refine_ls_matrix_type           sfls   14       40|
+_refine_ls_weighting_scheme      sfls   12       40|
+_refine_ls_hydrogen_treatment    sfls   15       40|
+_refine_ls_extinction_method     sfls   13       40|
+_refine_ls_extinction_expression sfls   17       40|
+_refine_ls_extinction_coef       sfls   33(34)     |
+_refine_ls_abs_structure_details sfls   16       40|
+_refine_ls_abs_structure_Flack   sfls   32         |
+_refine_ls_abs_structure_Rogers  sfls   31         |
+_refine_ls_number_reflns         sfls   43         |
+_refine_ls_number_parameters     sfls   42         |
+_refine_ls_number_restraints     sfls   44         |
+_refine_ls_number_constraints    sfls   45         |
+_refine_ls_R_factor_all          sfls   21      D 3|
+_refine_ls_R_factor_obs          sfls   22      D 3|
+_refine_ls_wR_factor_all         sfls   25      D 3|                            
+_refine_ls_wR_factor_obs         sfls   26      D 3|                            
+_refine_ls_goodness_of_fit_all   sfls   27      D 3|
+_refine_ls_goodness_of_fit_obs   sfls   28      D 3|
+_refine_ls_shift/esd_max         sfls   29      D 3|
+_refine_ls_shift/esd_mean        sfls   30      D 3|
+_refine_diff_density_min         dens   11      D 3|                            
+_refine_diff_density_max         dens   12      D 3|                            
+------------------------------------------------------------------------------
+_reflns_special_details                            |
+_reflns_limit_h_min              dset   71         |
+_reflns_limit_h_max              dset   72         |
+_reflns_limit_k_min              dset   73         |
+_reflns_limit_k_max              dset   74         |
+_reflns_limit_l_min              dset   75         |
+_reflns_limit_l_max              dset   76         |
+_reflns_number_total             dset   81         |
+_reflns_number_observed          dset   82         |
+_reflns_observed_criterion       dset   87      $24|
+_reflns_d_resolution_high        dset   79      D 3|
+_reflns_d_resolution_low         dset   80      D 3|
+                                                   |
+_reflns_scale_group_code         expl  200+1    $37|                       6 
+_reflns_scale_meas_F             expl  100+1    $38|                       6
+_reflns_scale_meas_intensity                       |
+_reflns_scale_meas_F_squared                       |
+                                                   |
+_refln_index_h                   refl    1      $21|                       H
+_refln_index_k                                     |           
+_refln_index_l                                     |            
+_refln_observed_status           refl n308      $19|
+_refln_refinement_status         refl n705        4|
+_refln_intensity_meas            refl n300         |                       
+_refln_intensity_sigma           refl n301         |                       
+_refln_intensity_calc            refl n800      $12|                       
+_refln_F_squared_meas            refl n302         |                       
+_refln_F_squared_sigma           refl n303         |                       
+_refln_F_squared_calc            refl n800         |                       
+_refln_F_meas                    refl n304      $22|                       
+_refln_F_sigma                   refl n305      $23|                       
+_refln_F_calc                    refl n800         |                       
+_refln_A_meas                    refl n701      $14|                       
+_refln_A_calc                    refl n801         |                       
+_refln_B_meas                    refl n701      $15|                       
+_refln_B_calc                    refl n802         |                       
+_refln_phase_meas                                  |
+_refln_phase_calc                refl n700         |                       
+_refln_scale_group_code          refl n309      $39|
+_refln_symmetry_multiplicity     refl    3      $16|
+_refln_symmetry_epsilon          refl    3      $17|
+_refln_sint/lambda               refl    2         |
+_refln_wavelength                refl n210         |                       
+_refln_wavelength_id                               |                            
+_refln_crystal_id                                  |                            
+_refln_mean_path_length_tbar     refl n200      D 5|                       
+------------------------------------------------------------------------------
+_symmetry_cell_setting           symm    9_1    $20|
+_symmetry_equiv_pos_as_xyz       symm    1_1    $18|
+_symmetry_space_group_name_Hall  sgnm    1_1     40| _sgnm_pak_1
+_symmetry_space_group_name_H-M   sgnm    1_2     40| _sgnm_pak_2
+_symmetry_Int_Tables_number                        |
+------------------------------------------------------------------------------
+_publ_requested_journal                            |
+_publ_requested_coeditor_name                      |                            
+_publ_contact_author                               |
+_publ_contact_letter                               |
+_publ_contact_author_phone                         |
+_publ_contact_author_fax                           |
+_publ_contact_author_email                         |
+_publ_author_name                                  |
+_publ_author_address                               |
+_publ_manuscript_creation                          |                            
+_publ_manuscript_processed                         |                            
+_publ_manuscript_text                              |                            
+_publ_section_title                                |
+_publ_section_abstract                             |
+_publ_section_comment                              |
+_publ_section_introduction                         |
+_publ_section_experimental                         |                            
+_publ_section_discussion                           |
+_publ_section_references                           |
+_publ_section_acknowledgements                     |                            
+_publ_section_figure_captions                      |
+_publ_section_table_legends                        |
+-------------------------------------------------------------------------------
+
+Special codes: 'lrec  n'    signals lrec is a directory packet and the idnum n
+                            contains the requested data.
+
+               'lrec  n_m'  signals lrec has fixed length packets, data starts
+                            in word n, packet m 
+
+               'lrec  n(m)' signals that n is the idnum & m is the esd idnum
+
+               'lrec dnnn'  signals that 'd' is to be replaced by the specified
+                            data set number to form the idnum
+
+               'lrec  n+d'  signals that 'd' is to be replaced by the specified
+                            data set number to form idnum
+
+               'lrec  n+m'  signals that m is looping constant; n+m = idnums
+ 
+               The columns 50-51 contain the number of characters if the bdf
+               data item is a string. If column 49 contains a '$' then columns
+               50-51 contain a 'special mapping code' number. This is for cases
+               where the data item requires additional action before being put
+               into the CIF. >>>> The special actions are listed at the end.
+
+               If column 49 contains a 'D' then column 51 contains a digit
+               from 0 to 8 which specifies the number of decimal places in the
+               number to be output. 
+
+     Special Mapping Table: 01 convert atom 23 0/1/2 to 'Uovl'/'Uiso'/'Uani' ***
+                            02 convert rad type number expl 94 to descriptor
+                            03 convert 2theta in refl n008 to theta
+                            04 convert publ 41 1/2/3 to 'F'/'Fsqd'/'Inet'
+                            05 calc oxidation number from scat 3 minus scat 4
+                            06 convert angles in cycles to degrees           
+                            07 search for DIFDAT, ADDREF, SORTRF, ABSORB
+                            08 search for GENTAN, SIMPEL, PATSEE, ...
+                            09 search for CRYLSQ, PROLSQ, CEDAR, ...
+                            10 search for PIG
+                            11 search for ORTEP, MOLDRA, PLOTX, ...
+                            12 calc Icalc from refl n800 and n204
+                            13 calc Fcalc**2 from refl n800 
+                            14 calc Ameas from refl n701 and n700
+                            15 calc Bmeas from refl n701 and n700
+                            16 get hkl mult from packed refl 3
+                            17 get hkl epsl from packed refl 3
+                            18 convert symmetry matrices to 'x,y,z' strings
+                            19 convert rcode refl n308 1/>1 to 'o'/'<'  *******
+                            20 convert crystal system number to descriptor
+                            21 get [h k l] from packed refl 1
+                            22 optional use of reln n701 & scale application
+                            23 optional use of scale application
+                            24 convert sigma threshold to descriptor
+                            25 output only if displ param is aniso (atom 23)
+                            26-33 extract atom label component from atom 14
+                            34 insert current date as yy-mm-dd
+                            35 insert 'from xtal archive file using CIFIO'
+                            36 convert symop no. & transl code 555 to string
+                            37 extract N scale codes where N store in 100
+                            38 extract N scale values where N store in 100
+                            39 convert number in lrrefl: to char string
+                            40 store the attenuator code not the value

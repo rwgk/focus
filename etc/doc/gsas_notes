@@ -1,0 +1,66 @@
+sed 's/^  *//' dcm47.2tce | sed 's/  */ /g' | cut -f2-3 -d' ' | gsas_raw -ESD > dcm47.gsas
+edit file to update title and enter 2-theta start and step * 100
+gsas
+  cnvfile
+    dcm47.gsas
+    <enter>
+  quit
+run cnvfile again for the instrument parameter file
+gsas
+  expedt
+    # create experiment
+    P
+      P
+        I
+          # enter space group symbol and unit cell parameters
+        X
+      H
+        I
+          # enter dcm47.gsas and the name of the instrument parameter file
+          T
+            # enter max 2-theta
+          B
+            # paste in fixed background parameters
+            X
+          X
+        X
+      X
+    X
+    quit
+gsas
+  expedt
+    L
+    A
+      # enter one atom at 0,0,0
+      X
+    L
+      C 10
+      E 1
+        C y y # leBail extraction, starting with 1.0 for each reflection
+        # make sure that "Fo's will be extracted from this histogram"
+        D 5
+      O
+        B
+          C 2 1 0 y
+          D 5
+          X
+        H
+          V # Histo. scale refinement flag set off
+          X
+        L
+          D 5
+          V # initially refine lattice parameters
+          X
+        X
+      X
+    X
+  powpref
+  genles
+  ...
+  reflist
+    1
+      R
+        1
+        r11.asc
+        0
+  quit

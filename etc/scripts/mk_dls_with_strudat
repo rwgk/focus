@@ -1,0 +1,43 @@
+#! /bin/csh -f
+
+if ($#argv > 0) then
+  set creab = ($*)
+else
+  set creab = (creab addo)
+endif
+
+set Codes = (`grep '^\*' strudat | cut -c2-`)
+
+set tA=/tmp/tmp$$A
+
+onintr CLEAN
+
+set delimiter='---------------------------------'
+
+foreach Code ($Codes)
+  (echo "$Code"; echo "n") | kriber reacs $creab wriid wrie quit >& $tA
+  set nErr =(`grep -i Error   $tA | wc -l`)
+  set nWarn=(`grep -i Warning $tA | wc -l`)
+  if ($nErr != 0) then
+    echo '*** Error(s) while processing *'$Code' ***'
+    echo ${delimiter}
+  else if ($nWarn != 0) then
+    echo '*** Warning(s) while processing *'$Code' ***'
+    echo ${delimiter}
+  else
+    dls dlsinp $tA
+    set DLSR=(`grep R=SQRT $tA | sed 's/0R=.*=/DLS R =/' | grep -v '\*' | sort +3n | head -1`)
+    head -2 strudatn
+    set Lit=(`head -3 strudatn | tail -1`)
+    echo $Lit $DLSR
+    head -5 strudatn | tail -2
+    stripnfilea | tr -c "[0-9][a-z][A-Z] .\012-" "[0*]"
+    echo ${delimiter}
+  endif
+end
+
+CLEAN:
+
+rm -f $tA list strudatn dlsinp nfilea.inp
+
+exit 0

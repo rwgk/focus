@@ -1,0 +1,2703 @@
+ AA0000 NUCLEUS-----------------------------------------------------------------
+ AA0001 Memory request has exceeded the size of the QX array. If the job must
+ AA0001 have this memory then the value of the macro memmax: must be increased
+ AA0001 in XMACRO and all programs reinstalled.
+ AA0002 This error arises when a program with recognisable XTAL name has not
+ AA0002 been implemented OR the portion of the program name entered on the 
+ AA0002 last input line matches a program that has not been implemented.
+ AA0002 Check the call:'s in AA00 and/or use the full program name.
+ AA0101 This is a common error exit in the XTAL system which, for many operating
+ AA0101 systems, is not serious. It signifies that an end of file has been
+ AA0101 encountered in the input image stream which controls the programs.
+ AA0101 Either no FINISH line or some other unexpected input data is being
+ AA0101 supplied in the input stream. On certain operating systems when no
+ AA0101 orderly FINISH exit is carried out bdfs may be lost or left in limbo.
+ AA0103 FINISH line encountered when another line required by current program.
+ AA0104 An extension code is missing from the COPYBDF line
+ AA0105 The SETID which has been supplied does not correspond to any line
+ AA0105 identity being sought in the input stream.
+ AA0106 Unexpected numeric field encountered on a RESET line.
+ AA0107 Unrecognisable code encountered on a RESET line.     
+ AA0108 Unexpected character code encountered on a RESET line.
+ AA0110 This is the most common error exit in the XTAL system. It signifies that
+ AA0110 an unexpected line ID was encountered in the input stream. The error
+ AA0110 message printed out gives the line encountered.
+ AA0120 Illegal construction of input on the MASTER line.
+ AA0125 Unrecognised control code on the MASTER line.
+ AA0130 Unit device numbers must be in the range 1 to 99. Check RESET line.
+ AA0399 An attempt to format a number not conforming with the IEEE standard.
+ AA0701 The control file requested on the xtal command line does not exist.
+ AA0701 Command line syntax is xtal file[.dat] [file.lst] ([] denotes optional).
+ AA0710 Unit device numbers must be in the range 0 to 99. Re-define macros.
+ AA1001 Insufficient memory available for the IO buffer needed to copy file.
+ AA1002 IO error detected in reading file during bdf copy operation.        
+ AA1003 IO error detected in writing file during bdf copy operation.        
+ AA1005 Master bdf versions will not be created beyond '099'. Please 
+ AA1005 reorganise the extension numbering of the master files.
+ AA1101 The packet size specified for a logical record in a binary dat file is
+ AA1101 larger than the I/O buffer size. This error requires changes in the
+ AA1101 value of BDFBUF:, a check of the correctness of the program being
+ AA1101 used, or an examination of the data supplied for the given crystal.
+ AA1210 The input binary file is either corrupted or is from an earlier version 
+ AA1210 of the Xtal system that is incompatible with the current nucleus.
+ AA1401 Error detected by local operating system on binary read of bdf.
+ AA2005 _cell data item in the .aaa file is not a recognisable number
+ AA2007 _symm data item in the .aaa file is not a recognisable number
+ AA2010 There is an incorrect number of elements in the _symm_ loop
+ AA2015 Illegal construction in _slav loop
+ AA2017 _slav data item in the .aaa file is not a recognisable number
+ AA2025 Illegal construction in _rfac loop
+ AA2105 The number of data items in the preceding loop structure is not a
+ AA2105 multiple of the loop_ data names. This file has been corrupted.
+ AA2205 Hexadecimal number in .aaa file contains illegal character. Hex numbers
+ AA2205 are used in _refl loops and start with a "Z".
+ AA2501 Data item in .aaa expected to be numeric but is non-numeric.
+ AA2502 Encountered number has illegal construction. Must be +/-xx.yy+/-zz(ss).
+ AA2503 Encountered number has illegal construction. Must be +/-xx.yy+/-zz(ss).
+ AA5001 Attempt made to open non-existent READ binary file.
+ AB0000 ABSORB------------------------------------------------------------------
+ AB0301 The reflection record lrrefl: is missing.
+ AB0302 There is an item missing from the bdf.
+ AB0303 The calculated sine theta has exceeded 1.0. This indicates that the 
+ AB0303 reflection indices do not match the cell dimensions or that the wrong
+ AB0303 was entered in STARTX. Check also if a cell transformation was applied 
+ AB0303 to the cell dimensions but not to the indices.
+ AB0310 Requested coefficient (irel, f2rl, frel) or sigma not on archive file.
+ AB1001 Insufficient memory is available for file buffers.
+ AB1002 An unacceptable field has been detected on the DIFF line.
+ AB1003 An unacceptable field has been detected on the ORIENT line.
+ AB1005 Corrections must be applied if there is to be punch output.
+ AB1009 Radius must be entered for spherical or cylindrical corrections.
+ AB1010 Incorrect option string entered on the ABSORB line.
+ AB1101 Insufficient memory is available for face storage.
+ AB1102 Less than 4 faces have been specified.
+ AB1103 The scale factor is too large for the Gaussian method.
+ AB1104 The scale factor is too small for the analytical method.
+ AB1201 An unacceptable field detected on the ORFACE or the FACEPT line.
+ AB1301 Insufficient memory is available for vertex storage.
+ AB1302 Insufficient memory is available for lists of faces around each vertex.
+ AB1303 Insufficient memory is available for edge storage.
+ AB1304 A face is not properly described.
+ AB1305 There is a violation of Euler's rule, faces+vertices-edges = 2.
+ AB1401 Insufficient memory is available for plot storage.
+ AB1801 Angle of spherical correction exceeds table limit.
+ AB2001 Insufficient memory in QQ array for Gaussian integration points. Reduce 
+ AB2001 Gaussian array OR recompile ABSORB program with larger QQ array.
+ AB3101 Insufficient memory is available for exponential tables.
+ AB4001 Insufficient memory is available for projected planes.
+ AB4101 Insufficient memory is available for vertices of Howell's polyhedron.
+ AB4301 Insufficient memory is available for a list of tetrahedra.
+ AB4601 Insufficient memory is available for a list of tetrahedra.
+ AD0000 ADDATM---------------------------------------------------------------- 
+ AD0102 Insufficient storage available for bdf buffers.                  
+ AD0104 An ADDATM input option is not recognised.     
+ AD0108 Extinction type or option on EXTINC line not recognised.
+ AD0112 The UOV value is too large. Remember enter a U value not a B.
+ AD0201 Insufficient storage available for symmetry and cell constants.
+ AD0202 No form factors were found for the specified atoms.
+ AD0210 A data set number specified does not match on any on lrexpl:
+ AD0211 No scale factors in lrexpl: of the bdf.    
+ AD0212 There is no lrdset: data on the input bdf.
+ AD0301 These lines are out of order. Must precede ATOM/ATOMG/UIJ/SUIJ lines
+ AD0302 U/UIJ/SUIJ lines must be preceded by an ATOM line with the same label
+ AD0303 Duplicate atom label detected while in ab initio mode.
+ AD0305 Label is missing or illegal for input ATOM/ATOMG/UIJ/SUIJ line.
+ AD0310 Insufficient storage available for stored atoms.                  
+ AD0312 The U value entered is too large. U values must be used, not B.
+ AD0313 The occupancy of an atom site exceeds the limiting value of 1.0.
+ AD0315 No form factors were present for the input atom label.
+ AD0320 An input U11, U22 or U33 element was detected as zero or negative.
+ AD0321 An input SU11, SU22 or SU33 element was detected as negative.
+ AD0322 The input LINK type was not a string.
+ AD0323 The input LINK type was not recognised.
+ AD0324 The input LINK bond length was missing.
+ AD0325 An essential geometry specifying atom on the LINK line is missing.
+ AD0326 An essential sibling atom label on the LINK line is missing.
+ AD0405 A number cannot be entered on a STACK line.
+ AD0410 The number of STACK labels has exceeded the maximum of 100.
+ AD0415 A number cannot be entered on a DELETE line.
+ AD0420 Code on DELETE line contains atom-type symbol not present on the bdf.
+ AD0425 A number cannot be entered on a EDITU line.
+ AD0430 Code on EDITU line contains atom-type symbol not present on the bdf.
+ AD0435 Illegal construct on the  EDITU line. Two fields per edit function.
+ AD0440 Incorrect U has been entered on the EDITU line. B's may not be used.
+ AD0445 Unrecognised code on the EDITU line. Only ALL, ISO and ANI allowed. 
+ AD0450 A number cannot be entered on a RENAME line.
+ AD0455 Label on RENAME line contains atom-type symbol not present on the bdf.
+ AD0460 "Old" label on RENAME line not present in atom list. Is UPD mode on? 
+ AD0465 "New" label on RENAME line must be present and of correct construct. 
+ AD0475 Code on STACK line contains atom-type symbol not present on the bdf.
+ AD0501 Insufficient storage is available for the constraints.
+ AL0000 ADDMUL----------------------------------------------------------------- 
+ AL0002 Bad field on the TRANSF line.
+ AM0000 APMASK----------------------------------------------------------------- 
+ AM0101 Unrecognized option on input line.
+ AM0201 Not enough memery for I/O buffers.
+ AM0202 No LRCELL: records on BDF.
+ AM0301 Mask has different layout than density map.
+ AM0302 Not enough memory to store mask.
+ AM2101 No map record (21) on BDF.
+ AM2102 Mask grid exceeds allowed size.
+ AR0000 ADDREF----------------------------------------------------------------- 
+ AR0101 Insufficient memory is available for file buffers.
+ AR0102 An incorrect mnemonic for conversion has been found on the REDUCE line.
+ AR0103 There is a mnemonic field on the TRANSF line.
+ AR0105 Line other than expected BDFIN or HKLIN entered. Lines out of order.
+ AR0201 Insufficient memory is available for item storage.
+ AR0203 Insufficient memory is available for the file buffer.
+ AR0205 An unrecognized item specification was detected on the BDFIN, the HKLIN,
+ AR0205 or the REMOVE line.
+ AR0206 Too many items were specified on the BDFIN, HKLIN, or REMOVE line.
+ AR0207 No files were specified for input/output.
+ AR0209 No source of Miller indicies were given.
+ AR0301 Wavelength from binary file is void. Check earlier runs.
+ AR0312 No lrsymm: record was found on the input bdf.
+ AR0313 Insufficient memory is available for symmetry matrices.
+ AR0314 No scattering factor record was found.
+ AR0315 Insufficient memory is available for form factor tables.
+ AR0317 Too many items were found in the scattering factor table.
+ AR0401 The requested or default reflection bdf does not contain lrrefl:.
+ AR0402 A continuation line was expected but not found.
+ AR0403 The calculated sine theta has exceeded 1.0. This indicates that the 
+ AR0403 reflection indices do not match the cell dimensions or that the wrong
+ AR0403 was entered in STARTX. Check also if a cell transformation was applied 
+ AR0403 to the cell dimensions but not to the indices.
+ AR0501 Insufficient memory is available for input reflection bdf buffer.
+ AR0502 The lrscat: record from input archive bdf is missing.
+ AR0505 STOL min is > STOL max. Reflection data is probably missing.
+ AR0601 An attempt was made to divide by a sigma(I(rel)) of zero.
+ AR0601 Bayesian statistics cannot be used when sigmas of zero are in the file.
+ AR0603 These Lorentz Polarization forms are not available yet.
+ AS0000 ABSCAL------------------------------------------------------------------
+ AS0001 Insufficient memory for I/O buffers and absorption factors.
+ AS1101 Unrecognised mnemonic on ABSCAL line.
+ AS1102 Missing phi value on TAU line.
+ AS1103 Missing intensity value on TAU line.
+ AS1104 Missing h,k, or l index on STAND line.
+ AS1105 Too many different decay monitoring reflections.
+ AS1106 Number of TAU phi-spin entries exceeds space provided.
+ AS1107 Max number of absorption correction hkl is less than minimum.
+ AS1201 Too much absorption information for current table size.
+ AS1202 Too many decay monitor reflections for current table size.
+ AS1203 The phi values for absorption corrections do not span the
+ AS1203 whole phi circle in steps of 20 degrees or less.            
+ AS1206 At least one essential quantity of the reflection record is missing.
+ AS1206 The quantities phi (1005), chi (1006), omega (1007), 2theta (1008),
+ AS1206 refln type (1018), intensity (1300) and sigma(I) (1301) must be
+ AS1206 present. Normally ABSCAL is run before SORTRF or ADDREF.
+ AS1207 Exposure times and reflection counts missing from lrrefl:.
+ AS1208 Reflection number not present on bdf when its use is requested.
+ AS1301 Absorption data supplied covers less than 340 degrees in phi.
+ AS1303 There is a gap > 20 degrees for the set of phi angles covered
+ AS1303 by the tau absorption correction.
+ AS1304 Some tau angle(s) appeared more than once.
+ AS1601 No decay monitoring reflections have been input.
+ AS1602 Insufficient memory for decay monitoring scale factors.
+ AS1603 Too many different reflections used as monitors of decay
+ AS1604 Insufficient measurements to use this reflection.
+ AT0000 ATABLE----------------------------------------------------------------- 
+ AT0001 No atom data on the archive bdf.
+ AT0002 Insufficient memory available for storing atom list.
+ AT0005 Unrecognised input code on the ATABLE line.         
+ AT0010 Insufficient memory available for bdf buffer.         
+ AX0000 LSLS----------------------------------------------------------------
+ AX0101 Syntax error in REF/NOREF/CONSTR/LIMSFT card: empty field or unknown
+ AX0101 atom name or atom type name.
+ AX0102 Syntax error in REF/NOREF/CONSTR/LIMSFT card: first character of an
+ AX0102 atom name or atom type name cannot be a space, a dash or a parenthesis.
+ AX0103 Syntax error in REF/NOREF/CONSTR/LIMSFT card: a separator must be 
+ AX0103 introduced to end a numerical field.
+ AX0104 Syntax error in REF/NOREF/CONSTR/LIMSFT card: empty field after a slash.
+ AX0201 Syntax error in REF/NOREF/LIMSFT card: more than two fields related by
+ AX0201 slashes.
+ AX0202 Error in REF/NOREF/LIMSFT card: spanning of differents types of
+ AX0202 parameters forbidden.
+ AX0203 Error in REF/NOREF/LIMSFT card: mixing atoms and atom types forbidden.
+ AX0204 Error in REF/NOREF/LIMSFT card: spanning different classes of
+ AX0204 parameters forbidden.
+ AX0205 Error in REF/NOREF/LIMSFT card: mixing general and atom/atom type
+ AX0205 parameters forbidden.
+ AX0206 Syntax error in REF/NOREF/LIMSFT card: numbers as atom type parameters
+ AX0206 are forbidden.
+ AX0207 Error in REF/NOREF/LIMSFT card: mixing of DSP and RE or IM is 
+ AX0207 forbidden.
+ AX0208 Error in REF/NOREF/LIMSFT card: turn on refinement in LSLS card first.
+ AX0209 Error in REF/NOREF/LIMSFT card: parameter out of bounds.
+ AX0210 Error in REF/NOREF/LIMSFT card: no parameter for UOV.
+ AX0212 Error in REF/NOREF/LIMSFT card: spanning POP parameter with other 
+ AX0212 parameter's type is forbidden.
+ AX0213 Error in REF/NOREF/LIMSFT card: turn on POP refinement in LSLS card.
+ AX0301 Syntax error in CONSTR card: the spanning is forbidden in CONSTR cards.
+ AX0302 Syntax error in CONSTR card: constraint on a whole class of parameters 
+ AX0302 or on all atom's parameters is forbidden.
+ AX0303 Syntax error in CONSTR card: first field must be a parameter.
+ AX0304 Syntax error in CONSTR card: constraint on whole class of parameters
+ AX0304 forbidden.
+ AX0305 Error in CONSTR card: atom or atom type with general parameter 
+ AX0305 forbidden
+ AX0306 Syntax error in CONSTR card: a number instead of a parameter was 
+ AX0306 encountered in the first field.
+ AX0307 Error in CONSTR card: DSP forbidden, use RE or IM instead.
+ AX0308 Error in CONSTR card: turn on parameter class refinement in LSLS card.
+ AX0309 Error in CONSTR card: parameter is out of bounds.
+ AX0310 Syntax error in CONSTR card: no number with UOV parameter.
+ AX0311 Error in CONSTR card: unknown atom or atom type.
+ AX0312 Error in CONSTR card: constraint displacement type does not coincide
+ AX0312 with atom displacement type.
+ AX0313 Error in CONSTR card: turn on POP refinement in LSLS card.
+ AX0401 Not enough memory to store LIMSFT list.
+ AX0402 Not enough memory to store constraint list.
+ AX0501 Parameter already constrained.
+ AX1199 Unrecognized code in LSLS card.
+ AX1100 Missing number after code DS, CY, SK, DA, LM, CD, PC, LE, LL and LP.
+ AX1101 Data set not positive.
+ AX1102 Cycle number not positive.
+ AX1114 Skipping range not positive.
+ AX1115 Damping factor not positive.
+ AX1117 Unsupported list matrix scheme (must be between -15 and 15).
+ AX1126 Correlation between observed distances greater than 1.
+ AX1123 Print correlations bound greater than 1.
+ AX1128 Negative number of listed reflections.
+ AX1130 List poor reflections bound less than 0.
+ AX1127 Refinement on intensities is mandatory to refine crystal shape.
+ AX1131 Refinement on restraints only is not allowed with crystal shape 
+ AX1131 refinement.
+ AX1132 Crystal shape refinement must be turned on to input correlation between
+ AX1132 crystal shape parameters.
+ AX1118 Impossible to list normal-equations matrix and variance-covariance
+ AX1118 matrix if in minimal variance weighting scheme.
+ AX1201 Not enough memory to store I/O buffers.
+ AX1202 lrcell: logical record is missing or ended too soon.
+ AX1203 Cell volume not positive.
+ AX1204 lrsymm: logical record is missing.
+ AX1205 Not enough memory to store non-atomic parameters.
+ AX1206 lrsymm: logical record ended too soon.
+ AX1208 lrscat: logical record is missing.
+ AX1209 Neutron scattering factors are missing.
+ AX1210 Scattering factors partition table not regular.
+ AX1211 Electrons radiation type not implemented.
+ AX1213 lrexpl: logical record is missing.
+ AX1214 lrexpl: logical record ended too soon.
+ AX1215 No crystal shape information on BDF: impossible to refine shape.
+ AX1216 No face number on BDF: impossible to refine shape.
+ AX1217 Missing mandatory crystal shape information: (hkl), distance or esd.
+ AX1218 lrdset: logical record is missing.
+ AX1301 Not enough memory to store TWINOP cards information.
+ AX1302 For new twinning rules, twinop serial number must be equal to the 
+ AX1302 previous total twinning rules number plus 1.
+ AX1303 Error in TWINOP card: volume ratio less than 0 or greater than 1.
+ AX1304 Error in TWINOP card: twinop serial number (field 10) is missing.
+ AX1404 lratom: logical record is missing.
+ AX1405 Missing mandatory items in lratom: logical record.
+ AX1406 Not enough memory to store atom list.
+ AX1500 Error in CONSTR card: reference parameter does not belong to the same
+ AX1500 class as subject parameter.
+ AX1501 Not enough memory for automatic constraints.
+ AX1511 Error in CONSTR card: parameter already constraint.
+ AX1512 Not enough memory to store constraint.
+ AX1515 REF UOV forbidden.
+ AX1516 Error in REF/NOREF card: the parameter belongs to a invariant atom.
+ AX1529 Error in REF card: parameter already constrained.
+ AX1531 MAXHKL or TWINOP card misplaced.
+ AX1601 Not enough memory to store BDF constraint list.
+ AX1602 Missing mandatory items on lrcons:. Could be subject atom name, 
+ AX1602 subject parameter, constant value or constraint type.
+ AX1701 Not enough memory to test constraint list self-consistency.
+ AX1702 Error in constraint list: one subject parameter is multiplied by 0.
+ AX1801 Error in LIMSFT card: no spanning allowed in LIMSFT cards.
+ AX1802 Error in LIMSFT card: parameter is mandatory.
+ AX1803 Syntax error in LIMSFT card: missing weight.
+ AX1804 Error in LIMSFT card: negative weight forbidden.
+ AX1805 Error in LIMSFT card: shift-limited displacement parameter type doesn't
+ AX1805 coincide with atomic displacement type.
+ AX1815 Error in LIMSFT card: variable already shift-limited.
+ AX1820 Card misplaced (after LIMSFT).
+ AX2201 Missing mandatory items on lrdist: logical record.
+ AX2202 Missing mandatory items on lrangl: logical record.
+ AX2203 Missing mandatory items on lrdihe: logical record.
+ AX2204 Missing mandatory items on lrbond: logical record.
+ AX2205 Not enough memory to store restraint lists.
+ AX2206 Refinement on restraints only, but there is no restraints on BDF.
+ AX2501 Not enough memory to store matrices.
+ AX3001 lrrefl: logical record is missing.
+ AX3102 Missing mandatory items on lrrefl:
+ AX3103 Derivative with respect to shape parameters are missing on lrrefl: 
+ AX3103 logical record.
+ AX3104 Weights are missing on lrrefl: logical record.
+ AX3106 Azimuthal angle is missing on lrrefl: logical record.
+ AX4901 Impossible to invert matrix, it is not positive defined.
+ AX5201 lrscat: logical record is missing.
+ AX5203 Too many scattering factors.
+ AX5204 lrexpl: logical record is missing.
+ AX5205 Missing scale.
+ AX5207 lrdset: logical record is missing.
+ AX5308 lratom: logical record is missing.
+ AX5309 Mandatory items are missing on lratom: logical record.
+ AX5399 Missing atom on BDF.
+ AX5402 Missing mandatroy items on lrrefl: logical record.
+ AX5501 Missing lrdist: logical record.
+ AX5502 Missing lrangl: logical record.
+ AX5503 Missing lrdihe: logical record.
+ AX5504 Missing lrbond: logical record.
+ AY0000 LSRES--------------------------------------------------------------
+ AY1101 Not enough memory to store I/O buffers.
+ AY1102 Syntax error in ADDRES card: unrecognized input code.
+ AY1103 Syntax error in ADDRES card: negative list-restraints number.
+ AY1201 Missing packets on lrcell: logical record.
+ AY1202 lrsymm: logical record is missing.
+ AY1203 lrsymm: logical record ended too soon.
+ AY1204 Not enough memory to store symetry operators.
+ AY1205 Not enough memory to store atom type names.
+ AY1206 lrscat: logical record is missing.
+ AY1207 Missing mandatory items on lrscat: logical record.
+ AY1208 lratom: logical record is missing.
+ AY1209 Missing atom name on lratom: logical record.
+ AY1210 Not enough memory to store atom list.
+ AY2101 Syntax error in SYMEQ card: root atom name is missing (field 1).
+ AY2102 Syntax error in SYMEQ card: symetrically-equivalent atom name is 
+ AY2102 missing (field 2).
+ AY2110 Syntax error in SYMEQ card: one coordinate of symetrically-equivalent
+ AY2110 atom is missing.
+ AY2111 Syntax error in SYMEQ card: unrecognized or misplaced first character
+ AY2111 of field.
+ AY2112 Syntax error in SYMEQ card: a number must follow division sign "/".
+ AY2113 Syntax error in SYMEQ card: patterns as "a/b/c" not allowed.
+ AY2114 Syntax error in SYMEQ card: a number must preceed "/".
+ AY2115 Not enough memory to store symeq list.
+ AY2120 Unrecognized card or END card after SYMEQ card.
+ AY2201 Missing mandatory items on lrdist: logical record.
+ AY2202 Missing mandatory items on lrangl: logical record.
+ AY2203 Missing mandatory items on lrdihe: logical record.
+ AY2204 Missing mandatory items on lrbond: logical record.
+ AY2205 Not enough memory to store BDF restraints.
+ AY2401 Syntax error in RESTR/DELRES card: missing restraint type.
+ AY2402 Syntax error in RESTR/DELRES card: unknown restraint type.
+ AY2403 Error in RESTR card: ALL as restraint type is forbidden.
+ AY2404 Syntax error in RESTR card: atom name is missing.
+ AY2405 Syntax error in RESTR card: atom name is missing, numerical field 
+ AY2405 instead.
+ AY2406 Error in RESTR/DELRES card: unknown atom name.
+ AY2408 Syntax error in RESTR card: "observed" value or its esd is missing.
+ AY2409 Not enough memory to store restraints.
+ AZ0000 LSABS---------------------------------------------------------------
+ AZ0001 Not enough memory for I/O buffers.
+ AZ0002 Negative absorption coefficient forbidden.
+ AZ0003 Unrecognized keyword in LSABS card.
+ AZ0004 Missing absorption coefficient value or dataset number on LSABS card.
+ AZ0005 Not enough memory to store face list.
+ AZ0006 SHAPE card incompatible with analytical integration method.
+ AZ0007 Syntax error in SHAPE card: PLATE or NEEDLE keywords are missing in
+ AZ0007 the first field.
+ AZ0008 Unrecognized keyword in SHAPE card.
+ AZ0009 GRID or SGRID card incompatible with analytical integration method.
+ AZ0011 Error in crystal descritpion: less than four faces.
+ AZ0012 Impossible to treat more than 20 faces.
+ AZ0013 Very unreasonable lattice constants, the basis vectors are coplanar.
+ AZ0014 Not enough memory for NOABS list.
+ AZ0015 Syntax error in NOABS card: missing reflection number.
+ AZ0016 Unrecognized or forbidden input card.
+ AZ0018 Only analytical intgration allowed for spherical crystals.
+ AZ0019 More than one SPHERE cards.
+ AZ1101 Not enough memory to store vertices list.
+ AZ1102 Error in crystal description: crystal not bounded.
+ AZ1103 Error in crystal description: a face has less than 3 vertices.
+ AZ1201 Not enough memory to store edges list.
+ AZ1202 Error in crystal description: an edge belongs to more than 2 faces.
+ AZ1203 Error in crystal description: Euler's law not fulfilled.
+ AZ1501 Not enough memory to store bulk grid.
+ AZ1502 Not enough memory to store surface grids.
+ AZ1601 The product between sphere radius and absorption coefficient must be
+ AZ1601 smaller than 10.
+ AZ1602 Not enough memory to store absortipon table.
+ AZ2101 R vector is not orthogonal to diffraction vector.
+ AZ2201 Grid point outside the crystal.
+ AZ2401 Not enough memory to store Howell's polyhedron.
+ AZ2501 Not enough memory to store cutting planes.
+ AZ2901 Not enough memory to store Howell's polyhedron new edge.
+ AZ3101 Missing lrrefl: logical record.
+ AZ3102 Missing mandatory items on lrrefl: logical record: (hkl), azimuthal
+ AZ3102 angle, intensity or esd of intensity.
+ AZ3103 Missing lrexpl: logical record.
+ AZ3301 Missing lrexpl: logical record.
+ AZ3302 No face information neither on BDF nor on cards.
+ AZ3303 Less than four faces on BDF.
+ AZ3304 Missing wavelength on BDF.
+ AZ3305 Impossible to compute absorption coefficient.
+ AZ3306 Absorption coefficient is missing.
+ AZ3307 Not enough memory to store faces.
+ AZ3308 Impossible to compute absorption coefficient: unknown wavelength.
+ AZ3309 Impossible to compute absorption coefficient: atomic absorption factor
+ AZ3309 is missing.
+ AZ3310 Missing esd and weight of sphere radius.
+ AZ4101 Principal direction for grid ill-defined.
+ BF0000 BFOURR-----------------------------------------------------------------
+ BF0101 Insufficient storage is available.
+ BF0202 Illegal control on BFOURR line.    
+ BF2101 An unacceptable Fourier type specification found on FOUR or PATT line.
+ BF2102 The data set 1 name from FOUR or PATT line is not on the bdf.
+ BF2103 The data set 2 name from FOUR or PATT line is not on the bdf.
+ BF2301 An illegal phase type was specified.
+ BF2302 A phase for a non-existent data set was speficied.
+ BF2401 The data set specified on the KDB line is not on the bdf.
+ BF2501 On the SCALE line, the scale is less than or equal to 0.
+ BF2601 An unacceptable descriptor was found on the WEIGHT card.
+ BF2701 Unacceptable limits were found on the LIMHKL line.
+ BF2702 Unacceptable limits were found on the LIMSTL line.
+ BF2703 Unacceptable limits were found on the LIMD line.
+ BF2704 Unacceptable limits were found on the LIMCO line.
+ BF2705 K in field three of the COEFF limit line is unreasonable.
+ BF2706 The lower Fo limit is greater than the upper limit.
+ BF2707 K in field three of the LIMF line is unreasonable.
+ BF4101 A Fourier was specified, but no PHASE line was input.
+ BF4102 Some basic quantity is missing from the input bdf. Has the ADDREF
+ BF4102 program been run? There must be hkl, sin(theta)/lambda, and packed
+ BF4102 epsilon and multiplicity on
+ BF4103 The requested Fs are not on the input bdf.
+ BF4104 The requested phases are not on the input bdf.
+ BF4105 The requested weights are not on the input bdf.
+ BF4106 Sigmas are needed but cannot be found on the bdf.
+ BF4199 Previous error(s) have occurred.
+ B44201 A Fourier was specified, but no PHASE line was input.
+ BF4202 Some basic quantity is missing from the input bdf. Has the ADDREF
+ BF4202 program been run? There must be hkl, sin(theta)/lambda, and packed
+ BF4202 epsilon and multiplicity on
+ BF4203 No set 1 Fs were found on the bdf.
+ BF4204 No set 2 Fs were found on the bdf.
+ BF4206 No weights were found on the bdf.
+ BF4299 Previous error(s) have occurred.
+ BF5101 An invalid K or delta-B was found on the bdf for data set 1.
+ BF9901 Either an unacceptable function or no function at all was found on the
+ BF9901 ADHOC line.
+ BF9999 Some previous error(s) have occurred on the ADHOC line.
+ BN0000 BONDLA-----------------------------------------------------------------
+ BN0701 Atom name is missing
+ BN0702 Insufficient memory for atom array
+ BN0703 Atom name not recognised
+ BN1101 An unidentifiable field was encountered on the BONDLA line.
+ BN1105 Insufficient memory
+ BN2101 The expected cell parameters are not in the bdf.
+ BN2102 The expected lattice and symmetry information is not in the bdf.
+ BN2103 The expected atomic coordinates are not in the bdf.
+ BN2104 Insufficient memory is available for atom or symmetry storage.
+ BN2105 No information on atomic radii was found in the bdf.
+ BN2501 The atom label is missing or incorrect on the SITE line.
+ BN2503 No scattering factor was found for given atom name on ATRAD line.
+ BN2504 Insufficient memory is available for atom parameter storage.
+ BN2506 No atom or peak data has been entered.
+ BN2507 Illegal construction on ADDPEK line. Atom type name is missing.
+ BN2508 Atom type name on SITE or ADDPEK line not on bdf. Go back to STARTX.
+ BN2509 Only a maximum of nine ADDPEK lines may be entered.
+ BN2510 Missing logical record from scratch file
+ BN3501 Insufficient memory is available to search for connected sets.
+ BN5101 Insufficient memory is available for contact distances search.
+ BN7501 Insufficient memory is available dihed angle list.
+ BT0000 BONDAT-----------------------------------------------------------------
+ BT0201 Indeterminate distance calculated. Check cell data and input coords.
+ BT0202 Input generating atoms are too close for this geometry. Check input.
+ BT0301 Indeterminate distance calculated. Check cell data and input coords.
+ BT0302 Input generating atoms are too close for this geometry. Check input.
+ BT0601 A void calculation type field was detected in the CALCAT line.
+ BT0605 Unrecognised atom label for generating atom in the CALCAT line.  
+ BT0610 Insufficient memory is available for atom storage.
+ BT1503 Insufficient memory is available for atom storage.
+ BT1505 Insufficient memory is available for file buffers. 
+ BU0000 BUNYIP------------------------------------------------------------------
+ BU1004 Syntax error on RADII line. Atom type is alpha string.
+ BU1005 Numerical value missing from option in BUNYIP line.
+ BU1006 Syntax error on RADII line. Radii must be numerical.
+ BU1007 Syntax error on ASSUME line. Atom type is alpha string.
+ BU1008 Syntax error on ALIGN line. Atom label is alpha string.
+ BU1009 Syntax error on SEARCH line. Inputs must be alpha strings. 
+ BU1010 Unknown input option on BUNYIP line.
+ BU1011 Unknown input option on SEARCH line.  
+ BU1015 Syntax error on COMPLX line. Atom label is alpha string.
+ BU1016 Syntax error on REMOVE line. Atom label is alpha string.
+ BU1105 No atom sites present on input archive file.
+ BU1110 No atom type info on input archive file.
+ BU3202 Solution of ls plane or line fails in routine BU32.
+ BU3301 Solution of ls plane or line fails in routine BU33.
+ BY0000 BAYEST------------------------------------------------------------------
+ BY0005 A numeric field was expected after NRANGE in the BAYEST line.
+ BY0010 An unrecognized field was found in the BAYEST line.
+ BY0015 Insufficient memory is available for the input buffer.
+ BY0020 Insufficient memory is available for the output buffer.
+ BY0025 Logical record lrdset: is missing from the input bdf.
+ BY0030 A mandatory item is missing from lrdset:; sin(theta)/lambda
+ BY0030 minimum and maximum.
+ BY0035 Logical record lrrefl: is missing from the input bdf.
+ BY0040 A mandatory item is missing from lrrefl:; hkl, sin(theta)/lambda
+ BY0040 or epsilon.
+ BY0045 The application of corrections to intensity or F squared
+ BY0045 requires the estimated standard deviation.
+ BY0050 The application of corrections to F(rel) requires sigma(F(rel)).
+ BY0055 The intensity, F squared, and F(rel) are all missing from the bdf.
+ CB0000 CBAZA-------------------------------------------------------------------
+ CB1001 Unable to allocate qx: memory for file io buffers.
+ CB1002 Numeric field on CBAZA command line, where character string is expected.
+ CB1003 Logical record lrexpl: is missing the wavelength or data set number.
+ CB1004 Number encountered on DIFF line, where character (C/A) expected.
+ CB1005 Unrecognized character string on DIFF line, (C/A expected).
+ CB1006 Not enough numeric fields on the ORIENT line.
+ CB1007 Both a DIFF and an ORIENT line are mandatory for this program.
+ CB2001 The logical record lrrefl: is missing from the bdf.
+ CB2002 The hkl indices are missing from lrrefl:.
+ CB2003 A nonsense value of Sine theta was determined for a reflection.
+ CD0000 CEDAR------------------------------------------------------------------
+ CD0201 Singular matrix; not inverted             
+ CD0502 Wrong number of symops on BDF
+ CD0503 Wrong number of CEDAR symops on BDF
+ CD0504 Requested dictionary on BDF not found
+ CD0505 No atoms on BDF
+ CD0603 Missing scattering factors on BDF
+ CD0701 Missing residue dictionary items
+ CD0801 Missing atom type data on the bdf.
+ CD0802 Atom name missing from BDF
+ CD0803 Atom link information missing from BDF
+ CD0804 Exceeded maximum number of atoms dimensioned
+ CD1512 Too many scale factor groups
+ CD1502 Option missing from MODE line
+ CD1503 Requested old atom coordinates missing from BDF
+ CD1508 Error in residue number for atom
+ CD1509 Requested atom not found
+ CD1511 Requested residue not found
+ CD1801 Cannout use B_change and anisotropic B-factors at same time yet
+ CD2002 No reflection information on BDF
+ CD2003 Mandatory item missing in LRREFL
+ CD2004 Requested previous fixed atom contribution missing from BDF
+ CD2506 Requested atom sigmas missing from BDF
+ CD2501 Less reflections than variables
+ CD4002 KeyG = 0 is incorrect, redo PRECED
+ CD4801 Error in conjugate gradient subroutine
+ CD9101 Singular matrix
+ CF0000 CIFIO------------------------------------------------------------------
+ CF1001 Unrecognised option code on CIFIO line.
+ CF1002 Insufficient memory for IO buffer allocation.
+ CF3005 CIFREQ file was not available to be opened, or was of zero length. In
+ CF3005 'cifout' mode this file is needed to specify the data items to be output
+ CF3006 CIFMAP file was not available to be opened, or was of zero length. In
+ CF3006 'cifout' mode this file is required to define the location of bdf data. 
+ CF3007 Duplicate data name requested in CIFREQ. This is illegal in a CIF.
+ CF3008 More than 200 items have been requested from a logical record in the 
+ CF3008 bdf. This necessitates recompiling CF30 with a larger RPNT() array.
+ CF3010 Unrecognised xtal bdf record type entered on the CIFMAP file.
+ CF3014 CIFMAP flags data as repeated but data requested as 'no loop'.
+ CF3015 Unrecognised idnumber construction encountered in the CIFMAP file.
+ CF3017 Unrecognised idnumber construction encountered in the CIFMAP file.
+ CF3020 Data items in a requested loop reside in different xtal bdf records. 
+ CF3110 Requested data is flagged for special mapping in CIFMAP but CIFIO does
+ CF3110 not recognise the special mapping number.
+ CF3301 Insufficient memory for symop storage.    
+ CF4005 _cell data item in the .arc file is not a recognisable number
+ CF4007 _symm data item in the .arc file is not a recognisable number
+ CF4010 There is an incorrect number of elements in the _symm_ or _twin loop
+ CF4015 Illegal construction in _slav loop
+ CF4017 _slav data item in the .ARC file is not a recognisable number
+ CF4025 Illegal construction in _rfac loop
+ CF4105 The number of data items in the looped list preceding this line is not
+ CF4105 an exact multiple of the loop_ data names. If this is older .arc file
+ CF4105 and occurs for looped _sfls data then remove the 10 numbers following
+ CF4105 _sfls_0016 character string and replace with the 3 characters '*'. If
+ CF4105 it is not, this file has been corrupted.Check the data carefully.
+ CF4205 Hexadecimal number in .ARC file contains illegal character. Hex numbers
+ CF4205 are used in _refl loops and start with a "Z".
+ CF4501 Data item in .CIF or .ARC expected to be numeric but is non-numeric.
+ CF4502 Encountered number has illegal construction. Must be +/-xx.yy+/-zz(ss).
+ CF5005 No .cif file is available, or it contains no lines.
+ CF5010 The requested or default (compid) data_ block name not found in .cif. 
+ CF5055 The main CIF dictionary (normally 'cifdic') cannot be opened. Make sure
+ CF5055 that the location of this file matches the path string in 'gx'.
+ CF5060 No .cif file that matches 6-char compid, or it contains no lines.
+ CF5065 There are no datablocks in the .cif file currently being checked?
+ CF5201 Some cell data appears to be missing from the .cif. Check the file.
+ CF5205 Cell data is missing from the .cif. Check that the block containing this
+ CF5205 data has been correctly named -- perhaps this is the text data.
+ CF5405 Illegal construction in .cif file. Unexpected end of file detected.
+ CF5810 Unresolvable conflict in 'cifmap' or .cif file.             
+ CF5820 Unrecognised character code for _diffrn_refln_scan_mode_* in CIF cannot 
+ CF5820 be converted to numeric. Check that char strings are "om ot st mo".
+ CG0000 CHARGE-----------------------------------------------------------------
+ CG1005 Insufficient memory for bdf input buffer
+ CG1010 Insufficient memory for bdf input buffer
+ CG1015 Logical record lrsymm: is nonexistant
+ CG1020 Insufficient memory to store symmetry operations
+ CG1025 Logical record lrexpl: is nonexistant
+ CG1030 Data set number (ID=1) is missing from logical record lrexpl:
+ CG1035 Logical record lratom: is nonexistant
+ CG1040 x (ID=1), y (ID=2), z (ID=3), atom name (ID=14) or scattering factor
+ CG1040 pointer (ID=22) are missing from logical record lratom:
+ CG1045 Insufficient memory to store atom information
+ CG1055 Logical record lrrefl: is nonexistant
+ CG1060 sig(F) (ID=1305) is missing from logical record lrrefl:
+ CG1105 Logical record lrscat: is nonexistant
+ CG1110 Number of atoms in unit cell (ID=1) or atomic number (ID=3) are missing
+ CG1110 from logical record lrscat:
+ CG1115 No potential profiles values for this atom on file 'profil'.
+ CI0000 CIFENT-----------------------------------------------------------------
+ CI1001 Unrecognised option code on CIFENT line.
+ CI1002 Insufficient memory for IO buffer allocation.
+ CI3005 CIFREQ file was not available to be opened, or was of zero length. In
+ CI3005 'cifout' mode this file is needed to specify the data items to be output
+ CI3006 CIFMAP file was not available to be opened, or was of zero length. In
+ CI3006 'cifout' mode this file is required to define the location of bdf data. 
+ CI3007 Duplicate data name requested in CIFREQ. This is illegal in a CIF.
+ CI3008 More than 200 items have been requested from a logical record in the 
+ CI3008 bdf. This necessitates recompiling CF30 with a larger RPNT() array.
+ CI3010 Unrecognised xtal bdf record type entered on the CIFMAP file.
+ CI3014 CIFMAP flags data as repeated but data requested as 'no loop'.
+ CI3015 Unrecognised idnumber construction encountered in the CIFMAP file.
+ CI3017 Unrecognised idnumber construction encountered in the CIFMAP file.
+ CI3020 Data items in a requested loop reside in different xtal bdf records. 
+ CI3110 Requested data is flagged for special mapping in CIFMAP but CIFIO does
+ CI3110 not recognise the special mapping number.
+ CI3301 Insufficient memory for symop storage.    
+ CI4005 _cell data item in the .arc file is not a recognisable number
+ CI4007 _symm data item in the .arc file is not a recognisable number
+ CI4010 There is an incorrect number of elements in the _symm_ or _twin loop
+ CI4015 Illegal construction in _slav loop
+ CI4017 _slav data item in the .ARC file is not a recognisable number
+ CI4025 Illegal construction in _rfac loop
+ CI4105 The number of data items in the looped list preceding this line is not
+ CI4105 an exact multiple of the loop_ data names. If this is older .arc file
+ CI4105 and occurs for looped _sfls data then remove the 10 numbers following
+ CI4105 _sfls_0016 character string and replace with the 3 characters '*'. If
+ CI4105 it is not, this file has been corrupted.Check the data carefully.
+ CI4205 Hexadecimal number in .ARC file contains illegal character. Hex numbers
+ CI4205 are used in _refl loops and start with a "Z".
+ CI4501 Data item in .CIF or .ARC expected to be numeric but is non-numeric.
+ CI4502 Encountered number has illegal construction. Must be +/-xx.yy+/-zz(ss).
+ CI5005 No .cif file is available, or it contains no lines.
+ CI5010 The requested or default (compid) data_ block name not found in .cif. 
+ CI5055 The main CIF dictionary (normally 'cifdic') cannot be opened. Make sure
+ CI5055 that the location of this file matches the path string in 'gx'.
+ CI5060 No .cif file that matches 6-char compid, or it contains no lines.
+ CI5065 There are no datablocks in the .cif file currently being checked?
+ CI5201 Some cell data appears to be missing from the .cif. Check the file.
+ CI5205 Cell data is missing from the .cif. Check that the block containing this
+ CI5205 data has been correctly named -- perhaps this is the text data.
+ CI5405 Illegal construction in .cif file. Unexpected end of file detected.
+ CI5810 Unresolvable conflict in 'cifmap' or .cif file.             
+ CI5820 Unrecognised character code for _diffrn_refln_scan_mode_* in CIF cannot 
+ CI5820 be converted to numeric. Check that char strings are "om ot st mo".
+ CL0000 CRILSQ-----------------------------------------------------------------
+ CL1001 On the CRILSQ line, a field must be a character field
+ CL2001 Insufficient cell packets in the binary data file    
+ CL2002 The scattering factor record is missing from the input bdf
+ CL2003 The experimental parameter record is missing from the input bdf.
+ CL2004 The logical record lrdset: is missing from the input bdf.
+ CL3001 Unrecognised input line
+ CL3002 Error in CONSTR line: first field must be parameter code
+ CL3003 Error in CONSTR line: second field must be atom (type) code
+ CL3004 Error in CONSTR line: third field must constant Q value
+ CL3005 Error in CONSTR line: fourth field must be multiplier
+ CL3006 Error in CONSTR line: fifth field must be parameter code
+ CL3007 Error in CONSTR line: sixth field must be atom label
+ CL3008 Error in CONSTR line: wrong atom codes
+ CL3009 Error in NOREF line: wrong inumber of parameters
+ CL3010 Error in NOREF line: wrong number of atom labels
+ CL3012 Error input contol lines out of sequence.
+ CL3013 Error. Unfortunately only the identity twinop can currently be used.
+ CL3101 Wrong calcat type in atom record of bdf
+ CL3102 Wrong order of riding atoms in atom record
+ CL3103 Unrecognizable atom label of a riding atom
+ CL4301 A negative distance is calculated
+ CL4302 Generating atoms for riding atoms are too cloose
+ CL4401 A negative distance is calculated
+ CL5001 Item is missing from the reflection logical record
+ CL5002 The weights for F**2 are missing from the reflection record.
+ CL5003 The sigmas for F**2 are missing from the reflection record.
+ CL9001 A negative twin fraction was calculated
+ CN0000 CONTRS-----------------------------------------------------------------
+ CN1001 An unrecognized character field was encountered on the CONTRS line.
+ CN1002 An unrecognized character field was encountered on the LEVELS line.
+ CN1004 NC, ST, or IN are not allowed for the DIRECT options.
+ CN1005 There must be two numeric fields for each character field on
+ CN1005 the LINTYP input line.
+ CN1006 An unrecognized character field was encountered on the
+ CN1006 LINTYP line.
+ CN1007 More than 10 dash-gap elements are requestd via the DASH or
+ CN1007 the DOT lines.
+ CN1008 More than 30 conturs are requested to be plotted.
+ CN1011 No conturs are specified on the LEVELS line.
+ CN1109 Insufficient memory is available for I/O buffers.
+ CN1110 There is no Fourier map on the MAP file!
+ CN1111 The specified contour type does not match the input map components.
+ CN1112 Insufficient memory available for symmetry operations.
+ CN1113 Insufficient memory available for atomic coordinates.
+ CN2001 Insufficient memory available for storage of layer data.
+ CN2002 Not enough data found on LR22: of the FOURR bdf.
+ CN3001 Insufficient memory is available to store the interpolated
+ CN3001 data points.
+ CN4001 Insufficient memory is available to store the curve information.
+ CP0000 CRISP------------------------------------------------------------------
+ CP0001 Insufficient QX mem for IO buffers
+ CP0101 Unrecognised input option on CRISP line.
+ CP0201 Empty logical record lrscat:. Add expected cell contents in STARTX.
+ CP0202 Potential corrupted lrscat: record. No Z or cell contents from STARTX.
+ CP0203 No cell volume in lrexpl:
+ CP0204 Insufficient QX mem for symop storage. 
+ CP0205 Insufficient QX mem for scattering factor names. 
+ CP0206 Insufficient QX mem for scattering factors. 
+ CP0207 Insufficient QX mem for group scales. 
+ CP0208 Insufficient QX mem for peak picking table. 
+ CP0209 Insufficient QX mem for storing prior atomic coordinates from bdf. 
+ CP0301 Corrupted structure invariants file .inv. Record 2 missing.
+ CP0302 Insufficient QX memory for storing generator reflection information.
+ CP0303 Corrupted structure invariants file .inv. Generators are missing.
+ CP0304 There is an unrecognized alphabetic string in the INVAR line.
+ CP0305 There is an unrecognized alphabetic string in the SELECT line.
+ CP0306 There is an unrecognized alphabetic string in the REFINE line.
+ CP0307 There is an unrecognized alphabetic string in the ASSIGN line.
+ CP0342 A duplicate assignment of the starting phase has been made.
+ CP0308 The number of permuted starting phases exceeds 10.
+ CP0309 A duplicate assignment of the starting phase has been made.
+ CP0310 There is an unrecognized alphabetic string in the PHI line.
+ CP0311 The number of permuted starting phases exceeds 10.
+ CP0312 There is an unrecognized alphabetic string in the SETFOM line.
+ CP0401 The intruction for the order of Fourier summation is irrational.
+ CP0501 The number of grid points in the second sum direction is too small
+ CP0501 relative to the maximum value of the Miller index in that direction.
+ CP0501 Either increase the number of grid points or degrease the maximum Miller
+ CP0501 index to reduce resolution.
+ CP0502 The number of grid points in the third sum direction is too small
+ CP0502 relative to the maximum value of the Miller index in that direction.
+ CP0502 Either increase the number of grid points or decrease the maximum Miller
+ CP0502 index to reduce resolution.
+ CP1010 No structure factors or useable intensities in lrrefl:
+ CP1011 F(rel) or F(cal) is missing from the input bdf.
+ CP1012 A,B, or phi is missing from the input bdf.
+ CP1013 The GENTAN phi is missing from the input bdf.
+ CP1101 Quartets were requested for the starting set selection, but none are
+ CP1101 present.
+ CP1102 Triplets were requested for the starting set selection, but none are
+ CP1102 present.
+ CP1103 Insufficient QX mem for storing structure invariants.
+ CP1104 The generator set is defficient of UVW=000 reflections.
+ CP1104 Direct methods cannot possibly work in this situation.
+ CP1301 An enantiomorph defining reflection cannot be automatically assigned.
+ CP1301 The EDR cannot be found from the selection of generators, increase the
+ CP1301 number.
+ CP1302 The number of permutable starting phases exceeds 10.
+ CP1501 The starting set is inadequate to continue. Check the invariant limits
+ CP1501 AMIN and BMIN; and if only quartets are used, the XVSM limits.
+ CP2001 There is insufficient storage to calculate one layer of second sum
+ CP2001 Fourier coefficients. Can only suggest reducing the number of structure
+ CP2001 invariants or generators stored previously
+ CP2002 There is insufficient storage for third sum Fourier coefficients. 
+ CP2002 Can only suggest reducing the number of structure invariants or 
+ CP2002 generators stored previously.
+ CP2003 Insufficient QX mem for storing peak list.
+ CP2004 Insufficient QX mem for FFT map layer storage.
+ CP2301 Too many grid points have been specified in at least one direction for
+ CP2301 FFT calculation.
+ CP3901 Insufficient QX mem for sorting peaklist. 
+ CP4101 Insufficient QX mem for sym related peak site. 
+ CP4103 Insufficient QX mem for new peak bond packet. 
+ CP4301 Insufficient QX mem for duplicate bond list for saving state. 
+ CP7001 Insufficient QX mem for sym related atom coords for structure 
+ CP7001 factor calculation.
+ CP7002 Insufficient QX mem for special position site constraint.
+ CP8001 Insufficient QX mem for first derivative accumulation.
+ CQ0000 CRITIQ-----------------------------------------------------------------
+ CQ0201 Required data missing from lrrefl:                    CQ02  33
+ CQ0202 Reflection data is missing from the bdf.                      CQ02  34
+ CQ1101 Insufficient memory is available.
+ CQ1102 The minimum shift number requested is greater than the maximum shift
+ CQ1102 number. See fields 5 and 6 of the CRITIQ line.
+ CQ1103 The minimum sin(theta)/lambda limit exceeds the maximum limit. See
+ CQ1103 fields 9 and 10 of the CRITIQ line.
+ CQ1104 The sorting order or shift numbers are absent from logical record
+ CQ1104 lrexpl: of the input bdf.
+ CQ1105 An unacceptable sorting order has been specified.
+ CQ1199 Previous errors have occurred.
+ CQ1201 Negative or void shift numbers are not allowed.
+ CQ1202 A requested shift number was not found on bdf (logical record lrexpl:).
+ CQ1203 There are too many shifts; the maximum is 500.
+ CQ1204 A scale factor cannot be negative.
+ CQ1299 Some previous error has occurred.
+ CQ2101 Insufficient memory is available.
+ CQ3101 The discrepancy list is not exhausted upon completion of the search.
+ CR0000 CRYLSQ-----------------------------------------------------------------
+ CR2501 Variables of the restraint are not in the same refinement block.
+ CR0101 In the CRYLSQ line, a function does not exist or is not followed by a
+ CR0101 numeric field.
+ CR0102 The cell record is missing from the input bdf.
+ CR0103 The symmetry record is missing from the input bdf.
+ CR0104 At least one complete least squares cycle must be made.
+ CR0104 Use FC to do just a structure factor calculation.
+ CR0120 Insufficient memory is available for symmetry operations.
+ CR0201 The scattering factor record is missing from the input bdf.
+ CR0202 There are no scattering factor tables in lrscat: of the input bdf.
+ CR0203 A DISPER line was read with an atom type that does not correspond to any
+ CR0203 atom type in the input bdf.
+ CR0204 The experimental parameter record is missing from the input bdf.
+ CR0205 The logical record lrdset: is missing from the input bdf.
+ CR0208 Error in EXTINC line: wrong extinction type, distribution or thermal
+ CR0208 mode.
+ CR0220 Insufficient memory is available for general parameters.
+ CR0301 Too much information was detected on the SELECT lines. The maximum is
+ CR0301 440 characters.
+ CR0302 An atom ID or scattering factor type is missing from lratom:.
+ CR0303 There are no atoms in the input bdf.
+ CR0304 There is an error in the TFTYPE line.
+ CR0320 Insufficient storage is available for the atoms.
+ CR0401 The nth identical molecule is not preceded by the first molecule.
+ CR0402 To refine population parameter(s) set PP in the CRYLSQ line.
+ CR0403 An atom of the ATOMGR line is not present in the input bdf.
+ CR0404 There are less than 3 atoms in the group.
+ CR0405 The indicated molecules are not identical.
+ CR0406 The char string defining the atom range is missing.
+ CR0407 The char string defining the atom range should contain '/' not '-'
+ CR0408 An ATOM line was expected but not found.                             
+ CR0420 Insufficient storage is available for the group information.
+ CR0501 Error in RESTR line: class does not exist.
+ CR0502 Error in RESTR line: wrong atom id.
+ CR0503 Error in RESTR line: not enough atoms for current class.
+ CR0504 Error in RESTR line: ideal value is missing
+ CR0520 Insufficient memory is available for restraint data.
+ CR0601 The code entered in a CONSTR line is unrecognizable. The parameter or
+ CR0601 the atom ID may not exist. The order of the reference and subject atoms
+ CR0601 on the CONSTR line is important. Check the user's guide.
+ CR0602 The BLOCK line has been entered out of order.
+ CR0603 A wrong atom ID or a wrong order of atom IDs was detected in the NOREF
+ CR0603 line or the BLOCK line. Note that '-' should be '/' for sequences.
+ CR0605 A non-fatal error has been detected in the input stream.
+ CR0610 The subject atom or parameter must not precede the reference atom or
+ CR0610 parameter in a CONSTR line equation. It will be necessary to reverse
+ CR0610 the order of these items for this constraint to work correctly.
+ CR0620 Insufficient storage is available for CONSTR, NOREF, and BLOCK
+ CR0620 information.
+ CR0820 Insufficient storage is available for the scratch arrays.
+ CR2001 One or more of the required data items is missing from the reflection
+ CR2001 of the binary file. Check if F, F**2 or I is required and is absent.
+ CR2002 The sigmas for F, F**2, or I are missing from the reflection record.
+ CR2003 The reflection weights are missing from the reflection record.
+ CR2004 1/Lp is missing from the reflection record.
+ CR2006 No partial contributions are present on the bdf.
+ CR2007 Friedel data is missing from the reflection packet. Make sure that
+ CR2007 SORTRF has been used in PAK mode.
+ CR2020 Insufficient memory available. See MemMax and MemReq values printed
+ CR2020 above and redefine the memmax: macro in XMACRO to be larger than MemReq.
+ CR2020 Then recompile aa.r and cr.r [on some machines it may be necessary to
+ CR2020 recompile all programs in your system] and then relink the system.
+ CR2401 Variables of the restraint are not in the same refinement block.
+ CR3120 Insufficient storage for the buffer of the correlation matrix.
+ CR3620 Insufficient memory is available for the output bdf buffer.
+ CR3701 The temperature factor for an atom has become non-positive definite.
+ CU0000 CREDUC-----------------------------------------------------------------
+ CU1001 Unrecognizable input field on the CREDUC line
+ CU2001 Insufficient memory space available for bdf buffers
+ CU2002 No symmetry information on the bdf
+ CU2003 Insufficient memory space available for symmetry matrices
+ CV0000 CONVOL-----------------------------------------------------------------
+ CV1001 Insufficient storage is available.
+ CV2002 Unrecognized field specified on convol line, should be list.
+ CV2003 Data set name specified on convol line is not found on bdf.
+ CV2101 Coordinates given on the f1.2 line are unacceptable.
+ CV2103 Must specify a, b, or c as the permutation order.
+ CV2501 On the scale line, the scale is less than or equal to 0.
+ CV2701 Unacceptable limits were found on the limhkl line.
+ CV2702 Unacceptable limits were found on the limstl line.
+ CV2703 Unacceptable limits were found on the limd line.
+ CV2706 The lower fo limit is greater than the upper limit.
+ CV2707 K in field three of the limf line is unreasonable.
+ CV3002 Some basic quantity is missing from the input bdf. has the
+ CV3002 ADDREF program been run? there must be hkl,
+ CV3002 Sin(theta)/lambda, and packed epsilon and multiplicity on bdf
+ CV3003 The requested fs are not on the input bdf.
+ CV3004 The requested phases are not on the input bdf.
+ CV3006 Sigmas are needed but cannot be found on the bdf.
+ CV3099 Previous error(s) have occurred.
+ DD0000 DIFDAT---------------------------------------------------------------
+ DD1001 Insufficient storage is available.
+ DD1002 There is an erroneous input mnemonic in the DIFDAT line.
+ DD1003 The number of standard deviations specifying the rejection criteria is
+ DD1003 unreasonable.
+ DD1010 There are missing quantities in the reflection record of the input bdf.
+ DD1021 The UB matrix is missing from lrexpl:. Use STARTX orient line.
+ DD1022 The UB matrix in lrexpl: is singular.
+ DD2004 An erroneous value has been supplied for an attenuator factor.
+ DD2006 Program execution has been terminated due to error 20 04.
+ DD2030 A FETCH line is expected but not entered.
+ DD2104 No tape end of file specification was given.
+ DD2201 An unrecognizable mnemonic was encountered in the FETCH line.
+ DD2202 A required mnemonic in the FETCH line is missing.
+ DD2302 A non-character field was encountered in the CODE line.
+ DD2303 Too many characters were input on CODE lines. The maximum number of
+ DD2303 characters is 256.
+ DD3001 No source of intensity data has been defined?
+ DD3002 Insufficient memory is available for standard reflection storage.
+ DD5001 Insufficient memory available to smooth the intensity scale factors.
+ DD5002 Insufficient memory available to store the intensity scale factors.
+ DI0000 DIVIDE------------------------------------------------------------------
+ DI2001 Insufficient memory is available for the I/O BUFFER and       
+ DI2001 all the reflection items in QX array.                         
+ DI2002 Data set           is missing from lrexpl: IDN=1.             
+ DI2003 Wavelength         is missing from lrexpl: IDN=2.             
+ DI2004 Sort order         is missing from lrexpl: IDN=12.            
+ DI2005 Scale group numbers are missing from lrexpl: IDN=100.         
+ DI2006 Some of the following items are missing from lrdsetl:         
+ DI2006 max h, max k, max l, min/max sin(theta)/lambda.               
+ DI2007 Miller indices    are missing from lrrefl: IDN=1.             
+ DI2008 Sin(theat)/lambda  is missing from lrrefl: IDN=2.             
+ DI2009 Refl. multiplicity is missing from lrrefl: IDN=3.             
+ DI2011 LRREFL: IDN=1302         is missing.                          
+ DI2012 LRREFL: IDN=1302 or 1801 is missing.                          
+ DI2013 LRREFL: IDN=1302 or 1801 or 1600 is missing.                  
+ DI2014 LRREFL: IDN=1302 or 1800 is missing.                          
+ DI2015 LRREFL: IDN=1302 or 1800 or 1910 is missing.                  
+ DI2016 LRREFL: IDN=1302 or 1604 is missing.                          
+ DI2017 LRREFL: IDN=1302 or 1605 is missing.                          
+ DI2018 LRSYMM: PKT 1            is missing.                          
+ DI2019 Insufficient memory is available for all the symops           
+ DI2020 No cell content                                               
+ DI2021 LRREFL: IDN=1302, 1801 or 1802 is missing.                    
+ DI3001 Insufficient memory is available for the INDEX table in QX.   
+ DI3002 Sum of intensities of overlapping reflections in a cluster    
+ DI3002 is NEGATIVE.                                                  
+ DI5001 Insufficient memory is available for I/O buffer.              
+ DI5002 Requested item is not present on bdf.                         
+ DI5501 Requested items are not present on bdf.                       
+ DI6001 Symmetry elements do not build a group.                       
+ DI6701 Index for double summation is not present in data set.        
+ DI6702 Not enough memory available for external Fourier coefs.       
+ EB0000 EDTBDF---------------------------------------------------------------
+ EB0101 Missing RECORD field on input line.
+ EB0102 Illegal paramter on input line.
+ EB0103 Missing ITEM NUMBER field on input line.
+ EB0104 Missing required field 3 on input line.
+ EB0110 Number of requested changes has exceeded inbuilt limit of 10.
+ EX0000 EXTINC---------------------------------------------------------------
+ EX1001 Insufficient memory is available for storage of symops
+ EX1002 Unrecognised control card  on  extinc  line
+ EX1003 For applying extinction correction no r* has been specified 
+ EX1004 For applying extinction correction no sigma(r*) has been specified 
+ EX1005 No symmetry information has been found on the bdf
+ EX1006 The limiting parameters, as specified are ambiguous
+ EX1007 Insufficient memory is available for IO buffers
+ EX1008 Unrecognised control card on limits line
+ EX5001 No reflection data has been found on the bdf
+ EX5002 Insufficient memory is available for storing lrrefl information
+ EX7001 The limits applied prevent refinement on any reflection data
+ FB0000 RFOURR----------------------------------------------------------------
+ FB1001 RFOURR input line contains an invalid option code or construction.
+ FB1002 Data set specification following DS code in RFOURR line invalid.
+ FB1003 The slow sort index must not have any negative values.
+ FB1003 Correct by running SORTRF with the averaging feature turned on or
+ FB1003 else choose a different sort order.
+ FB1004 No information on data sets in record lrexpl: on input archive bdf.
+ FB1005 Insufficient immediate access memory for bdf buffers.
+ FB1006 The reflection sort order is neither in lrexpl: of input archive bdf,
+ FB1006 nor has it been given on the RFOURR  line.  It is very likely
+ FB1006 the SORTRF program has never been run in the 'MSO' mode.
+ FB1007 The sort order on the input BDF and the summation order on
+ FB1007 the FOURR map are not consistant with the RFOURR algorithm.
+ FB1007 Please refer to the sort table in the RFOURR write-up.
+ FB1008 DSTAT entries are out of order.
+ FB1021 Miller indices are missing from record lrrefl: of input archive file.
+ FB1048 The input Fourier map must be for modulo 1 unit cell.
+ FB1048 If the grid is in 48ths, the map must be points 0 through 47.
+ FB7001 The grid of the fourier map on MAP file is inconsistent with
+ FB7001 the restriced number of fft grids allowed in RFOURR.  Rerun
+ FB7001 the FOURR link with possible GRID and LAYOUT specifications.
+ FB7002 Insufficient memory for second sum coefficients.
+ FB7003 Insufficient memory for even one layer of third sum coefficients.
+ FB7004 Too many layers to be held by table of direct access records of the
+ FB7004 scratch file. Current setting is for 400 layers (variable LEAD in FB70).
+ FB7005 The use of a scratch file will increase the computation time
+ FB7005 significantly. This can be avoided by recompiling the nucleus routine
+ FB7005 aa1 with memmax: set to at least the value requested above.
+ FC0000 FC-------------------------------------------------------------------
+ FC0101 An incorrect calculation code was detected on the input FC line.
+ FC0102 Cell volume must be present for scaling with electron radiation.
+ FC0104 There is not enough storage for I/O buffers.
+ FC0105 There is not enough storage for symmetry operations.
+ FC0106 There is not enough storage for 16 scattering factor types.
+ FC0107 Required neutron scattering factors are not in the bdf.
+ FC0108 Insufficient storage available for scattering factor tables.
+ FC0109 Insufficient storage available for scale factor list.
+ FC0110 No cell contents information for Sim weight calculation.
+ FC0201 A mixture of SELECT and OMIT lines is not permitted.
+ FC0301 The scattering factor pointer OR x, y, and z data is missing from
+ FC0301 lratom: of the bdf.
+ FC0302 Insufficient storage for all of the atoms to be used in the calculation.
+ FC0401 Form factors are missing from lrrefl: of the bdf.
+ FC0402 Insufficient storage available for complete sin/cos table.
+ FD0000 FODIFF-----------------------------------------------------------------
+ FD0001 Insufficient memory is available for the calculation.
+ FD0002 A scale factor <= 0.0  was entered on the FODIFF line.
+ FD0003 There is a disagreement in the layout data for the two input maps.
+ FD0004 One input map is a Patterson map and the other is a Fourier map.
+ FD0005 The number of points on the two input bdfs is not the same.
+ FE0000 REGFE-----------------------------------------------------------------
+ FE0101 an invalid keyword on REGFE line.
+ FE0102 an invalid number of unit cell for atom connectivity searched.
+ FE0103 memory allocation failure for I/O buffers.
+ FE0104 memory allocation failure for unit cell parameters.
+ FE0105 memory allocation failure for varariance-covariance matrix of
+ FE0105    unit cell parameters.
+ FE1001 unit cell parameters were missing in BDF.
+ FE1002 transformation matrix was missing in BDF.
+ FE1003 metric tensor was missing.
+ FE1008 inverse metric tensor was missing.
+ FE1009 lattice information was missing.
+ FE1010 memory allocation failure for symmetry operators.
+ FE1011 scattering factor ID was missing in BDF.
+ FE1012 memory allocation failure for atomic scattering data.
+ FE1013 atom record was missing.
+ FE1014 memory allocation failure for atom records.
+ FE2001 some item was missing in CELL line.
+ FE2002 incomplete variance-covariance data for unit cell parameters.
+ FE2003 unit cell parameters were missing.
+ FE2004 an invalid centricity code in LATICE line.
+ FE2005 an invalid lattice code in LATICE line.
+ FE2006 lattic information was missing.
+ FE2007 incorrect control line sequence.
+ FE2008 memory allocation failure symmetry operators.
+ FE2009 an invalide character in SYMTRY line.
+ FE2010 character '/' is required after a number in SYMTRY line.
+ FE2011 no number is allowed after '/' in SYMTRY line.
+ FE2012 demonimator can not be 5 in SYMTRY line.
+ FE2013 translaton > 1.
+ FE2014 comma or blank is required.
+ FE2015 an invalid character in symmetry definition.
+ FE2016 empty line was encountered.
+ FE2017 SGNAME is not available in REGFE program.
+ FE2018 memory allocation failure for symmetry operators.
+ FE2019 number of symmetry opertors was incorrect.
+ FE2020 symmetry information was missing.
+ FE2021 incorrect control line sequence.
+ FE2022 (can be removed).
+ FE2023 memory allocation failure for atomic scattering data.
+ FE2024 atomic radius data were missing.
+ FE2025 atom ID was missing in ATOM line.
+ FE2026 memory allocation failure for atom records.
+ FE2028 unknown atom ID.
+ FE3101 memory allocation failure for correlation matrix.
+ FE3102 memory allocation failure for correlation matrix.
+ FE3103 memory allocation failure for correlation matrix.
+ FE3104 memory allocation failure for correlation matrix.
+ FE3301 memory allocation failure for correlation matrix.
+ FE3302 memory allocation failure for correlation matrix.
+ FE3305 file structure of correlation matrix is incompatible.
+ FE4001 incorrect control line sequence.
+ FE4002 memory allocation failure for plane and line records.
+ FE4003 undefined plane ID.
+ FE4004 (can be removed).
+ FE4005 incorrect control line sequence.
+ FE4007 undefined line ID.
+ FE4021 currently not available.
+ FE4022 currently not available.
+ FE4023 currently not available.
+ FE4024 currently not available.
+ FE4501 invalid function code in FUNCTN line.
+ FE4503 invalid control line.
+ FE4504 undefined plane or line ID.
+ FE6201 memory allocation failure for atom connectivity table.
+ FE6801 memory allocation failure for symmetry operation.
+ FE7101 memory allocation failure for variance-covariance calculation.
+ FE7102 memory allocation failure for variance-covariance calculation.
+ FE7103 invalid function code.
+ FE7104 invalid function code.
+ FE7105 negative variance was detected.
+ FE7106 invalid function code.
+ FE7107 negative variance was detected.
+ FE9701 unknown atom ID.
+ FE9702 undefined plane ID.
+ FE9703 undefined line ID.
+ FG0000 FOGNU-----------------------------------------------------------------
+ FG1005 The FOGNU line contains unrecognized key words.
+ FG1010 Insufficient memory for i/o buffers.
+ FG1015 Insufficient memory for i/o buffers.
+ FG2005 One of the grid increment sizes is not allowed.
+ FG2001 The input map must be the unit cell starting at 0,0,0.
+ FG2002 The output map must have the same grid as the input map.
+ FG2003 Only increments of 1 in grid are allowed.
+ FG2010 Insufficient memory available for input map.
+ FG3001 Directions of output map must be the same as for the input map
+ FG3002 Grid increment must be 1 for the output map.
+ FG3003 Too many points requested...map won't fit in the buffer.
+ FG3010 Illegal entry on the PRINT line.
+ FG3015 Neither print nor binary output specified.  run would be null.
+ FG3005 Summation order specifications are not possible,
+ FG3005 Codes don't add up.
+ FG4005 Insufficient memory for output map buffer.
+ FG4105 Insufficient memory for output map heading.
+ FM0000 FOMERG----------------------------------------------------------------
+ FO0000 FOGEN-----------------------------------------------------------------
+ FO1005 Unrecognized input parameter on FOGEN line
+ FO1010 Insufficient memory for bdf input buffer
+ FO1015 Insufficient memory for bdf output buffer
+ FO1020 Logical record lrsymm: is missing from the bdf
+ FO1025 Insufficient memory to store all symmetry operations
+ FO2005 Input map increment must be unity
+ FO2010 Insufficient memory to store entire input map
+ FO3005 Illegal axis summation order
+ FO3010 Illegal printing format has been requested
+ FO3015 No output has been requested
+ FO4005 Insufficient memory to store a single section of the output map
+ FO4010 Required point not contained in the input map
+ FO4105 Insufficient memory to store page headers
+ FR0000 RMAP----------------------------------------------------------------
+ FR0101 unrecognized instruction code in rmap input line.                      
+ FR0104 insufficient memory for input/output buffers.                          
+ FR0105 insufficient memory for symmetry operations.                           
+ FR0106 insufficient memory for scattering factor tables.                      
+ FR0107 neutron calculation requested, but no neutron scattering               
+ FR0107 lengths supplied in input bdf.                                         
+ FR0108 insufficient memory for dispersion factors.                            
+ FR0109 insufficient memory for f relative scale factors.                      
+ FR0202 insufficient memory for storing select line atom names.                
+ FR0301 request for use of overall isotropic temperature factor, but           
+ FR0301 none is present in input bdf.                                          
+ FR0302 insufficient storage for atom parameters.                              
+ FR0309 the number of atoms selected from the input bdf is less                
+ FR0309 than the total of the number specified in the fixatm line.             
+ FR0310 no atoms have been specified to be translated. calculation             
+ FR0310 is, therefore, pointless.                                              
+ FR0401 no x-ray scattering factors in the input bdf                           
+ FR0402 insufficient storage for sin/cos tables for table look-up.             
+ FR0403 binary data file on a has neither f nor f**2 in lrrefl:                
+ FR0507 insufficient memory for r map.  reduce limits or use a                 
+ FR0507 coarser, low resolution search first.                                  
+ FS0000 FOURR-----------------------------------------------------------------
+ FS1001 An unidentifiable character field was encountered on the FOURR line.
+ FS1004 Insufficient storage is available for I/O buffers.
+ FS1006 Insufficient storage is available for symmetry operations.
+ FS2001 An F(rel) scale factor pointer is out of bonds (i.e., greater than 64).
+ FS2002 Field 1 of the MAP line contains an unidentifiable character string.
+ FS2004 The MAP line has an invalid request for axis or projection data.
+ FS2006 An incorrect format code is specified for the PRINT line.
+ FS2008 One or more Spcifications are missing from COEFF input line. The line
+ FS2008 must be complete
+ FS2010 The summation orders indicated on the MAP line and LAYOUT lines are
+ FS2010 inconsistent.
+ FS2012 The intruction for the order of summation is irrational.
+ FS3001 The number of grid points in the second sum direction is too small
+ FS3001 relative to the maximum value of the Miller index in that direction.
+ FS3001 Either increase the number of grid points or degrease the maximum Miller
+ FS3001 index to reduce resolution.
+ FS3002 The number of grid points in the third sum direction is too small
+ FS3002 relative to the maximum value of the Miller index in that direction.
+ FS3002 Either increase the number of grid points or decrease the maximum Miller
+ FS3002 index to reduce resolution.
+ FS4001 There is insufficient storage for the formation of the trig tables and
+ FS4001 first sum coefficients of one layer. Consider the summation order
+ FS4001 requested.
+ FS4002 There is insufficient storage to calculate one layer of second sum
+ FS4002 coefficients. Reconsider the summation order requested.
+ FS4003 There is insufficient storage for third sum coefficients. Reconsider the
+ FS4003 summation order requested.
+ FS4004 The page width is set so narrow that not even one grid point can be
+ FS4004 printed.
+ FS4005 Either h, k, and l or sin(theta)/lambda is missing from lrrefl: in the
+ FS4005 bdf.
+ FS4006 One of the coefficients needed for the calculation is missing from
+ FS4006 lrrefl: of the bdf.
+ FS4007 Neither the estimated phase nor the calculated values of A and B are in
+ FS4007 lrrefl: of the bdf.
+ FS5101 Too many grid points have been specified in at least one direction for
+ FS5101 FFT calculation.
+ FT0000 FOSTAT-----------------------------------------------------------------
+ FT0002 The input map cannot be scaled by a factor less than equal to zero.
+ FT0003 Insufficient memory available for the number of slots requested.
+ GE0000 GENEV-----------------------------------------------------------------
+ GE0101 Illegal construction of input data on GENEV line.  
+ GE0102 Input option string on GENEV line not recognised.
+ GE0105 Insufficient memory is available for the buffer and the Wilson table.
+ GE0112 Insufficient memory is available for the cell contents table.
+ GE0113 There is no information for the requested form factor in input bdf.
+ GE0114 Insufficient memory is available for form factor and scale tables.
+ GE0115 Insufficient memory is available for group scales.
+ GE0116 Neutron requested, but no neutron form factors in bdf.
+ GE0118 The fragment type parameter on the JFRAG line is not recognized.
+ GE0120 Only one fragment of type 4 (POSITION) is permitted.
+ GE0125 Insufficient memory is available for fragment data.
+ GE0127 The fragment multiplicity cannot exceed 1 if the fragment is oriented.
+ GE0130 Fragment type 2 atoms may not be entered from the bdf.
+ GE0132 There are insufficient atom details (x,y,z,ff,pp) on the bdf.
+ GE0135 Insufficient memory is available for fragment-atom data from the bdf.
+ GE0140 SITE, SITEG or SITEA lines must follow the FRAG line.
+ GE0145 SITEA lines must be used for a fragment of type 2 (RANDOM).
+ GE0150 A GRID line must precede the first SITEG line.
+ GE0155 An atom name on a SITE, SITEG, or SITEA line does not match any form
+ GE0155 factor names on the bdf.
+ GE0160 Insufficient memory is available for fragment-atom data from an SITE,
+ GE0160 SITEG, or SITEA line.
+ GE0165 An atom name on the CELCON line does not match any form factor names on
+ GE0165 the bdf.
+ GE0170 A parameter on the DATAFX line was not recognized.
+ GE0175 Fragment atoms exceed the atomic content defined by the CELCON line.
+ GE0180 Insufficient memory is available for fragment data.
+ GE0185 Insufficient memory is available for fragment-atom data.
+ GE0220 Insufficient memory is available for the index scale group table.
+ GE0230 No cell contents data is present in the bdf.                      
+ GE0235 Insufficient memory is available for the sine/cosine lookup table.
+ GE0301 Missing sin theta/lambda from lrrefl:. Try running ADDREF.
+ GE0302 No structure factor data (Frel, F**2 or Irel) present on the bdf.
+ GE0305 The Lp function (item n204) is not on the bdf. It is needed for Bayesian
+ GE0305 statistics.
+ GE0310 The net intensity (item n300) is not in the bdf. It is needed for
+ GE0310 Bayesian Statistics.
+ GE0315 The requested expectation values are not present on the bdf.
+ GE0330 The present s**2 maximum is too large for a reliable Wilson plot.
+ GE0610 Sin(theta) or lambda or multiplicity missing from input bdf.
+ GS0000 GENSIN-----------------------------------------------------------------
+ GS0105 The character string in the GENSIN line is unrecognizable.
+ GS0107 The mnemonic given in field 1 of the PSICAL line is not in the table.
+ GS0110 Insufficient memory is available for the file buffers.
+ GS0120 Insufficient memory is available for the matrix-order table.
+ GS0125 Insufficient memory is available for the symmetry matrices.
+ GS0130 Cell content information is missing from the input bdf.
+ GS0135 Fragment components entered exceed the array size (20).
+ GS0205 Insufficient memory is available for inverse symmetry matrices.
+ GS0220 An errror was detected in the symmetry. Check the initial ADDREF
+ GS0220 and STARTX runs.
+ GS0305 No E-values were present on the input bdf.
+ GS0310 The expected fragment data is missing from the input bdf.
+ GS0312 Insufficient memory is available for the symop table (1000).
+ GS0315 An illegical line follows the CHANGE line.
+ GS0316 Group (fragment) structure factors n606-n630 in lrrefl: are missing.
+ GS0317 The expected fragment data is missing from the input bdf.
+ GS0320 Insufficient memory is available for the reflection data.
+ GS0410 Insufficient memory is available for the H2H3 table + gen. list.
+ GS0510 Insufficient memory is available for the reflection data.
+ GS0520 Insufficient memory is available for the sin/cos lookup table.
+ GS0610 A symmetry error was detected. Check the initial ADDREF
+ GS0610 and STARTX runs.
+ GS1010 Insufficient memory is available for the invariant sums.
+ GS1120 Insufficient memory is available for sorting invariants.
+ GT0000 GENTAN-----------------------------------------------------------------
+ GT0101 Illegal option or construction of the GENTAN line.
+ GT0110 Insufficient memory is available for the buffer and the sin/cos table.
+ GT0115 Invariant file INV is unavailable or void.
+ GT0120 Insufficient memory is available for the generator list.
+ GT0123 The generator list on the .inv file is shorter than expected.
+ GT0125 There is an unrecognized alphabetic string in the INVAR line.
+ GT0130 There is an unrecognized alphabetic string in the SELECT line.
+ GT0135 There is an unrecognized alphabetic string in the REFINE line.
+ GT0140 There is an unrecognized alphabetic string in the ASSIGN line.
+ GT0142 A duplicate assignment of the starting phase has been made.
+ GT0145 The number of permuted starting phases exceeds 10.
+ GT0147 A duplicate assignment of the starting phase has been made.
+ GT0150 There is an unrecognized alphabetic string in the PHI line.
+ GT0160 The number of permuted starting phases exceeds 10.
+ GT0165 There is an unrecognized alphabetic string in the SETFOM line.
+ GT0167 In the DUMP line an input string does not match any of the allowed
+ GT0167 mnemonics.
+ GT0170 The number of items in the archive list exceeds 66.
+ GT0230 The SF scale required for PARTSF is not on the bdf.
+ GT0235 The SF scale is zero or negative.
+ GT0240 The requested |E| values are missing from the input bdf.
+ GT0245 F(rel) or F(cal) is missing from the input bdf.
+ GT0250 A,B, or phi is missing from the input bdf.
+ GT0255 The GENTAN phi is missing from the input bdf.
+ GT0270 Quartets were requested for the starting set selection, but none are
+ GT0270 present.
+ GT0275 Triplets were requested for the starting set selection, but none are
+ GT0275 present.
+ GT0277 insufficient memory for phase map dump.
+ GT0280 Insufficient memory is available for invariant storage.
+ GT0310 The ODR cannot be found from the selection of generators, increase the
+ GT0310 number.
+ GT0320 An enantiomorph defining reflection cannot be automatically assigned.
+ GT0320 The EDR cannot be found from the selection of generators, increase the
+ GT0320 number.
+ GT0325 The number of permutable starting phases exceeds 10.
+ GT0330 There is an insufficient number of selection generators to specify the
+ GT0330 EDR and the ODR
+ GT0505 The starting set is inadequate to continue. Check the invariant limits
+ GT0505 AMIN and BMIN; and if only quartets are used, the XVSM limits.
+ GT2010 No acceptable sets were found; no bdf was output.
+ GT2020 The requested |E| values are missing from the input bdf.
+ KB0000 FINDKB-----------------------------------------------------------------
+ KB0101 Insufficient memory is available.
+ KB0103 A data set ID on the FINDKB line is void.
+ KB0104 An output bdf cannot be requested when data are specified by packet
+ KB0104 catalog number.
+ KB0105 An unacceptable data set ID has been detected on the FINDKB line.
+ KB0106 Data set IDs on the FINDKB line are identical.
+ KB0107 The requested data is not on the input bdf.
+ KB0108 Field 4 of the FINDKB line must either be void or contain the three
+ KB0108 characters "bdf".
+ KB0109 Field 5 of the FINDKB line must either be void or contain the characters
+ KB0109 "SQUARED".
+ KB0110 There is nothing in lrrefl: of the input bdf.
+ KB0111 Sin(theta)/lambda is missing from the input bdf. Run ADDREF to put it in
+ KB0111 the bdf.
+ KB0112 Data specified on the FINDKB line is not in the directory for lrrefl: of
+ KB0112 the input bdf
+ KB0113 There is no  lrdset information for one or both data set(s).
+ KB0114 Too many reflections have been used.
+ KB0115 F(+)**2 or F(-)**2 terms are missing on the bdf.
+ KB0116 There is no F observed data for one or both of the data sets. Check
+ KB0116 that the data sets were sorted in same order "sort 3" in SORTRF.
+ KB0121 The input sin(theta)/lambda max is smaller than min? Check input.
+ KB1101 An unreasonable value for sin(theta)/lambda has been supplied.
+ KB1102 An unreasonable value for the resolution limit has been supplied.
+ KB1201 Bad values for min/max Fo limits.
+ KB1202 Bad values for min/max K multiplicity factors.
+ LC0000 LATCON-----------------------------------------------------------------
+ LC0101 Illegal mnemonic in LATCON line.
+ LC0102 Cannot refine both Q-zero and 2-theta zero.
+ LC0104 Insufficient storage for reflexion data.
+ LC0201 Too few reflexions for the number of parameters.
+ LC0202 Too few independent reflexions for the number of parameters.
+ LC0203 Reciprocal metric tensor is a singular matrix. Check your data.
+ LF0000 LISTFC-----------------------------------------------------------------
+ LF0001 Unrecognised option on the LISTFC line.
+ LF0002 Insufficient memory is available for the input bdf buffer.
+ LF0003 Illegal sort order code. Must be hkl, khl, ...... or lkh.
+ LF0005 Sort order of h,k,l has not been set on LISTFC line or by SORTRF code.
+ LF0006 The number of indices listed must be 1 or 3! Check INDICES input.
+ LF0015 The item alphabetic code on the OUTPUT line is not recognized.
+ LF0020 The format construction on the FORMAT line is incorrect.
+ LF0025 The item count on the FORMAT and the OUTPUT lines do not match.
+ LF0030 A requested item is not present on the input bdf.
+ LF0035 Insufficient memory is available to store one page of reflections.
+ LS0000 LSQPL-----------------------------------------------------------------
+ LS0001 Insufficient memory is available for the input file buffer.
+ LS0002 No PLANE or LINE lines were detected in the input stream.
+ LS1101 Insufficient storage is available for atom list.
+ LS1102 An unrecognizable atom name has been encountered.
+ LS1103 No DEFINE lines have been entered.
+ LS1104 Insufficient storage is available.
+ LS1110 Atom data not available for a DEFINE or NONDEF atom -- check atom names.
+ LS6201 Determinant of reciprocal metric tensor is very small.
+ LS6202 Large positive discriminant for normal equations matrix. This implies
+ LS6202 imaginary latent roots.
+ LS6301 Homogeneous equations have too small a largest element
+ LS6302 Homogeneous equations do not have a unique solution. This means that
+ LS6302 there are equal latent roots.
+ MB0000 MAKBRK-----------------------------------------------------------------
+ MB0101 Illegal numerical data on MAKBRK line.                  
+ MB0102 Illegal character code on MAKBRK line.                  
+ MB0103 Insufficient memory for bdf buffer.                     
+ MB1101 The MAP file does not contain cell data!                       
+ MB1102 All map density points are the same!?                   
+ MB1103 Cannot pack a density in to a byte!                     
+ MB1201 Map dimensions missing from MAP file which must be FOURR op file.
+ MB1202 Specified map limits illegal for map read from MAP file.     
+ MD0000 MERGDS-----------------------------------------------------------------
+ MD1101 Insufficient memory is available.
+ MD1102 lrsymm: records do not agree between primary and secondary input bdfs.
+ MD1103 lrscat: records do not agree between primary and secondary input bdfs.
+ MD1104 Scattering factors missing from record lrscat:. Check names.
+ MD1105 The input compid code 1 on MERGDS line must match the compid of the run!
+ MD2101 Insufficient memory is available.
+ MD2102 The data set name specified in field 3 of the MERGDS line has been found
+ MD2102 more than once on the secondary input bdf.
+ MD2103 The data set name specified in field 3 of the MERGDS line has not been
+ MD2103 found on secondary input bdf.
+ MD2104 The data set name specified in field 3 of the MERGDS line has been found
+ MD2104 more than once on the primary input bdf.
+ MD2105 Data set information missing from file MER.
+ MD2201 Required packets not found in lrrefl: for primary dataset.
+ MD2202 Required packets not found in lrrefl: for secondary dataset.
+ MD2205 The sort order on the data sets is not the same.
+ MD2206 The sort method used in SORTRF must be "3" for MERGDS to run correctly.
+ ME0000 MEDENS-----------------------------------------------------------------
+ ME1001 there is an invalid option code on the medens line.
+ ME1005 insufficient storage for electron density file c & d buffers.
+ ME1006 the rfourr program is restricted to certain grid divisions.
+ ME1006 the input electron density map does not meet the restrictions.
+ ME7001 the electron density map shows a normalized variance outside
+ ME7001 the range 0.01 through 0.99.  this suggests that the e000 or
+ ME7001 f000 factor was left out of the fourier calculation and that
+ ME7001 the average electron density is near zero.
+ MF0000 MEFFIT-----------------------------------------------------------------
+ MF1001 there is an invalid option code on the meffit line.
+ MF1005 insufficient storage for electron density files c,d&e buffers.
+ MF1006 the rfourr program is restricted to certain grid divisions.
+ MF1006 the input electron density map does not meet the restrictions.
+ MF1009 there is insufficient immediate access memory for a buffer
+ MF1009 to write a scratch file on h with the electron density map.
+ MF1010 the origins on the two fourier maps do not match.
+ MF1011 the grid increments on the two fourier maps do not match.
+ MF1012 the grids on the two fourier maps do not match.
+ MF1013 the number of grid points on the two fourier maps do not match
+ MF1014 the summation order on the two fourier maps does not match.
+ MF1015 the summation order on the two fourier maps does not match.
+ MF1016 the maximum electron density on input file c, the constrained
+ MF1016 exponential density, is less than 0.01. why?
+ MH0000 MODHKL-----------------------------------------------------------------
+ MH0005 Insufficient memory is available for the I/O buffers.
+ MH0007 Removal of items is limited to 200 item per pass; reduce the
+ MH0007 number of items in this pass.
+ MH0015 There is a corrupt or missing directory for logical record lrrefl:.
+ MH0017 The lrrefl: ID number requested on either the RCODE or the PURGE
+ MH0017 line is not present in the input bdf.
+ MH0018 The reflection code is not present on the input lrrefl: record.
+ MH0020 The lrrefl: ID number requested on the MODIFY line is not present.
+ MH0025 There may be either an illegal line order, or there may be
+ MH0025 MODIFY or DELETE lines not in the order of hkl, or the occurance
+ MH0025 number may be incorrect on MODMUL or DELMUL lines.
+ MI0000 MIR--------------------------------------------------------------------
+ MI0101 Insufficient memory available for data storage
+ MI0301 No scattering factor data on input bdf
+ MI0302 Insufficient memory available for scattering factors
+ MI0303 Scattering factor data f, f', f" missing or incomplete
+ MI0304 Error 90303 encountered earlier - run stopped after checking
+ MI0501 DATSET or ATOMS lines out of order
+ MI0502 Numeric information where alphabetic expected.
+ MI0503 Insufficient memory available for data storage
+ MI0504 No dataset information in lrddef: of bdf.
+ MI0505 Tried to use more datasets than currently allowed
+ MI0508 No dataset name on DATSET line or a bad construction.
+ MI0509 Indicated dataset has already been used.
+ MI0510 No infi=ormation present in lrdset: of the input bdf.
+ MI0511 No dataset name on current input line.
+ MI0512 Bad dataset name on current input line.
+ MI0513 Dataset name on current line not being used.
+ MI0514 Input atom name not found on bdf.
+ MI0515 Current atom name already requested.
+ MI0516 Too many atoms requested.
+ MI0517 Max. SITOL for dataset < min. SITOL
+ MI0518 Bad field on DATSCL line.
+ MI0519 Unknown continuation character on input line.
+ MI0520 Current line is not closure error continuation line.
+ MI0521 Closure errro continuation line has different F**2 bin number
+ MI0522 Only 13 closure errors allowed per dataset.
+ MI0523 Bad refinement indicator on MIR line, Field 2.
+ MI0550 There have to be at least two datasets.
+ MI0551 There are no atoms!
+ MI0552 The phasing method was not specified.
+ MI0553 The parent may not be a heavy-atom isomorph.
+ MI0554 No atoms in bdf for a specified dataset.
+ MI0599 Previous non-fatal error(s) now cause(s) termination.
+ MI0602 Directory of record lratom: is missing.
+ MI0603 Missing atom name or xyz coordinate.
+ MI0604 Too many atoms on the bdf.
+ MI0605 No anisotropic temperature factors.
+ MI0606 No scattering factor number.
+ MI1201 Illegal field on REF or NOREF line.
+ MI1202 Improper parameter name on a REF or NOREF line.
+ MI1203 Improper dataset name on a REF or NOREF line.
+ MI1204 Dataset requested was not included in the refinement.
+ MI1205 Atom requested was not to be included in the refinement.
+ MI1301 A change in the number of stol and F**2 bins must precede all
+ MI1301 changes of closure errors.
+ MI1501 FAZPRB method of phasing has already been specified.
+ MI1502 Illegal characters in field 7 MVFC line.
+ MI1601 MVFC method of phasing has already been specified.
+ MI1701 F**2 bin number on the input line <  0 OR > current number of F**2 bins.
+ MI1702 Closure errors for this isomorph for this F**2 bin have
+ MI1702 already been updated for this run.
+ MI1703 Input line contained no closure errors.
+ MI1704 Input line contained neither one or current number of stol
+ MI1704 closure errors.
+ MI1801 Name does not match available statistics.
+ MI2201 Not all isomorphous closure errors updated after bin number change.
+ MI3001 Insufficient memory available for normalization bins.
+ MI3102 Neither F nor F**2 data on lrrefl: of bdf.
+ MI3103 No lrrefl: reflection record on bdf.
+ MI3401 Insufficient memory available for statistics.
+ MI3501 Too many parameters are being refined.
+ MI3502 Insufficient memory available for refinement.
+ MI7301 No elements in the matrix!
+ MI7201 Insufficient observations for current dataset.
+ MI8901 The lrdset: record is incomplete, or lacks necessary data.
+ MI8902 Input archive bdf has different reflection data to the scratch bdf.
+ MI9101 Eigenvalue failure in MI92.
+ MI9102 Eigenvector failure in MI92.
+ MI9103 Zero root found.
+ ML0000 MODEL-----------------------------------------------------------------
+ ML1001 There is insufficient storage for symmetry operations.
+ ML1002 Unit cell information is missing.
+ ML1003 There is insufficient storage for symmetry operations.
+ ML1004 There is insufficient storage for peak-list items.
+ ML1005 Unrecognisable signal code on the MODEL line.
+ ML1202 There is insufficient storage for all atoms in a fragment.
+ ML1203 There is insufficient storage for the atoms given on the CONECT line.
+ ML1204 There is insufficient storage for the bond list.
+ ML1301 There is insufficient storage for clusters.
+ ML1302 There is insufficient storage for the bonded peaks.
+ ML4001 There is insufficient storage for the lists of clusters.
+ ML6001 There is insufficient storage for the lists of clusters.
+ MM0000 MKMASK-----------------------------------------------------------------
+ MM0101 Unrecognized option on input line.
+ MM0102 Illegal field on LAYOUT line.    
+ MM0201 No LRCELL: records on BDF.
+ MM0202 Volume specifications outside cell.
+ MM0301 Not enough memory for symops.
+ MM0302 Not enough memory to store mask.
+ MM0401 Not enough memory to store mask.
+ MM0402 Mask loner than allowed.
+ MM0403 Not enough memory.
+ MM0404 Required atom items not on input bdf, i.e. x,y,z.
+ MM2101 No map record (number 21) on bdf.
+ MN0000 MOGIN------------------------------------------------------------------
+ MN0005 Insufficient storage available for bdf buffer space.
+ MN0015 Incorrect maximum bond count entered.
+ MN0020 Incorrect atom name length entered.   
+ MN0025 Insufficient storage available for symop tables.    
+ MN0030 Atomic radii are not on bdf record lrscat:. Use CELCON lines in STARTX.o
+ MN0035 Atom coordinate data is not on the bdf. Use LOADAT to add data.
+ MN0040 Insufficient storage available for atomic parameters.
+ MN0050 Insufficient storage available for cell atomic parameters.
+ MO0000 MERGOB-----------------------------------------------------------------
+ MO0001 Insufficient memory is available.
+ MO0005 Specified data set not found in lrexpl: record of input archive bdf.
+ MO0006 Specified data set not found in lrexpl: record of .mer bdf.
+ MO0008 Maximum scale groups possible is 100.
+ MO0010 Specified data set not found in lrdset: record of .mer bdf.
+ MO0011 Specified data set not found in lrdset: record of input archive bdf.
+ MO0015 Coefficients to be merged do not match on archive or .mer bdf's.
+ MR0000 MERUN-----------------------------------------------------------------
+ MR1001 there is an invalid option code on the merun line.
+ MR1005 innsuficient storage for i/o buffer
+ MR1101 one or more of the i/o units attached to the run
+ MR1101 is a duplicate.  file a through file g must be
+ MR1101 unique for the proceedure to work.
+ MS0000 MESTAR----------------------------------------------------------------
+ MS0001 Unrecognised option string on MESTAR line.
+ MS0005 Insufficient storage for input buffers.
+ MS0015 Missing mandatory items in the refl record of the input archive bdf.
+ MS0021 Duplicate indices on PHI line detected.
+ MT0000 MIND-------------------------------------------------------------------
+ MT1001 Unknown option code entered in the MIND line.
+ MT1005 Illegal codes or construct on the RADII line.
+ MT1006 Radii entered on the RADII line must be greater than 0.
+ MT1025 Insufficient memory for input bdf buffer.                    
+ MT1030 No scattering factor data available on the input archive bdf.
+ MU0000 MULIST-----------------------------------------------------------------
+ MU0101 Required data missing from bdf record lrrefl:
+ MU0102 No reflection data on bdf.
+ MU1001 Insufficient memory is available
+ MU1002 An illegal option has been specified in field 2 of the MULIST line. It
+ MU1002 must be between 1 and 5.
+ MU1003 An illegal minimum or maximum sin(theta)/lambda has been specified.
+ MU1004 Either the sorting order or the number of scale groups or both was
+ MU1004 missing from logical record lrexpl:.
+ MU1005 An illegal sorting order was found in logical record lrexpl:.
+ MU1101 Negative or void shift numbers are not allowed.
+ MU1102 The requested shift number was not found on the bdf (logical record
+ MU1102 lrexpl:).
+ MU1103 There are too many shifts; the maximum is 500.
+ MU1104 A scale factor cannot be negative.
+ MU1199 Some previous error has occurred.
+ MU2101 Insufficient memory is available.
+ NI0000 NICNAK-----------------------------------------------------------------
+ NI0007 An unrecognized instruction was encountered in the NICNAK
+ NI0007 input line.
+ NI0009 The number of steps in the step scans are out of the range 0-96.
+ NI0011 An impossible data set number was encountered on the NICNAK line.
+ NI0013 An impossible reflection observation type was encountered
+ NI0013 in the NICNAK line.
+ NI0014 Bad reflection range encountered on the RANGE line.
+ NI0015 Bad monitor reflection range encountered on the MONRFN line.
+ NI0016 Bad absorption reflection range encountered on the TAURFN line.
+ NI0017 Bad background reflection range encountered on the BKGRFN line.
+ NI0021 There is no lrexpl: logical record on the input bdf on input bdf.
+ NM0000 NEWMAN------------------------------------------------------------------
+ NM1101 Wrong code on NEWMAN line
+ NM1102 No minimum bond distance on NEWMAN line
+ NM1103 Number of plots/page must be 1 or 4
+ NM1104 Lrcell: is missing from the BDF
+ NM1105 CELL line is absent or in wrong order
+ NM1106 Error in ATOMTY line: UPD or ADD missing
+ NM1107 Wrong atom type on BONLEN line
+ NM1108 Input lines in wrong order
+ NM1109 Insufficient memory for bond distance table or atom array
+ NM1119 Input atom type not present in the bond radii table. Use ATOMTY and
+ NM1119 BONLEN lines to enter values.
+ NM2101 Wrong atom ID on BONDIN line
+ NM2102 Distance between atoms on BONDIN line outside limits
+ NM2103 Wrong atom ID on PROJAX line
+ NM2104 Insufficient memory for bonding matrix
+ NM3101 Error in bonding matrix
+ NM3102 Insufficient memory for Newman projection data
+ NM3201 Two atoms coincide. Check input sites.
+ NM3202 Insufficient memory available for additional sites.
+ OR0000 ORTEP------------------------------------------------------------------
+ OR0201 Insufficient memory is available for overlap arrays.
+ OR0401 Insufficient memory is available for overlap arrays.
+ OR1401 A null matrix is present in the eigenvalue routine.
+ OR1402 There is no convergence in the eigenvalue routine.
+ OR2001 A null vector is present in the normalization routine.
+ OR4101 Insufficient memory is available for symmetry equivalent positions.
+ OR4102 An unidentified character string is present on the EXEC line.
+ OR4103 Part of logical record lrcell: is missing.
+ OR4501 Insufficient memory is available for references atoms.
+ OR4502 The atom name or coordinates are missing from lratom:.
+ OR4503 The last listed atom has a non-positive definite UIJ.
+ OR4555 The atom name on the RADIUS line not present in the archive bdf.
+ OR4597 On SPHERE lines the radius value must follow the atom type name.
+ OR4598 Atom type on SPHERE line is not present in the atom list.
+ OR5101 Insufficient memory is available for instructions.
+ OR5110 There is an illegal code in the SEQ line.
+ OR5201 Insufficient memory is available for instructions.
+ OR5202 SYMOP line only used for 'symm' or 'csymm' plot.
+ OR5203 Only a maximum of 24 SYMOP lines are permitted.
+ OR5204 Symmetry operator used in SYMOP line exceeds symop no. on input bdf. 
+ OR5205 MOLORG line only used in for 'mole' or 'cmol' plot.
+ OR5206 Atom name on MOLORG line not found in the input atoms. Check case.
+ OR5213 Error on write to unitas: file 'PS300'.
+ OR5301 Insufficient memory is available for instructions.
+ OR6701 Insufficient memory is available for the working atoms list.
+ OR6901 Insufficient memory is available for the working atoms list.
+ OR7701 Not enough working atoms are present.
+ OR8201 Insufficient memory is available for overlap arrays.
+ OR8501 Not enough working atoms are present.
+ OR8502 A bad explicit bond instruction is present.
+ OR8601 Insufficient memory is available for overlap arrays.
+ OR8713 Error writing on unitas: file 'PS300'.  Check in listing for a clue
+ OR8713 to the program line at time of fault. (value of variable NWRITE)
+ OR9101 A null vector as title baseline has been found, instructions 903-906.
+ OR9102 A null vector as title baseline has been found, instructions 913-916.
+ PA0000 PREABS-----------------------------------------------------------------
+ PA0001 PREABS graphics interface destroyed from window manager.
+ PA1400 Not enough QX memory free for IO buffers.
+ PA1401 Unknown option on PREABS line.
+ PA1402 UB matrix from lrexpl: is singular. 
+ PA1403 Void/non-numeric entry  found for compulsory ORIENT field.
+ PA1404 Void/non-character entry found for compulsory DIFF field.
+ PA1405 Not enough QX memory free for symop table.
+ PA1406 Not enough QX memory free for lrexpl diffractometer UB vectors.
+ PA1407 Not enough QX memory free for real and reciprocal lattice vectors.
+ PA1501 Not enough QX memory free for FACE storage.
+ PA1601 An unacceptable field detected on the ORFACE or the FACEPT line.
+ PA1701 Not enough QX memory free for face vertex storage.
+ PA1702 Not enough QX memory free for storing artificial face vertices.
+ PA1703 Insufficient memory is available for lists of faces around each vertex.
+ PA1704 Insufficient memory is available for edge storage.
+ PA1705 There is a violation of Euler's rule, faces+vertices-edges = 2.
+ AB1801 Insufficient memory is available for plot storage.
+ PA2501 Unable to initialize X11 interface.
+ PA2701 Insufficient memory is available for collimator vertices.
+ PA2702 Insufficient memory is available for collimator faces.
+ PA2703 Insufficient memory is available for chi circle vertices.
+ PA2704 Insufficient memory is available for chi circle faces.
+ PA2705 Insufficient memory is available for phi circle vertices.
+ PA2706 Insufficient memory is available for phi circle faces.
+ PA2707 Insufficient memory is available for omega circle vertices.
+ PA2708 Insufficient memory is available for omega circle faces.
+ PA2709 Insufficient memory is available for telescope circle vertices.
+ PA2710 Insufficient memory is available for telescope circle faces.
+ PA2801 Insufficient memory for EWALD reflection storage.
+ PC0000 PRECED-----------------------------------------------------------------
+ PC0001 No sequence information from the bdf or from input lines was given.     
+ PC0002 No dictionary information from the bdf or from input lines was found.   
+ PC0003 No atoms were found on the bdf.                                         
+ PC0004 Insufficient memory available for bdf buffers.                          
+ PC0102 No symmetry informattion on the bdf.
+ PC0103 Too few symmetry operators on the bdf.
+ PC0104 Missing scattering factor information on bdf.
+ PC0401 The program requires a minimum packing of 4 characters per real word.   
+ PC2001 No sequence was provided to the routine.                                
+ PC3001 The dictionary of all residues required by sequence was not present.    
+ PC3203 The maximum number of atoms was exceeded.                               
+ PC3204 The atoms not in the dictionary cannot be handled currently.            
+ PC3401 Scattering factors of atom missing
+ PC5001 Bach chain atom not found, check dictionary entries
+ PC5002 Forward chain atom not found, check dictionary entries
+ PC5002 The atom link routine found a different number of residues than was     
+ PC5501 Illegal link information line
+ PC5502 The number of master or slave atoms was not correct.                    
+ PC5503 The master or slave could not be found.                                 
+ PC5505 The master/slave maximum was exceeded.                                  
+ PC5508 The atom name and the residue from the input line could not be matched  
+ PC5508 to that from the dictionary and sequence information.                   
+ PC5509 Atom names could not be matched.                                       
+ PC5511 Residue was not found.                                                  
+ PC5512 Bad total count of master/slave relationships
+ PC6101 Too many symops for neighboring atoms are being generated.
+ PC6101 Decrease NEIBOR distance parameter or increase maxlat: in routine
+ PD0000 PROATM-----------------------------------------------------------------
+ PD0001 A loading error occured before this point. check above.
+ PD0510 No form factors for the symbol(s) given for an input atom.
+ PD0801 Ihe transformation matrix for orthogonal angstrom to fractiona
+ PD0801 coordinates has a determinant of zero. check scale1,2,3 lines.
+ PD1102 Insufficient memory available for buffers and storage of data.
+ PD1103 Illegal construction on EXTINC line. Check format.
+ PD1104 Unrecognized option code given in protin input line.
+ PD1105 Unrecognized mnemonic in the prolod line for item to be stored
+ PD1107 Incomplete data fields on scale1, 2 or 3 input line.
+ PD1108 Too many f relative scale lines for memory space allocated.
+ PD1109 Too many extinc lines for memory space allocated.
+ PD1110 Too many bov lines for memory space allocated.
+ PD2101 No orthogonal to fractional coordinate transformation matrix
+ PD2101 given, either in scale1, 2, 3 input lines or in lrcell: of
+ PD2101 the input binary data file.
+ PD2102 No form factor information on the input binary data file.
+ PD2103 Specified data set name not on the binary data file.
+ PD2110 Data set specification missing in f relative scale line.
+ PD2111 No scale factor given in f relative scale line.
+ PD2112 Data set record, lrdset:, missing from bdf.
+ PD2113 No data set information in lrdset:.
+ PD4101 An attempt has been made to delete an atom out of order.
+ PD4101 atom serial number on input line is smaller than current
+ PD4101 serial number from input bdf. input lines are out of order.
+ PD4102 Replacement of an atom carried out for matching serial numbers
+ PD4102 but the generated xtal atom ids do not match.
+ PD4102 is this really a deletion insertion operation?
+ PD4103 During an insertion and renumbering process it is not acceptab e
+ PD4103 to encounter an end line in the input stream.
+ PD4201 In attempt has been made to edit with a proati, proate, or pro td
+ PD4201 with a serial number smaller than the current serial number.
+ PD4201 input lines are out of order.
+ PD4401 Chains may not start with hetro atoms. Place all hetro atoms
+ PD4401 atoms associated with the chain after the N terminal residue.
+ PD4404 Insufficient memory for residue sequence information.
+ PD4501 missing scattering factor specification on an atom, hetatm,
+ PD4501 proat, or prohet input line.
+ PD4502 a valid scattering factor id of one or two characters must be
+ PD4502 given in the scattering factor fields of the atom, hetatm,
+ PD4502 proat, or prohet input lines.
+ PD4503 the xtal atom name derived from the protein data bank name
+ PD4503 will not fit into the eight characters allowed.
+ PD4503 scattering factor id plus serial number must be six characters
+ PD4503 or less.
+ PD9101 an attempt is being made to print or punch atoms in the protei
+ PD9101 data bank form, but there are no atoms in lratom: of the bdf.
+ PD9101 of the input binary data file.
+ PD9105 an attempt is being made to print and/or punch pdb atoms
+ PD9105 from a binary data file with no scale1, 2, and 3 data in it.
+ PD9106 scattering factor record missing from bdf.
+ PD9107 insufficient memory for residue sequence information.
+ PE0000 PATSEE------------------------------------------------------------------
+ PE1005 Insufficient memory for I/O buffers.                                    
+ PE1010 Unrecognised mnemonic on the TRIPLE line.                               
+ PE1015 Insufficient memory for list of atoms.                                  
+ PE1020 Unrecognised mnemonic on the ROTATE line.                               
+ PE1035 Unrecognised mnemonic on the TRANSL line.                               
+ PE1050 Unrecognised mnemonic on the TWIST  line.                               
+ PE1505 Cell data or lrcell: is missing from the input archive bdf.             
+ PE1510 Insufficient memory for list of symmetry operations.                    
+ PE1515 Atom type data (Z, name, radius or cell content) missing from the       
+ PE1515 input archive bdf.
+ PE1530 Atom requested has incorrect name or atom data is missing from the
+ PE1530 input archive bdf.
+ PE1540 Insufficient memory for main storage lists. 
+ PE2005 Either the INV file is missing or triplets are not on this file. 
+ PE2010 Insufficient memory for list of E-values.                               
+ PE2015 Insufficient memory for list of triplets.                               
+ PE2505 Either the MAP file is missing or the the Patterson map is not present.
+ PE2510 The MAP file must contain a Patterson type map (PATT, EPAT or VECT). 
+ PE2515 Input map must have origin at 0,0,0, incr 1,1,1 and be a full cell.     
+ PE2520 Insufficient memory for Patterson map.                                  
+ PE2525 There is a premature end to the MAP file.                               
+ PE3510 The close contacts of twisted atoms are too short in rotation mode.     
+ PF0000 PERFAC------------------------------------------------------------------
+ PF0005 Insufficient memory for bdf buffers.
+ PF0006 Wavelength or scale missing from bdf record lrexpl:.
+ PF0007 Maximum sin theta on lambda missing from bdf record lrdset:.
+ PF0008 Input perfection factor ratios outside of range 0. to 1.0.
+ PF0009 Rcode, intensity or Frel missing from bdf lrrefl: record.
+ PF0010 Reflection data does not match identically.
+ PG0000 PIG---------------------------------------------------------------------
+ PG0001 PIG graphics interface destroyed from window manager.
+ PG1001 Unknown output device code entered in the PIG line.
+ PG1002 No atom sites present. If peaks are to be displayed enter PEAKS line.
+ PG1005 Illegal codes or construct on the RADII line.
+ PG1006 Radii entered on the RADII line must be greater than 0.
+ PG1009 Unknown code entered on the PIG line.
+ PG1010 Unknown code entered on the PEAKS line.
+ PG1015 Peak height limits must be positive.
+ PG1017 Peak radius must be positive number.
+ PG1018 Illegal construct of color options on PRESET line.
+ PG1019 Depth queue number on PRESET line must be positive.
+ PG1020 Unknown code entered on the PRESET line.
+ PG1021 Min rotation number on PRESET line must be greater than 0.
+ PG1022 Max bonds allowed must exceed 1 -- check PRESET line.
+ PG1025 Insufficient memory for the assignment of IO buffers.
+ PG1028 Insufficient memory for the assignment of symmetry tables.
+ PG1030 No scattering factor data available on the input archive bdf.
+ PG1040 Insufficient memory for the assignment of atom data tables.
+ PG1042 Insufficient memory for the assignment of peak data tables.
+ PG2501 Sites array exceeded. PIG must be recompiled with larger maxs: value.
+ PG3005 Insufficient memory for the assignment of atom data expansion.
+ PG3610 Atom type has been entered which was not loaded in STARTX.
+ PG4000 Unable to initialize X11 interface
+ PG9905 Insufficient memory for the assignment of atom data expansion.
+ PH0000 PHONYD-----------------------------------------------------------------
+ PH0001 Illegal construction or name on PHONYD line.
+ PH0005 Insufficient memory for bdf buffers.
+ PH0015 Relative and calculated structure factors missing from bdf.
+ PI0000 PEAKIN-----------------------------------------------------------------
+ PI0102 No cell data in record lrcell:?!     
+ PI0103 No symmetry data in bdf record lrsymm:!
+ PI0104 Insufficient memory for symop table.
+ PI0104 Insufficient memory for atom coordinates.
+ PI0107 Insufficient memory for bdf buffers.
+ PI0501 Insufficient memory for peak parameters.
+ PN0000 PARTN------------------------------------------------------------------
+ PN1005 Atom name not present on the ATOM line
+ PN1010 Atom coordinates not present on the ATOM line
+ PN1015 ATOM line missing from input
+ PN1020 Insufficient memory for input buffer of bdf.
+ PN1025 Insufficient memory for bdf input buffer
+ PN1030 Insufficient memory for bdf output buffer
+ PN1035 Logical record lrsymm: is nonexistant
+ PN1040 Insufficient memory to store symmetry operations
+ PN1045 Logical record lratom: is nonexistant
+ PN1050 x (ID=1), y (ID=2), z (ID=3), atom name (ID=14) or scattering factor
+ PN1050 pointer (ID=22) are missing from logical record lratom:
+ PN1055 Insufficient memory to store atom information
+ PN1065 Atom name does not match any on the bdf
+ PN1070 Atom coordinates on the ATOM line are not within the
+ PN1070 bounds of the partition region.
+ PN1105 Logical record lrscat: is nonexistant
+ PN1110 Number of atoms in unit cell (ID=1) or atomic number (ID=3) are missing
+ PN1110 from logical record lrscat:
+ PN1115 No potential profiles values for this atom on file 'profil'.
+ PP0000 PEKPIK------------------------------------------------------------------
+ PP0101 An unrecognizable input mnemonic was detected on the PEKPIK line.
+ PP0103 No symmetry record has been found on the bdf.
+ PP0104 Insufficient storage is available for the symmetry operators.
+ PP0105 Insufficient storage is available for the previously named atom
+ PP0105 coordinates.
+ PP0106 Insufficient storage is available for peak storage.
+ PP0107 Insufficient memory is available for I/O buffers.
+ PP0201 There was an unexpected end of map on MAP file.
+ PS0000 PHACMP------------------------------------------------------------------
+ PS2002 Erroneous option on PHACMP line.
+ PS2003 Erroneous option on PHASO1 or PHASO2 lines.
+ PS2102 Data base information missing from lrexpl: of primary phase source.
+ PS2103 Data base information missing from lrexpl: of secondary phase source.
+ PS2104 Order of reflections not the same for each phase source.
+ PS3002 Required reflection data missing from primary phase source.
+ PS3003 Required reflection data missing from secondary phase source.
+ PS3011 Requested FC  phases not present on primary file.
+ PS3012 Requested 'best' MIR phases not present on primary file.
+ PS3013 Requested 'most prob.' MIR phases not present on primary file.
+ PS3014 Requested density mod. MIR phases not present on primary file.
+ PS3015 Requested direct methods phases not present on primary file.
+ PS3021 Requested FC  phases not present on secondary file.
+ PS3022 Requested 'best' MIR phases not present on secondary file.
+ PS3023 Requested 'most prob.' MIR phases not present on secondary file.
+ PS3024 Requested density mod. MIR phases not present on secondary file.
+ PS3025 Requested direct methods phases not present on secondary file.
+ PS3030 Mismatch in reflection data between two phase sources.
+ PT0000 PLOT--------------------------------------------------------------------
+ PT0001 An unexpected end of plot was encountered.
+ PT0002 Plot file cannot have numeric file extension name.
+ PT0201 Illegal write status for calcomp vax file.
+ PT0701 Parameter exceeds half-word length and illegal for Tektronics!
+ PT1101 The STARTP line is missing. The STARTP line is mandatory for
+ PT1101 each plot.
+ PT1103 Insufficient memory is available for pen movement buffer (MARK1 array).
+ PT1104 An invalid code was found in the SETCAR line.
+ PT1105 There were more instruction characters than storage will hold.
+ PT1106 No input characters were supplied on the current SETCAR line.
+ PT1109 The numbers in the PSPECS line which specify the way in which the bits
+ PT1109 go into the bytes do not make sense.
+ PT1111 Unrecognised control code or construction on COLOR line.
+ PT2201 Illegal write status on Perkin Elmer plot file.
+ PT4101 The string of symbols supplied for plotting exceeds 72.
+ PT7101 Insufficient buffer space is available for one line of plot in the
+ PT7101 dot-matrix print mode.
+ PT7503 Insufficient memory for the pen movement buffer.
+ PV0000 PREVUE----------------------------------------------------------------
+ PV0001 Unexpected end of plot input file. Check file and input requests.
+ PV0002 PREVUE graphics interface destroyed from window manager.
+ PV1101 Unknown graphical output device code.           
+ PV1102 Numeric file extension is not permitted in PREVUE
+ PV1103 Illegal construction or data on the COLOR line.
+ PV1104 PREVUE cannot read a .pre file because it will be the output file.
+ PV1105 Insufficient memory for coordinate buffer assignment.
+ PV1111 Insufficient memory is available for I/O buffers.
+ PV3101 Frame numbers out of order on FRAMES line or the input plot file.
+ PV4000 Unable to initialize X11 interface
+ PX0000 PLOTX-----------------------------------------------------------------
+ PX0001 Unexpected end of plot input file. Check file and input requests.
+ PX0002 PLOTX graphics interface destroyed from window manager.
+ PX1101 Unknown graphical output device code.           
+ PX1102 Numeric file extension is not permitted in PLOTX.
+ PX1103 Illegal construction or data on the COLOR line.
+ PX1105 Insufficient memory for coordinate buffer assignment.
+ PX3101 Frame numbers out of order on FRAMES line or the input plot file.
+ PX4000 Unable to initialize X11 interface
+ PX6000 Can't find the postscript prolog file named xtalps. 
+ PX6000 Check the XTALHOME environment variable and the directory specified.
+ QE0000 PROELD-----------------------------------------------------------------
+ QF0000 PROLSQ-----------------------------------------------------------------
+ QF1001 invalid mnemonoic in the prolsq input line
+ QF1002 invalid mnemonoic in the print input line
+ QF1001 invalid mnemonoic in the reflim input line
+ QF1104 insufficient memory for buffers
+ QF1106 no x-ray scattering factor data on file a.
+ QF1107 no neutron scattering lengths in record lrscat:
+ QF1201 insufficient memory for storage of atom names and coordinates.
+ QF1202 there are no atoms loaded in the input binary data file (a).
+ QF1202 the proatm and protin program must be run before prolsq.
+ QF1203 the number of atoms loaded from file a are different than
+ QF1203 the number given in file f from protin.  are files current?
+ QF1203 or were atoms rejected during the protin run?
+ QF1204 there is no match for the residue code in the table of
+ QF1204 residue names passed from protin.
+ QF1205 the noref lines must come just before the end line.
+ QF2201 insufficient storage for vector.  the number of variables
+ QF2201 is too large.
+ QF2204 insufficient storage for distances.  the estimated
+ QF2204 number of distances exceeds storage alocation algorithm
+ QF2204 as currently programmed.  reduce number of variables.
+ QF2205 insufficient storage for scratch array.
+ QF3201 not enough space in storage for distance restraint
+ QF3201 information from protin.
+ QF3202 sequence problem in records of file f distance restraints.
+ QF3203 the two counts of distance restraints on file do not agree.
+ QF3203 something went wrong with the protin run.
+ QF3301 the records of planar constraints in file f are faulty.
+ QF3501 the records of chiral center constraints in file f are faulty.
+ QF3601 the records of van der waals constraints in file f are faulty.
+ QF3601 memory for interatomic distances exhausted.
+ QF3602 during the storage of van der waals contacts, including
+ QF3602 hydrogen bonding and bonding contacts, the markd or markt
+ QF3602 were exhausted.   too many restraints for storage available.
+ QF3701 the records of torsion angle constraints in file f are faulty.
+ QF3901 the records of special symmetry constraints in file f
+ QF3901 are faulty.
+ QF4201 job terminated because derivative matrix is singular.
+ QF4501 the records of anisotropic temp. fact. constraints in file f
+ QF4501 are faulty.
+ QF6101 no scattering factor information on bdf on file a
+ QF8301 no atomic parameters in bdf on scratch file e. program error!
+ QF9105 the fractional to orthogonal coordinate transformation is not
+ QF9105 on the scratch file e.  has proatm been run?
+ QF9106 there are no x-ray scattering factors on scratch file e.
+ QN0000 PROTIN-----------------------------------------------------------------
+ QN0001 errors encountered in loading instructions - search above.
+ QN0401 the designated field on the current input line must
+ QN0401 be a valid character string such as those loaded residue
+ QN0401 names from a restrm, reslnk, or residu line.
+ QN0501 a field on the current input line must be a residue name
+ QN0501 from a restrm, reslnk, or residu line previously loaded.
+ QN1101 bad field encountered where unique residue sequence number
+ QN1101 required.
+ QN1102 the input residue sequence number is not in the table
+ QN1102 of numbers passed from proatm in bdf record lrsequ:.
+ QN1201 void field encountered where chain identitfier required.
+ QN1202 the chain identifier is not in the table passed from proatm
+ QN1202 in bdf record lrsequ:.
+ QN1901 insufficient memory for buffers
+ QN1902 insufficient memory for symmetry operations
+ QN1903 invalid mnemonoic in the protin input line
+ QN1904 the number of atoms of the main chain that are restrained
+ QN1904 to lie in the same plane must be between 4 and 6.
+ QN1904 check the value specified in the protin line.
+ QN1905 too many alternate chains, must increase qmxchn: and recompile
+ QN1906 the atom name of the first partially occupied atom for
+ QN1906 which the occupancy is to be refined is not specified
+ QN1906 in a character string on the firstp input line.
+ QN1907 the chain identification symbol must not be a blank string.
+ QN1905 the altchn line must have a preceeding chaini line.
+ QN1910 too many disulphide bridges for current array size qmxdss:
+ QN1910 must be increased and qn recompiled.
+ QN2101 invalid residue specification input line. residue name?
+ QN2102 too many main chain residues for storage capacity. (10 max)
+ QN2103 too many linkage residues for storage capacity. (5 max)
+ QN2104 too many residues for storage capacity. (qmxgrp: max)
+ QN2105 invalid atom specification input line. atom name?
+ QN2106 a coordinate given for a residue atom is incorrect.
+ QN2107 relative atom pointer, field 6, is outside 1 to 50 range
+ QN2108 unless the residue atom is h, d, c, n, o, s, or fe field
+ QN2108 eight of the residue line must be given explictly.
+ QN2109 proatm did not specify n terminal residue correctly
+ QN2109 (group id for residue not in table)
+ QN2110 proatm did not specify c terminal residue correctly
+ QN2110 (group id for residue not in table)
+ QN2111 no parent atom found for named h atom.
+ QN2113 input lines expected earlier have been encountered later!
+ QN2113 protin input line order error.
+ QN2313 input lines expected earlier have been encountered later!
+ QN2313 protin input line order error.
+ QN2303 a continuation line for disres, dislnk, or distrm is missing.
+ QN2413 input lines expected earlier have been encountered later!
+ QN2413 protin input line order error.
+ QN2401 the link group plane has more than 5 or lees than 3 atoms.
+ QN2402 the link group plane is defective.  it has no atoms.
+ QN2513 input lines expected earlier have been encountered later!
+ QN2513 protin input line order error.
+ QN2501 too many chiral center types for storage availability.
+ QN2613 input lines expected earlier have been encountered later!
+ QN2613 protin input line order error.
+ QN2601 a vdwcon line has been encountered out of order.  either
+ QN2601 there is no preceeding vdwres, vdwlnk, or vdwtrm line or
+ QN2601 the counts given on those lines are erroneous.
+ QN2713 input lines expected earlier have been encountered later!
+ QN2713 protin input line order error.
+ QN2702 the previous torres line demands a following chiwgt line.
+ QN2703 fields are missing in the tortrm input line.
+ QN2704 the previous tortrm line demands a following neighb line.
+ QN2705 the previous neighb line demands a following chidis line.
+ QN2813 input lines expected earlier have been encountered later!
+ QN2813 protin input line order error.
+ QN4013 there are no atoms loaded in the input binary data file (a).
+ QN4013 the proatm program must be run before protin is used.
+ QN4001 insufficient memory for storage of atom names and coordinates.
+ QN4002 group name given for a residue is not among those in
+ QN4002 the table of standard groups.
+ QN4005 one of the storage arrays is full.  the qn program will have
+ QN4005 to have array sizes reset and be recompiled.
+ QN4501 there must be at least one chain in the structure in order
+ QN4501 to proceed with protin.  check proatm atom input lines or
+ QN4501 protin chaini input lines.
+ QN5113 input lines expected earlier have been encountered later!
+ QN5113 protin input line order error.
+ QN5102 subscript given for field 1 or 2 of interd or intrad line are
+ QN5102 out of range possible for chain identifiers.
+ QN5101 there must not be void fields in a spcdis input line.
+ QN5109 insufficient space exists for storage of special distance data
+ QN5109 one of the variable ndig(ich) has exceeded the parameter qmxdi
+ QN5110 insufficient space exists for storage of special distance data
+ QN5110 one of the variable ndic(ich) has exceeded the parameter qmxdi
+ QN5213 input lines expected earlier have been encountered later!
+ QN5213 protin input line order error.
+ QN5513 input lines expected earlier have been encountered later!
+ QN5513 protin input line order error.
+ QN5501 insufficient space exists for storage of special distance data
+ QN5501 in qn55 (sdsort).  either variable ndig or ndic is too big.
+ QN6101 limit of symmetry operators  reached before all possibilities
+ QN6101 were searched.
+ QN6201  singular matrix in qn62.
+ QN6513 input lines expected earlier have been encountered later!
+ QN6513 protin input line order error.
+ QN6613 input lines expected earlier have been encountered later!
+ QN6613 protin input line order error.
+ QN6601 some special symmetry data was loaded, but not enough to set
+ QN6601 up the weighting scheme.
+ RC0000 RCALC-----------------------------------------------------------------
+ RC0001 Requested LRREFL: items not found on BDF.
+ RC0002 Bad resolution bins requested.
+ RC0003 Zero sin(t)/l bin requested.
+ RB0000 RIGBOD----------------------------------------------------------------
+ RB1001 The cell record is missing in the bdf.
+ RB1002 The CELL line is missing.
+ RB1003 The atom record is missing in the bdf.
+ RB1004 A new atom has an unknown atom type.
+ RB1005 There is a wrong atom ID on the DELETE line.
+ RB1006 The first rigid group is missing.
+ RB1007 Insufficient storage is available for the calculation.
+ RB2001 The ATNAME line is input before the coordinates of ideal atoms.
+ RB2002 The number of atoms in the ATNAME line does not correspond with the
+ RB2002 number of atoms in the first group.
+ RB2003 There is not enough overlapping of ideal and real atoms.
+ RB2004 The first 3 ideal atoms are linear.
+ RB3001 Insufficient storage is available for the calculation.
+ RE0000 REFM90------------------------------------------------------------------
+ RE0010 Record buffer too small - It must be at least 80 characters.
+ RE0020 An unrecognized mode is specified on the REFM90 line.
+ RE0030 Unreasonable data set number of REFM90 line.
+ RE3110 Insufficient memory is available for list storage.
+ RE3205 Insufficient memory is available for CELL DIMENSIONS storage.
+ RE3210 Insufficient memory is available for SG NAME storage.
+ RE3215 Insufficient memory is available for SYMMETRY storage.
+ RE3220 Insufficient memory is available for ATOMS storage.
+ RE3225 Insufficient memory is available for FORM factor storage.
+ RE3230 Insufficient memory is available for CONDITIONS storage.
+ RE3235 Insufficient memory is available for FORMULA storage.
+ RE3240 Insufficient memory is available for CRYSTAL storage.
+ RE3245 Insufficient memory is available for COMMENTS storage.
+ RE3250 Unexpected end of file reading SCFS90 file.
+ RE3255 Insufficient memory is available for HKL/ANGL storage.
+ RE3310 Insufficient memory is available for FORM factor storage.
+ RE3810 Too many data sets.
+ RE5101 Insufficient memory is available for permanent storage.
+ RE5102 Insufficient memory is available for temporary storage.
+ RE5210 Dataset parameter record lrddef: is missing from the XTAL bdf.
+ RE5220 Dataset parameter record lrexpl: is missing from the XTAL bdf.
+ RE5230 Insufficient memory is available for temporary storage.
+ RE5310 Dataset parameter record lrdset: is missing from the XTAL bdf.
+ RF0000 REFCAL-----------------------------------------------------------------
+ RF1001 Unrecognizable field on REFCAL line
+ RF1002 Illegal data set number on REFCAL line
+ RF1004 Illegal smoothing range on REFCAL line
+ RF2001 Insufficient memory for bdf buffers.
+ RF2002 No symmetry information on the input bdf
+ RF2003 Insufficient memory for symmetry operations
+ RF2004 No scattering factor information on the input bdf
+ RF2005 Insufficient memory for scattering factor information
+ RF2007 Insufficient memory to hold the reference reflection information
+ RF2008 Insufficient data available on bdf for the requested data conversion.
+ RF2502 Impossible data conversion requested
+ RF4001 Insufficient memory to scale factors derived from reference reflections.
+ RF4002 For SETSCL parameters, the requested elapsed times do not correspond
+ RF4002 with the data values in the bdf.
+ RM0000 REMSET-----------------------------------------------------------------
+ RM0001 There is insufficient memory available for the buffers.
+ RM0002 The data set to be deleted is on the input bdf more than once.
+ RM0003 There is only one data set on the input bdf.
+ RM0004 the requested data set is not present on the input bdf.
+ RM0005 An Atom is present which does not belong to any data set in the bdf.
+ RM0006 There is insufficient memory for the directory of the output record
+ RM0006 lrrefl:.
+ RS0000 RSCAN----------------------------------------------------------------
+ RS0101 Insufficient memory is available for the input file buffer.
+ RS0102 Insufficient memory is available for scale factor storage.
+ RS0103 Insufficient memory is available for RCODE=1 summations.
+ RS0104 Insufficient memory is available for RCODE=2 summations.
+ RS0105 An unacceptable measurement F range is specified on the RSCAN line.
+ RS0106 An unacceptable measurement F interval is specified on the RSCAN line.
+ RS0107 The measurement I interval factor must be greater than 1.0.
+ RS0201 A required item such as Miller indices, sin(theta)/lambda, measured F,
+ RS0201 or calculated F, is not in the bdf.
+ RV0000 GIP---------------------------------------------------------------------
+ RV0001 GIP graphics interface destroyed from window manager.
+ RV1001 Unable to initialize X11 interface.
+ RV1002 Unknown option entered on GIP command line.
+ RV1003 Insufficient qx: memmory for file buffers.
+ RV1004 Insufficient qx: memmory for symop storage.
+ RV1801 No scale factor, wavelength or data set number in lrexpl:
+ RV2001 Logical record lrrefl: missing - no reflections on the bdf.
+ RV2002 Insufficient qx: memmory for H index table.
+ RV2003 Insufficient qx: memmory for K index table.
+ RV2004 Insufficient qx: memmory to allocate new K index row for H.
+ RV2005 Insufficient qx: memmory for reflection sorting swap buffer.
+ RV2006 Insufficient qx: memmory for direct access reflection file buffer.
+ RV2007 Insufficient qx: memmory to reserve L index row packets for given H, K.
+ RV2101 All of Frel, F2rl and Irel appear to be missing from the bdf.
+ RV2201 Expected bdf lrrefl: item is missing.
+ RV2202 Insufficient qx: memmory for equivalent reflection common value table.
+ RZ0000 REVIEW--------Formerly RV-----------------------------------------------
+ RZ0110 Unrecognizable input has been detected in field 2 of the REVIEW line.
+ RZ0111 Unrecognizable input has been detected in field 5 of the REVIEW line.
+ RZ0112 Unrecognizable input has been detected in field 1 of the LIST line.
+ RZ0114 Unrecognizable input has been detected in field 1 of the TRIP line.
+ RZ0115 Unrecognizable input has been detected in field 1 of the QUAR line.
+ RZ0116 Unrecognizable input has been detected in field 6 of the QUAR line.
+ RZ0118 There is insufficient memory to read the invariants from INV file.
+ RZ0120 Insufficient memory is available to accumulate psi plots (2601/plot).
+ RZ0210 /E/ values are missing from the XTAL bdf.
+ RZ0220 FC phases are missing from the XTAL bdf.
+ RZ0230 GT phases are missing from the XTAL bdf.
+ RW0000 REGWT-----------------------------------------------------------------
+ RW0101 Insufficient memory is available for I/O buffers.
+ RW0102 There are improper calculation codes in REGWT input line.
+ RW0103 Insufficient memory is available for scale factor(s).
+ RW0104 There is inconsistancy of weighting type: Regina weighting scheme.
+ RW0105 Unrecognizable input has been detected in the line REGINA.
+ RW0106 The order of the Regina weight function is greater than 3.
+ RW0107 There is inconsistancy of weighting type: normal weighting scheme.
+ RW0108 Unrecognizable input has been detected in the NORMAL line.
+ RW0109 Coefficient value missing from NORMAL line.
+ RW0110 Unrecognised input line.
+ RW0116 Insufficient memory is available to store the data arrays.
+ RW0117 Insufficient memory is available for X(rel) grid points.
+ RW0118 END line is missing.                                       
+ RW0119 Inconsistent grid parameters have been entered. Check input.
+ RW0120 There are essential items missing from the lrrefl: record of the
+ RW0120 bdf. h,k,l, sintheta/lambda, F(cal), either F(rel), its square,
+ RW0120 or intensity and the sigma must be present on the file.
+ RW0121 A and B containing dispersion must be on lrrefl: of the bdf.
+ RW0129 Insufficient memory is available for specified grid points.
+ RW0130 Weight analysis number cannot exceed 6.
+ RW0132 Required values missing from the bdf.
+ RW0308 Insufficient memory is available for the var-covar.corrections.
+ RW0403 Lorentz polarization factor missing from the bdf. 
+ RW0501 The matrix of normal equations is singular. Are the specified
+ RW0501 groups over sintheta/lambda and Frel specified correctly.
+ RW0501 Be sure to note the difference between Frel and Fobs.
+ RW0901 There are essential items missing from the lrrefl: record of the
+ RW0901 bdf. h,k,l, sintheta/lambda, F(cal), either F(rel), its square,
+ RW0901 or intensity and the sigma must be present on the file.
+ RW0903 1/LP factor is missing from lrrefl: of the bdf.
+ RW0934 Required least squares weights missing from reflection record.
+ RW1101 The least squares weight LSWT1(n901) is missing from lrrefl: of the bdf.
+ RW1102 The least squares weight LSWT2(n902) is missing from lrrefl: of the bdf.
+ RW1103 The least squares weight LSWT3(n903) is missing from lrrefl: of the bdf.
+ RW1104 Former weight information ID=n109x is missing from lrrefl: of the bdf.
+ RW0105 B component of F(cal) is void in the input bdf.
+ SC0000 SCALE1----------------------------------------------------------------
+ SC1001 Insufficient memory is available.
+ SC1101 No shifts have been found in logical record lrexpl: of the input bdf.
+ SC1102 Negative or void shift numbers are not allowed.
+ SC1103 The requested shift number has not been found on the bdf (logical record
+ SC1103 lrexpl:).
+ SC1104 There are too many shifts; the maximum is 500.
+ SC1105 A scale factor cannot be negative.
+ SC1106 There must be at least 2 shifts whose scale factors are to be refined.
+ SC1199 Check for some previous error.
+ SC2201 Some necessary ID number is missing from logical record lrrefl:.
+ SC2202 No reflection data was found in logical record lrrefl:.
+ SC3001 Scale group shift nembers missing from the bdf.
+ SH0000 SHELIN-----------------------------------------------------------------
+ SH0020 HKLF can only be entered in mode '-3' or '-4'.
+ SI0000 SIMPEL----------------------------------------------------------------- 
+ SI0210 The symbol multiplicity exceeds 64, restart the program using
+ SI0210 different parameters.
+ SI1010 Insufficient memory is available for the INV file buffer.
+ SI1015 Either an error has been detected on INV file or it is not available.
+ SI1020 Insufficient memory is available for an |E| list.
+ SI1025 There is an unrecognized character string in the START line.
+ SI1030 There is an unrecognized character string in the PRINT line.
+ SI1040 There is an unrecognized character string in the SYMBAD line.
+ SI1045 There is an unrecognized character string in the INVAR line.
+ SI1050 There is an unrecognized character string in the PHASE line.
+ SI1060 More than 8 symbols have been assigned with the PHASE line.
+ SI2010 Insufficient memory is available to store invariants. Reduce number.
+ SI9010 Insufficient memory is available to store one phase set.
+ SI9020 The requested /E/ values are not present on input archive bdf.
+ SL0000 SLANT------------------------------------------------------------------
+ SL0105 The distance between plane defining points is almost zero.
+ SL1105 An unrecognized input was found on the SLANT line.
+ SL1110 Insufficient memory is available for the input buffer.
+ SL1115 Insufficient memory is available for the output buffer.
+ SL1120 Logical record lrsymm: is missing from the bdf.
+ SL1125 Insufficient memory is available to store the symmetry operations.
+ SL2105 The grid increment of input map points must be unity.
+ SL2110 Insufficient memory is available to store the input map.
+ SL3101 Insufficient memory is available for atom sites.       
+ SL3105 A mandatory item is missing from the MAPRES line.
+ SL3106 The first field in the DEFPLN line must be characters.
+ SL3110 A mandatory item is missing from the DEFPLN line.
+ SL3115 The first 3 items on the LAYOUT line must be alphabetic.
+ SL3120 An unrecognized item was found on the LAYOUT line.
+ SL3125 An atom ID is missing from an SITE or an SITEG line.
+ SL3130 No output has been requested.
+ SL3135 The mandatory input line, DEFPLN, is missing.
+ SL3140 The map orientattion, either LAYER, DOWN or ACROSS is incorrect.
+ SL3145 The grid layer increment is negative.
+ SL3150 Logical record lratom: is missing from the bdf.
+ SL3155 A mandatory item is missing from lratom: (x,y,z, or atom name).
+ SL4105 Insufficient memory is available to store the output map.
+ SL4205 Insufficient memory is available for the heading.
+ SL4405 A required map point is not in the asymmetric unit.
+ SM0000 SIMWGT------------------------------------------------------------------
+ SM0001 missing item from refl packet
+ SM0002 resolutions either zero or non-decreasing order
+ SM0003 zero resolution not valid
+ SM0004 no phase data on the bdf
+ SP0000 SHAPE-------------------------------------------------------------------
+ SP1001 Only one option is allowed, do different runs.                
+ SP1002 Write either a CHEMX or a BIOSYM file, but not both.          
+ SP2001 Insufficient memory is available for the I/O BUFFER for       
+ SP2001 FILE A, C, D, symops, histograms or CHEMX files.              
+ SP2002 Symops not on bdf.                                            
+ SP2003 Invalid LAYOUT of Map for BIOSYM file,                        
+ SP2003 recalculate the MAP with program:                             
+ SP2003                                                               
+ SP2003 FOURR compid                                                  
+ SP2003 GRID ...                                                      
+ SP2003 LAYOUT ACROSS DOWN LAYER ...                  .               
+ SP2004 Insufficient memory is available for buffering the entire     
+ SP2004 map into QX array.                                            
+ SP2005 Mismatch in number of expected an read pixels.                
+ SP3002 Symops not on bdf.                                            
+ SP3003 Only Patterson, E-Patterson and Vectormaps allowed as input   
+ SP3003 for Image-seeking (minimum) function.                         
+ SP4001 Mapping of x,y,z into asymmetric unit failed, use option      
+ SP4001 FULL in FOURR.                                                
+ SR0000 SORTRF------------------------------------------------------------------
+ SR1001 Insufficient memory is available.
+ SR1006 An incorrect option code has been encountered on the SORTRF line.
+ SR1007 Input bdf does not contain lrexpl: data. Check bdf!
+ SR2001 Reflection data not present on the bdf. Use ADDREF or DIFDAT.
+ SR2002 No measured data (Irel, Frel or Frelsqd) present on the bdf.
+ SR2003 Reflection rcode must be present on the bdf (ID 1308) for SORTRF.
+ SR2010 Insufficient memory is available.
+ SR3002 Not enough memory is available for merging.
+ SR4001 Required reflection items missing from lrrefl: on input bdf.
+ SR4002 Insufficient memory for storing sorted reflection data.
+ SX0000 STARTX---------------------------------------------------------------- 
+ SX1001 Insufficient storage for bdf buffers.
+ SX1002 No cell parameter information on the bdf. 
+ SX1003 Unrecognised input option on STARTX line.
+ SX1005 Number of interpolated form factor values cannot exceed 400. Either 
+ SX1005 reduce SMAX or increase SINT.
+ SX1101 Only N or C are allowed in the LATICE line centrosymmetric/
+ SX1101 noncentrosymmetric indicator field
+ SX1102 An erroneous lattice type was specified. P I R F A B C are valid.
+ SX1103 The translation fraction is incomplete.
+ SX1104 The denominator for a fractional translation has been omitted.
+ SX1105 The denominator of a fraction on a SYMTRY line may not be 5.
+ SX1106 A translation is greater than one.
+ SX1107 A plus or minus sign, a comma, or a blank does not follow after
+ SX1107 a translation.
+ SX1108 Either X, Y, or Z has not been used for an axis symbol.
+ SX1109 An illegitimate character was encountered on a SYMTRY line.
+ SX1111 The determinant of a rotation matrix from SYMTRY line is not +1 or -1.
+ SX1112 No symmetry equivalent positions were given on SYMTRY lines.  
+ SX1201 An incorrect lattice or centrosymmetric code was found on entered
+ SX1201 SGNAME line, or space group code generated from input SYMTRY lines.
+ SX1202 Less than three origin shift numbers were entered on SGNAME line.
+ SX1203 An incorrect axis code was found on an SGNAME line.
+ SX1204 No lattice code was found on an SGNAME line.
+ SX1205 Translations on the SGNAME line do not agree.
+ SX1206 An inversion matrix is present on an SGNAME line.
+ SX1207 More matrices were generated than expected from SGNAME line.
+ SX1208 A bad translation specification was found on an SGNAME line.
+ SX1210 Incorrect entry for rotation code on SGNAME line.
+ SX1305 The symmetry mapping file (normally named symmap) cannot be opened.
+ SX1310 No data blocks (data_) are present in the symmetry mapping file?
+ SX1315 No symmetry information has been entered.                    
+ SX1401 More than one identity symop (x,y,z) detected.
+ SX1405 Symops represent unrecognised monoclinic symmetry.
+ SX1410 Symops represent unrecognised orthorh. or tetragonal symmetry.
+ SX1415 Symops represent unrecognised trigonal or hexagonal symmetry.
+ SX1420 Symops represent unrecognised cubic symmetry.
+ SX1501 Illegal translation present in a symop.
+ SX1701 The identity matrix is missing from the symmetry operations supplied.
+ SX1702 The symmetry operations supplied do not satisfy the group property.
+ SX1702 Check printed messages.
+ SX1703 Rotation subgroups of symops are unequal in size.
+ SX1704 Identical rotation matrices are present in the symops.
+ SX1705 Symmetry operations are incompatible with unit cell dimensions.
+ SX1731 Symmetry is monoclinic but cell angles do not correspond.
+ SX1732 Symmetry is tetragonal but cell dimensions do not correspond.
+ SX1733 Symmetry is hexagonal but cell dimensions do not correspond.
+ SX1734 Symmetry is rhombohedral but cell dimensions do not correspond.
+ SX2001 The sin theta/ lambda value for the first FORMFX line must be 0.0
+ SX2002 The number of FORMFX lines per atom type cannot exceed 200.
+ SX2003 Atom type symbol on FORMFX or FORMGN line not recognised. A CELCON line
+ SX2003 with the matching symbol must precede these lines.
+ SX2004 A required non-void field was left void in a CELCON line.
+ SX2005 FORMFX line are not in order of increasing sin(theta)/lambda.
+ SX2006 Some Cromer-Mann coefficients missing from FORMGN line.
+ SX2007 The atom type symbol is missing from the CELCON line.      
+ SX2008 Identical atom type symbol has been entered on two CELCON lines.
+ SX2009 Either no atom type data has been entered or CELCON lines out of order.
+ SX2010 Only 16 atom type symbols are permitted.
+ SX2012 Scattering data is missing for atom type. Check symbol construction.
+ SX2014 Illegal atom type symbol. Digits may only precede + or -.
+ SX2015 Illegal atom type symbol. Oxidation states entered as n+ or n-
+ SX2016 Neutron data has been entered inconsistently. Either for all atom
+ SX2016 types (and no xray data) or for none (all xray data).
+ SX2017 FORMGN or FORMFX lines cannot be entered when neutron data is entered.
+ SX2018 Neutron data entered when radiation set as Xray or electrons.
+ SX2201 Insufficient memory to store Crommer-Mann coefficients.
+ SX3001 The number of data sets cannot exceed 25.
+ SX3002 Tha data set name is void or numeric on the DATDEF line.
+ VF0000 VUFILE----------------------------------------------------------------
+ VF0001 Incorrect entry on VUFILE line. Unexpected field encountered.
+ VU0000 VUBDF-----------------------------------------------------------------
+ VU0001 Incorrect entry. Unexpected numerical field encountered.
+ VU0002 Unrecognised alpha string encountered on VUBDF line.
+ VU0005 Unrecognised device number entered.
+ VU0010 Unrecognised physical record number entered.
+ VU0015 Unrecognised logical record number entered.
+ VU0017 Unrecognised packet number entered.
+ VU0020 Insufficient memory in qx array for bdf buffer.
+ VU0025 I/O error or EOF when reading input bdf file.
+ WI0000 WEAKIN--------------------------------------------------------------
+ WI1001 INSUFFICIENT STORAGE IS AVAILABLE.
+ WI1013 NO FORM FACTOR NAMES IN THE SCATTERING FACTOR RECORD.
+ WI1014 NO DATA SET RECORD IN THE INPUT BDF.
+ WI2002 UNRECOGNIZED FIELD SPECIFIED ON WEAKIN LINE, SHOULD BE LIST.
+ WI2003 DATA SET NAME SPECIFIED ON WEAKIN LINE IS NOT FOUND ON BDF.
+ WI3002 SOME BASIC QUANTITY IS MISSING FROM THE REFLECTION RECORD OF
+ WI3002 THE INPUT BDF. HAS THE ADDREF PROGRAM BEEN RUN?
+ WI3021 THE REQUESTED E OBS VALUES ARE NOT ON THE INPUT BDF.
+ WI3022 THE REQUESTED F CALC VALUES ARE NOT ON THE INPUT BDF.
+ WI3023 THE REQUESTED PHASE VALUES ARE NOT ON THE INPUT BDF.
+ WI3099 PREVIOUS ERROR(S) HAVE OCCURRED.
+ XT0000 XTINCT------------------------------------------------------------------
+ XT1001 An incorrect option code has been encountered on the XTINCT line.
+ XT1002 No specified r* value has been encountered on the XTINCT line.
+ XT1003 No specified sigma(r*) value has been encountered on the XTINCT line.
+ XT1004 An invalid data set has been specified on the XTINCT line.
+ XT1005 The polarization fraction specifed on XTINCT line is not physical (0..1)
+ XT1006 Insufficient memory is available in main data storage array.
+ XT1007 Input bdf does not contain lrsymm: data. Check bdf!
+ XT1008 No wavelength was found in lrexpl:  Check bdf!
+ XT1009 Unrecognised limiting parameters have been specified on limits line.
+ XT1010 The minima and maxima specified on the limits line conflict.
+ XT2001 This routine is unsuitable for dynamically scattered electrons.
+ XT2002 A required data item is missing from lrrefl:.
+ XT2003 No suitable reflection information has been found in lrrefl:.
+ XT2004 Insufficient memory is available in main data storage array.
+ XT3001 No clusters of equivalent data have been found in lrrefl:.
+ XT3002 Refinement restrictions have rejected all reflection data.
+ XT5001 A required data item is missing from lrrefl: on input bdf.
+ ZZB
+ ZZC                      OZY MESSAGES
+ ZZD
+ ZZZ001 I met a traveller from an antique land who said...
+ ZZZ001 Two vast and trunkless legs of stone stand in the desert,
+ ZZZ001 near them, on the sand, half sunk, a shattered visage lies,
+ ZZZ001 whose frown, and wrinkled lip, and sneer of cold command
+ ZZZ001 tell that its sculptor well those passions read which yet survive,
+ ZZZ001 stamped on these lifeless things the hand that mocked them,
+ ZZZ001 and the heart that fed-
+ ZZZ001 and on the pedestal these words appear....
+ ZZZ001 MY NAME IS OZYMANDIAS KING OF KINGS
+ ZZZ001 LOOK ON MY WORKS YE MIGHTY AND DESPAIR.
+ ZZZ001 Nothing beside remains, round the decay of that colossal wreck,
+ ZZZ001 boundless and bare the lone and level sands stretch far away.
+ ZZZ001                                                       Shelley
+ ZZZ002 One of the benefits of a college education
+ ZZZ002 is to show the boy its little avail.        Emerson in 'culture'
+ ZZZ003 Ye have sown much, and bring in little.
+ ZZZ003 Ye eat, but ye have not enough.
+ ZZZ003 ye drink, but ye are not filled with drink.
+ ZZZ003 Ye clothe you, but there is none warm.
+ ZZZ003 And he that earneth wages
+ ZZZ003 earneth wages to put it into a bag with holes
+ ZZZ003                                                   Haggai I,6
+ ZZZ004 Fireworks ended
+ ZZZ004 And spectators gone away.
+ ZZZ004 Ah, how vast and dark.                            Shiki
+ ZZZ005 Sic as the cawse of ewery thing is, sic wilbe the effect.
+ ZZZ005 Proverbs and reasons of the year 1585 as reprinted in Paisley 1828
+ ZZZ006 He that wald reache the sweite rose suld now and then be scratched
+ ZZZ006 wt the sharpe breeres.
+ ZZZ006 Proverbs and reasons of the year 1585 as reprinted in Paisley 1828
+ ZZZ007 Under most greene grasse ly most greate snakes.
+ ZZZ007 Proverbs and reasons of the year 1585 as reprinted in Paisley 1828
+ ZZZ008 Quhen the causs is taken away the effect wanisheth.
+ ZZZ008 Proverbs and reasons of the year 1585 as reprinted in Paisley 1828
+ ZZZ009 An optimist is a guy that has never had
+ ZZZ009 much experience.       certain maxims of archy--Don Marquis
+ ZZZ010 If you get confused, logic out your dilemma....
+ ZZZ010               Picker X-ray corp. Digital Printer Manual. circa 1964
+ ZZZ011 Knight - Sire, I've just returned from the front
+ ZZZ011 King   - How goes the battle?
+ ZZZ011 Knight - The situation is quite fluid.
+ ZZZ011 King   - What does THAT mean?
+ ZZZ011 Knight - We`re up the creek!        From the Wizard of Id
+ ZZZ012 There's small choice in a bowl of rotten apples.   Shakespeare
+ ZZZ013 I am riding on a limited express, one of the crack trains of the nation
+ ZZZ013 Hurtling across the prairie into blue haze and dark air go fifteen
+ ZZZ013          all-steel coaches holding a thousand people.
+ ZZZ013 (all the coaches shall be scrap and rust and all the men and women
+ ZZZ013          laughing in the diners and sleepers shall pass to ashes.)
+ ZZZ013 I ask a man in the smoker where he is going and he answers: "Omaha."
+ ZZZ013                                             "Limited" C. Sandburg
+ ZZZ014 Lord, man... were ye but whyles where I am,
+ ZZZ014 The gentiles ye wald ne'er envy then 'em.
+ ZZZ014 It's true, they needna starve nor sweat,
+ ZZZ014 thro' winter's cauld or summmer's heat.
+ ZZZ014 They've nae sair wark to craze their banes,
+ ZZZ014 and fill auild age with gripes an' granes.
+ ZZZ014 But human bodies are sic fools
+ ZZZ014 for a' their colleges and schools,
+ ZZZ014 that when nae real ills perplex them,
+ ZZZ014 they mak enow themselves to vex them,
+ ZZZ014 and' aye the less they hae to sturt them,
+ ZZZ014 in like proportion less will hurt them.      Robert Burns 'Twa Dogs'
+ ZZZ015 According to Hen3ry, life is much like sewer.....(the 3 is silent)
+ ZZZ015 You get out of it just what you put into it....    Tom Lehrer
+ ZZZ016 Here we go.....
+ ZZZ016 Sliding down the razor blade of life.......        Tom Lehrer
+ ZZZ017 From whence it happens,
+ ZZZ017 that they which trust to books,
+ ZZZ017 do as they that cast up many little summs into greater,
+ ZZZ017 without considering wether those little summes were rightly cast up
+ ZZZ017 or not.
+ ZZZ017 And at last, finding the errour visible,
+ ZZZ017 and not mistrusting their first grounds,
+ ZZZ017 know not which way to cleere themselves.
+ ZZZ017 But spend time in fluttering over their bookes,
+ ZZZ017 as birds that entering by the chimney,
+ ZZZ017 flutter at the false light of a glasse window,
+ ZZZ017 for want of wit to consider which way they came in.    Leviathan
+ ZZZ018 O wad some power the Giftie gie us
+ ZZZ018 to see oursels as ithers see us.
+ ZZZ018 It would frae many a blunder free us,
+ ZZZ018                 and foolish notion.
+ ZZZ018 What airs in dress and gait wad lea'e us,
+ ZZZ018                 and ev'n devotion.  Robert Burns 'To A Louse'
+ ZZZ019 God gave us two ends- one to sit on and the other to think with.
+ ZZZ019 Your success depends on which end you use the most.
+ ZZZ019 It's a case of heads you win, tails you lose.           source unknown
+ ZZZ020 nobody loses all the time
+ ZZZ020 i had an uncle named
+ ZZZ020 sol who was a born failure and
+ ZZZ020 nearly everybody said he should have gone
+ ZZZ020 into vaudeville perhaps because my uncle sol could
+ ZZZ020 sing mccann he was a diver on xmas eve like hell itself which
+ ZZZ020 may or may not account for the fact that my uncle
+ ZZZ020 sol indulged in that posssibly must inexcusable
+ ZZZ020 of all to use a highfalootin phrase
+ ZZZ020 luxuries that is or to
+ ZZZ020 wit farming and be
+ ZZZ020 it needlessly
+ ZZZ020 added
+ ZZZ020 my uncle sol's farm
+ ZZZ020 failed because the chickens
+ ZZZ020 ate the vegetables so
+ ZZZ020 my uncle sol had a
+ ZZZ020 chicken farm till the
+ ZZZ020 skunks ate the chickens when
+ ZZZ020 my uncle sol
+ ZZZ020 had a skunk farm but
+ ZZZ020 the skunks caught cold and
+ ZZZ020 died so
+ ZZZ020 my uncle sol imitated the
+ ZZZ020 skunks in a subtle manner
+ ZZZ020 by drowning himself in the watertank
+ ZZZ020 but somebody who'd given my uncle sol a victor
+ ZZZ020 victrola and records while he lived presented to
+ ZZZ020 him upon the auspicious occasion of his decease a
+ ZZZ020 scrumptious not to mention splendiferous funeral with
+ ZZZ020 tall boys in black gloves and flowers and everything and
+ ZZZ020 i remember we all cried like the missouri
+ ZZZ020 when my uncle sol's coffin lurched because
+ ZZZ020 somebody pressed a button
+ ZZZ020 and down went
+ ZZZ020 my uncle
+ ZZZ020 sol
+ ZZZ020 and started a worm farm                e.e. cummings
+ ZZZ021 I may speak in tongues of men or of angels, but if I am without
+ ZZZ021 love, I am a sounding gong or a clanging cymbal. I may have the
+ ZZZ021 gift of prophecy, and know every hidden truth; I may have faith
+ ZZZ021  strong enough to move mountains; but if I have no love, I am nothing.
+ ZZZ021 I may dole out all I possess, or even give my body to be burnt, but
+ ZZZ021 if I have no love, I am none the better.
+ ZZZ021 Love is patient; love is kind and envies no one. Love is never
+ ZZZ021 boastful, nor conceited, nor rude; never selfish, not quick to take
+ ZZZ021 offence. Love keeps no score of wrongs; does not gloat over other
+ ZZZ021 mens's sins, but delights in the truth. There is nothing love cannot
+ ZZZ021 face; there is no limit to its faith, its hope, and its endurance.
+ ZZZ021 Love will never come to an end. Are there prophets? their work
+ ZZZ021 will be over. Are there tongues of ecstasy? they will cease. Is there
+ ZZZ021 knowledge? it will vanish away; for our knowledge and our prophecy
+ ZZZ021 alike are partial, and partial vanishes when wholeness comes.
+ ZZZ021 When I was a child, my speech, my outlook, and my thoughts were
+ ZZZ021 all childish. When I grew up, I had finished with childish things.
+ ZZZ021 Now we see only puzzling reflections in a mirror, but then we shall
+ ZZZ021 see face to face. My knowledge now is partial; then it will be
+ ZZZ021 whole, like God's knowledge of me. In a word, there are three
+ ZZZ021 things that last forever: faith, hope, and love; but the greatest of
+ ZZZ021 them all is love.                                    1 Corinthians 13.
+ ZZZ022 It takes greater character to carry off good fortune than bad.
+ ZZZ022 French Proverb
+ ZZZ023 We have seen that man on the average does not live above
+ ZZZ023 two-and-twenty years. During these two-and-twenty years he is
+ ZZZ023 liable to two-and-twenty thousand evils. Many of which are
+ ZZZ023 incurable. Yet even in this dreadful state men still strut and
+ ZZZ023 pose on the stage of life. They make love at the risk of destruction,
+ ZZZ023 intrigue, carry on war, and form projects, just as if they were to
+ ZZZ023 live in luxury and happiness for a thousand ages.       Voltaire
+ ZZZ024 Define your terms, you will permit me again to say, or we shall
+ ZZZ024 never understand one another.                          Voltaire
+ ZZZ025 Let us place at the end of every chapter....The two letters used by
+ ZZZ025 the Roman judges when they did not understand a pleading. N.L.
+ ZZZ025 -non liquet- it is not clear.                         Voltaire
+ ZZZ026 The progress of rivers to the sea is not as rapid as that of man
+ ZZZ026 to error.                                               Voltaire
+ ZZZ027 Whatsoever thy hand findeth to do, do it with thy might. For there
+ ZZZ027 is no work, nor device, nor knowledge, nor wisdom, in the grave,
+ ZZZ027 whither thou goest.
+ ZZZ027 I returned and saw under the sun, that the race is not to
+ ZZZ027 the swift, nor the battle to the strong, neither yet bread to
+ ZZZ027 the wise, nor yet riches to men of understanding, nor yet
+ ZZZ027 favor to men of skill. But time and chance happen to them all.
+ ZZZ027 For man also knoweth not his time. As the fishes
+ ZZZ027 that are taken in an evil net, and as the birds that are
+ ZZZ027 caught in the snare. So are the sons of men snared in an evil
+ ZZZ027 time, when it falleth suddenly upon them.               Ecclesiaste
+ ZZZ028 The enlightened one, because he saw mankind drowning
+ ZZZ028 in the great sea of birth, death, and sorrow, longed to save
+ ZZZ028 them, for this he was moved to pity.
+ ZZZ028 Because he saw men of the world straying in false paths, and
+ ZZZ028 none to guide them, for this he was moved to pity.
+ ZZZ028 Because he saw the men of the world ploughing their fields,
+ ZZZ028 sowing the seed, trafficking, huckstering, buying, selling,
+ ZZZ028 and at the end winnowing nothing but bitterness,
+ ZZZ028 for this he was moved to pity.....
+ ZZZ028                       Buddah's Pity - Upsaka Sila Sutra
+ ZZZ029 We have left undone those things which we ought to have
+ ZZZ029 done, and we have done those things which we ought not to
+ ZZZ029 have done.                                    Book of common prayer
+ ZZZ030 Disappointment is the nurse of wisdom.              Sir Boyle Roche
+ ZZZ031 Men have become the tools of their tools...               Thoreau
+ ZZZ032 Mystery is the wisdom of blockheads...               Horace Walpole
+ ZZZ033 The cautious seldom err..                               Confucius
+ ZZZ034 Woe unto them that call evil good, and good evil
+ ZZZ035 Don't worry Charlie Brown...We learn more losing than we do
+ ZZZ035 from winning. Then that makes me the smartest person in the
+ ZZZ035 world...                                   Charles Schulz 'Peanuts'
+ ZZZ036 One thorn of experience is worth a whole wilderness of warning...
+ ZZZ036                                            Lowell - Among My Books
+ ZZZ037 Blessed are those who nought expect, for they shall not be
+ ZZZ037 disappointed..                                  Walcot -Ode to Pitt
+ ZZZ038 Charlie Brown..I can't get that stupid kite in the air...
+ ZZZ038 I can't... I C A N N O T...'
+ ZZZ038 Lucy..'OH come now Charlie Brown..That's no way to talk...
+ ZZZ038 the trouble with you is you don't believe in yourself...
+ ZZZ038 You don't believe in your abilities...
+ ZZZ038 You've go to say to yourself...'
+ ZZZ038 I believe I can fly this kite...'
+ ZZZ038 Go ahead say it....'
+ ZZZ038 Charlie Brown...'I believe that I can fly this stupid kite....
+ ZZZ038 I believe that I can fly this kite ..........
+ ZZZ038 I  A C T U A L L Y  B E L I E V E  T H A T  I  C A N *****'
+ ZZZ038 Lucy..'I'll bet you ten-to-one you're wrong.....'  Schultz
+ ZZZ039 See you now, your bait of falsehood takes this carp of truth.
+ ZZZ039 And thus do we of wisdom and of reach...
+ ZZZ039 By indirections find directions out.             --Hamlet, II, 1
+ ZZZ040 I would take counsel of myself. I would stop and look within
+ ZZZ040 and looking within, look back, also that I may look ahead
+ ZZZ040 with clearer understanding of the way I have been moving, and in
+ ZZZ040 what direction. I need to know if I am going forward or retreating,
+ ZZZ040 wether I have been wasting, or enjoying other precious moments
+ ZZZ040 of life. There have been frictions, annoyances and sometimes wrath,
+ ZZZ040 but were they because I was right and other wrong...
+ ZZZ040 Have i had my thoughts too sharply focused.
+ ZZZ040 On that which pleased me, served my self-esteem, disregarded my
+ ZZZ040 security, of which I did not inquire whether it served or
+ ZZZ040 hampered others.... Have I been trying to stop the clock to hold
+ ZZZ040 the world in perpetuation of what was and is already slipping
+ ZZZ040 away....Have I been critical of others for what really needed
+ ZZZ040 changing in me.....Let me indeed take counsel of myself and set
+ ZZZ040 my directions straight.  R.T. Weston as adapted by D. Osborn 1967
+ ZZZ041 A man should never be ashamed to own he has been in the wrong,
+ ZZZ041 which is but saying, in other words, that he is wiser today
+ ZZZ041 than he was yesterday.                             Jonathan Swift
+ ZZZ042 We learn wisdom from failure much more than from success.
+ ZZZ042 We discover what will do by finding out what will not do...
+ ZZZ042 and he who never made a mistake never made a discovery.      Anon.
+ ZZZ043 In this short life that only lasts an hour how much, how little
+ ZZZ043 is within our power...         Emily Dickinson Bolts of Melody No. 521
+ ZZZ044 We lose because we win. Gamblers, recollecting which, toss their
+ ZZZ044 dice again...                  Emily Dickinson Bolts of melody No. 533
+ ZZZ045 Not what we did shall be the test when act and will are
+ ZZZ045 done, but what our Lord infers we would- had we diviner
+ ZZZ045 been.                           Emily Dickinson Poems No. CLXXV
+ ZZZ046 Therefore shall evil come upon thee...Thou shalt not know
+ ZZZ046 whence it riseth... and mischief shall fall upon thee...
+ ZZZ046 Thou shalt not be able to put it off... and desolation
+ ZZZ046 shall come upon thee suddenly.. Which thou shalt not know. Isaiah 47.11
+ ZZZ047 We still have judgement here, that we teach but bloody
+ ZZZ047 instructions, which, being taught, return to plague the
+ ZZZ047 inventor.                                     MacBeth Act I, Scene VII
+ ZZZ048 Everybody is ignorant, only on different subjects.         Will Rodgers
+ ZZZ049 That's what makes us a great country.  The little things
+ ZZZ049 are serious and the big ones are not.               Will Rodgers
+ ZZZ050 You can lead a boy to college..
+ ZZZ050 But you cannot make him think....  Elebert Hubbard
+ ZZZ051 It's what a feller thinks he knows that hurts him... Kin Hubbard
+ ZZZ052 The best way to convince a fool that he is wrong is to
+ ZZZ052 let him have his own way                            Josh Billings
+ ZZZ053 Success is counted sweetest by those who ne'er succeed.
+ ZZZ053 To comprehend nectar requires sorest need.         Emily Dickinson
+ ZZZ054 But 'GLORY' doesn't mean 'A nice knock down argument'
+ ZZZ054 Alice objected.  When I use a word, Humpty Dumpty said, in a rather
+ ZZZ054 scornful tone, it means just what I choose it to mean.....
+ ZZZ054 Neither more nor less.... The question is, said Alice,
+ ZZZ054 whether you can make words mean so many different things....
+ ZZZ054 The question is, said Humpty Dumpty, which is to be master....
+ ZZZ054 That is all....                       Alice through the looking glass
+ ZZZ055 Contrawise...continued tweedledee, if it was so, it might be,
+ ZZZ055 and if it were so, it would be....
+ ZZZ055 But as it isn't, it ain't....
+ ZZZ055                                        Alice through the looking glass
+ ZZZ056 Faultily faultless, icily regular, splendidly null...Maude by Tennyson
+ ZZZ057 Progress is only achieved by those who have not yet reached their level
+ ZZZ057 of incompetence.                              From the Peter Principle
+ ZZZ058 It can be no sufficient compensation to a corpse to know that the
+ ZZZ058 dynamite that laid him out was not of as good a quality as it had
+ ZZZ058 been supposed to be.                               Mark Twain
+ ZZZ059 I know you believe what I said, but I am not sure you realize that
+ ZZZ059 what you heard is not what is not what I meant.  From U.S. Post
+ ZZZ059                                     Office notice board, Mt. Vernon
+ ZZZ060 A little nonsense, now and then, is relished by the wisest men.
+ ZZZ060                                                          Anonymous
+ ZZZ061 When your crops fail, your chickens have died from fowl pest,
+ ZZZ061 and your neighbour is known to be having congress with your
+ ZZZ061 wife, Vishnu says there is no reason why your house should
+ ZZZ061 not catch fire.                        Old Hindu proverb
+ ZZZ062 We are not alone on the Universe, and do not bear alone the
+ ZZZ062 whole burden of life and what comes of it.  Life is cosmic
+ ZZZ062 event - so far as we know the most complex state of organis-
+ ZZZ062 ation that matter has achieved in our cosmos.  It has come
+ ZZZ062 many times, in many places - places closed off to us by
+ ZZZ062 impenetrable distances. As men we can attempt to understand
+ ZZZ062 it, even somewhat control and guide its local manifestations.
+ ZZZ062 On this planet that is our home, we have every reason to wish
+ ZZZ062 it well. Yet if it should fail, all is not lost. Our kind
+ ZZZ062 will try again elsewhere.      WALD 'The Origin of the Universe'
+ ZZZ063 Life's a bitch! .... And then you die!             GARFIELD
+ ZZZ064 Nice try......but no cigar!                    Jim Stewart
+ ZZZ065 No pain, no gain!                        Squash Player's Manual
+******************************************************************************

@@ -1,0 +1,17 @@
+python reformat_gsas_rfl.py --xtal MYEXP.EXP export.RFL > xtal.dat
+# edit xtal.dat to adjust cell contents
+xtal xtal
+# edit xtal.dat to fix scale factor and enable divide
+rm zap.*
+xtal xtal
+mv zap.aaa divide.aaa
+genseq 1 20 1 > fips_boostr
+mk-squared-dat 60 60 42 8 12 > squared.dat
+find_optimal_boostr
+# best is 6 5
+mk-squared-dat 60 60 42 6 5 > squared.dat
+rm zap.*
+cp divide.aaa zap.aaa
+xtal squared
+grep " NEW" squared.lst # only for verification
+python reformat_gsas_rfl.py --focus MYEXP.EXP export.RFL squared.lst > my.fif

@@ -1,0 +1,27 @@
+#! /bin/csh -f
+
+set tA=/tmp/tmp$$A
+set tB=/tmp/tmp$$B
+set tC=/tmp/tmp$$C
+set tD=/tmp/tmp$$D
+
+onintr CLEAN
+
+stargrep _refl_0001          $1 > $tA
+stargrep _refl_1304 "%10.4f" $1 > $tB
+stargrep _refl_1305 "%10.4f" $1 > $tC
+stargrep _refl_1940 "%6.4f"  $1 > $tD
+
+if (0) then
+  paste -d" " $tA $tB $tC $tD
+else
+  sed 's/$/  \* /' $tB > $tC
+  paste -d" " $tA     $tC $tD
+endif
+
+
+CLEAN:
+
+rm -f $tA $tB $tC $tD
+
+exit 0

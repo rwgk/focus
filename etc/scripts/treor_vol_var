@@ -1,0 +1,34 @@
+#! /bin/csh -f
+
+set noglob
+
+set progn = "$0"
+set progn = "$progn:t"
+
+if ($#argv != 4) then
+  echo ""
+  echo 'usage: '"$progn"' MinVolume MaxVolume StepVolume treor_input_file'
+  echo ""
+  echo 'Example: '"$progn"' 1000 50000 2000 treor.inp'
+  echo ""
+  exit 1
+endif
+
+set MinVolume=$1
+set MaxVolume=$2
+set StepVolume=$3
+set treor_inp="$4"
+
+set     Vol  = $MinVolume
+while ($Vol <= $MaxVolume)
+  echo -n 'VOL='"$Vol"': '
+  set FM=(`sed 's/VOL=[^,]*,/VOL='"$Vol"',/' "$treor_inp" | treor | grep 'M([* 0-9][* 0-9][*0-9])=' | cut -d= -f2 | awk '{ print $1 }' | sort -n | head -3`)
+  if ($#FM == 0) then
+    echo 0
+  else
+    echo "$FM"
+  endif
+  @ Vol += $StepVolume
+end
+
+exit 0

@@ -1,0 +1,22 @@
+setenv FOCUS_ETC ~/focus-etc
+
+set opsys = `uname | tr "[A-Z]" "[a-z]"`
+
+if      ($opsys =~ irix*) then
+  set exedir = exe-irix
+else if ($opsys =~ linux) then
+  set exedir = exe-linux
+else if ($opsys =~ osf1) then
+  set exedir = exe-tru64
+else
+  set exedir = ""
+endif
+
+set path = ($FOCUS_ETC/scripts "$FOCUS_ETC/$exedir" $path)
+
+unset opsys
+unset exedir
+
+setenv COSEQ_DB $FOCUS_ETC/kriber/coseq
+
+#alias gsas /usr/local/gsas/gsas

@@ -1,0 +1,19 @@
+#! /bin/csh -f
+
+set progn = $0
+set progn = $progn:t
+
+if ($#argv < 1) then
+  echo 'usage: '"$progn"' "x,y,z" [file ...]'
+  exit 1
+endif
+
+if ($#argv == 1) then
+  formulc -xtal "$1" .xyz @1 " %8.5f"
+else
+  foreach f ($argv[2-])
+    formulc -xtal "$1" .xyz @1 " %8.5f" < $f
+  end
+endif
+
+exit 0

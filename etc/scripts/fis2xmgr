@@ -1,0 +1,30 @@
+#! /bin/csh -f
+
+set noglob
+
+set progn = "$0"
+set progn = "$progn:t"
+
+if ($#argv == 0) then
+  echo 'usage: '"$progn"' fis_file(s)'
+  exit 1
+endif
+
+foreach f ($*)
+  echo "$f"':'
+
+  set xmgrinp = "$f:r".xmgr
+
+  echo '# generated with fis2xmgr' > "$xmgrinp"
+  echo '@ title "'"$f"'"' >> "$xmgrinp"
+  echo '@ kill s0' >> "$xmgrinp"
+
+  focus -PowderStepscan "$f" | section - stepscan >> "$xmgrinp"
+
+  set ymin=(`grep '@ world ymax' "$xmgrinp" | awk '{ print $4/50 }'`)
+  if ($#ymin == 1) then
+    echo '@ world ymin -'"$ymin" >> "$xmgrinp"
+  endif
+end
+
+exit

@@ -1,0 +1,5 @@
+focus doh.fie 10 > & focus.log
+fo2hist focus.log | cut -c2- > tf
+section focus.log Framework -take=tf > strudat
+mk_dls_with_strudat > sdn
+mk_cdls_with_strudat creab addo > sdnc

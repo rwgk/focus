@@ -1,0 +1,644 @@
+          #
+          # hall symmetry notation
+          #
+          # table of ralf w. grosse-kunstleve, eth, zuerich.
+          #
+          # version june 1995
+          #      updated  september 29 1995
+          #      updated  july       9 1997
+          # last updated  july      24 1998
+          # last updated  june      11 2000
+
+data_notation
+
+loop_
+    _monoclinic_extension   # cf. _symmetry_space_group_id
+    _monoclinic_axis        # cf. it vol. a 1983 sec. 2.16.
+    _monoclinic_setting     # cf. it vol. a 1983 tab. 2.16.1.
+    _monoclinic_cellchoice  # cf. it vol. a 1983 sec. 2.16.(i) & fig. 2.6.4.
+
+     b   b  abc   1
+     b1  b  abc   1
+     b2  b  abc   2
+     b3  b  abc   3
+    -b   b  c-ba  1
+    -b1  b  c-ba  1
+    -b2  b  c-ba  2
+    -b3  b  c-ba  3
+     c   c  abc   1
+     c1  c  abc   1
+     c2  c  abc   2
+     c3  c  abc   3
+    -c   c  ba-c  1
+    -c1  c  ba-c  1
+    -c2  c  ba-c  2
+    -c3  c  ba-c  3
+     a   a  abc   1
+     a1  a  abc   1
+     a2  a  abc   2
+     a3  a  abc   3
+    -a   a  -acb  1
+    -a1  a  -acb  1
+    -a2  a  -acb  2
+    -a3  a  -acb  3
+
+
+loop_
+    _symmetry_space_group_id
+    _symmetry_space_group_name_sch
+    _symmetry_space_group_name_h-m   # recognised iucr cif data names
+    _symmetry_space_group_name_hall  # recognised iucr cif data names
+
+      1        c1^1    P_1          p_1              
+      2        ci^1    P_-1         -p_1             
+      3:b      c2^1    P_1_2_1      p_2y             
+      3:b      c2^1    P_2          p_2y             
+      3:c      c2^1    P_1_1_2      p_2              
+      3:a      c2^1    P_2_1_1      p_2x             
+      4:b      c2^2    P_1_21_1     p_2yb            
+      4:b      c2^2    P_1_21_1     p_2y1 
+      4:b      c2^2    P_21         p_2yb            
+      4:c      c2^2    P_1_1_21     p_2c             
+      4:c      c2^2    P_1_1_21     p_21  
+      4:a      c2^2    P_21_1_1     p_2xa            
+      4:a      c2^2    P_21_1_1     p_2x1 
+      5:b1     c2^3    C_1_2_1      c_2y             
+      5:b1     c2^3    C_2          c_2y             
+      5:b2     c2^3    A_1_2_1      a_2y             
+      5:b3     c2^3    I_1_2_1      i_2y             
+      5:c1     c2^3    A_1_1_2      a_2              
+      5:c2     c2^3    B_1_1_2      b_2              
+      5:c3     c2^3    I_1_1_2      i_2              
+      5:a1     c2^3    B_2_1_1      b_2x             
+      5:a2     c2^3    C_2_1_1      c_2x             
+      5:a3     c2^3    I_2_1_1      i_2x             
+      6:b      cs^1    P_1_m_1      p_-2y            
+      6:b      cs^1    P_m          p_-2y            
+      6:c      cs^1    P_1_1_m      p_-2             
+      6:a      cs^1    P_m_1_1      p_-2x            
+      7:b1     cs^2    P_1_c_1      p_-2yc           
+      7:b1     cs^2    P_c          p_-2yc           
+      7:b2     cs^2    P_1_n_1      p_-2yac          
+      7:b2     cs^2    P_n          p_-2yac          
+      7:b3     cs^2    P_1_a_1      p_-2ya           
+      7:b3     cs^2    P_a          p_-2ya           
+      7:c1     cs^2    P_1_1_a      p_-2a            
+      7:c2     cs^2    P_1_1_n      p_-2ab           
+      7:c3     cs^2    P_1_1_b      p_-2b            
+      7:a1     cs^2    P_b_1_1      p_-2xb           
+      7:a2     cs^2    P_n_1_1      p_-2xbc          
+      7:a3     cs^2    P_c_1_1      p_-2xc           
+      8:b1     cs^3    C_1_m_1      c_-2y            
+      8:b1     cs^3    C_m          c_-2y            
+      8:b2     cs^3    A_1_m_1      a_-2y            
+      8:b3     cs^3    I_1_m_1      i_-2y            
+      8:b3     cs^3    I_m          i_-2y            
+      8:c1     cs^3    A_1_1_m      a_-2             
+      8:c2     cs^3    B_1_1_m      b_-2             
+      8:c3     cs^3    I_1_1_m      i_-2             
+      8:a1     cs^3    B_m_1_1      b_-2x            
+      8:a2     cs^3    C_m_1_1      c_-2x            
+      8:a3     cs^3    I_m_1_1      i_-2x            
+      9:b1     cs^4    C_1_c_1      c_-2yc           
+      9:b1     cs^4    C_c          c_-2yc           
+      9:b2     cs^4    A_1_n_1      a_-2yab        # a_-2yac       
+      9:b3     cs^4    I_1_a_1      i_-2ya           
+      9:-b1    cs^4    A_1_a_1      a_-2ya           
+      9:-b2    cs^4    C_1_n_1      c_-2yac        # c_-2ybc      
+      9:-b3    cs^4    I_1_c_1      i_-2yc           
+      9:c1     cs^4    A_1_1_a      a_-2a            
+      9:c2     cs^4    B_1_1_n      b_-2ab         # b_-2bc      
+      9:c3     cs^4    I_1_1_b      i_-2b            
+      9:-c1    cs^4    B_1_1_b      b_-2b            
+      9:-c2    cs^4    A_1_1_n      a_-2ab         # a_-2ac   
+      9:-c3    cs^4    I_1_1_a      i_-2a            
+      9:a1     cs^4    B_b_1_1      b_-2xb           
+      9:a2     cs^4    C_n_1_1      c_-2xac        # c_-2xbc 
+      9:a3     cs^4    I_c_1_1      i_-2xc           
+      9:-a1    cs^4    C_c_1_1      c_-2xc           
+      9:-a2    cs^4    B_n_1_1      b_-2xab        # b_-2xbc
+      9:-a3    cs^4    I_b_1_1      i_-2xb           
+     10:b      c2h^1   P_1_2/m_1    -p_2y            
+     10:b      c2h^1   P_2/m        -p_2y            
+     10:c      c2h^1   P_1_1_2/m    -p_2             
+     10:a      c2h^1   P_2/m_1_1    -p_2x            
+     11:b      c2h^2   P_1_21/m_1   -p_2yb           
+     11:b      c2h^2   P_1_21/m_1   -p_2y1 
+     11:b      c2h^2   P_21/m       -p_2yb           
+     11:c      c2h^2   P_1_1_21/m   -p_2c            
+     11:c      c2h^2   P_1_1_21/m   -p_21  
+     11:a      c2h^2   P_21/m_1_1   -p_2xa           
+     11:a      c2h^2   P_21/m_1_1   -p_2x1 
+     12:b1     c2h^3   C_1_2/m_1    -c_2y            
+     12:b1     c2h^3   C_2/m        -c_2y            
+     12:b2     c2h^3   A_1_2/m_1    -a_2y            
+     12:b3     c2h^3   I_1_2/m_1    -i_2y            
+     12:b3     c2h^3   I_2/m        -i_2y            
+     12:c1     c2h^3   A_1_1_2/m    -a_2             
+     12:c2     c2h^3   B_1_1_2/m    -b_2             
+     12:c3     c2h^3   I_1_1_2/m    -i_2             
+     12:a1     c2h^3   B_2/m_1_1    -b_2x            
+     12:a2     c2h^3   C_2/m_1_1    -c_2x            
+     12:a3     c2h^3   I_2/m_1_1    -i_2x            
+     13:b1     c2h^4   P_1_2/c_1    -p_2yc           
+     13:b1     c2h^4   P_2/c        -p_2yc           
+     13:b2     c2h^4   P_1_2/n_1    -p_2yac          
+     13:b2     c2h^4   P_2/n        -p_2yac          
+     13:b3     c2h^4   P_1_2/a_1    -p_2ya           
+     13:b3     c2h^4   P_2/a        -p_2ya           
+     13:c1     c2h^4   P_1_1_2/a    -p_2a            
+     13:c2     c2h^4   P_1_1_2/n    -p_2ab           
+     13:c3     c2h^4   P_1_1_2/b    -p_2b            
+     13:a1     c2h^4   P_2/b_1_1    -p_2xb           
+     13:a2     c2h^4   P_2/n_1_1    -p_2xbc          
+     13:a3     c2h^4   P_2/c_1_1    -p_2xc           
+     14:b1     c2h^5   P_1_21/c_1   -p_2ybc          
+     14:b1     c2h^5   P_21/c       -p_2ybc          
+     14:b2     c2h^5   P_1_21/n_1   -p_2yn           
+     14:b2     c2h^5   P_21/n       -p_2yn           
+     14:b3     c2h^5   P_1_21/a_1   -p_2yab          
+     14:b3     c2h^5   P_21/a       -p_2yab          
+     14:c1     c2h^5   P_1_1_21/a   -p_2ac           
+     14:c2     c2h^5   P_1_1_21/n   -p_2n            
+     14:c3     c2h^5   P_1_1_21/b   -p_2bc           
+     14:a1     c2h^5   P_21/b_1_1   -p_2xab          
+     14:a2     c2h^5   P_21/n_1_1   -p_2xn           
+     14:a3     c2h^5   P_21/c_1_1   -p_2xac          
+     15:b1     c2h^6   C_1_2/c_1    -c_2yc           
+     15:b1     c2h^6   C_2/c        -c_2yc           
+     15:b2     c2h^6   A_1_2/n_1    -a_2yab        # -a_2yac    
+     15:b3     c2h^6   I_1_2/a_1    -i_2ya           
+     15:b3     c2h^6   I_2/a        -i_2ya           
+     15:-b1    c2h^6   A_1_2/a_1    -a_2ya           
+     15:-b2    c2h^6   C_1_2/n_1    -c_2yac        # -c_2ybc   
+     15:-b2    c2h^6   C_2/n        -c_2yac        # -c_2ybc  
+     15:-b3    c2h^6   I_1_2/c_1    -i_2yc           
+     15:-b3    c2h^6   I_2/c        -i_2yc           
+     15:c1     c2h^6   A_1_1_2/a    -a_2a            
+     15:c2     c2h^6   B_1_1_2/n    -b_2ab         # -b_2bc  
+     15:c3     c2h^6   I_1_1_2/b    -i_2b            
+     15:-c1    c2h^6   B_1_1_2/b    -b_2b            
+     15:-c2    c2h^6   A_1_1_2/n    -a_2ab         # -a_2ac   
+     15:-c3    c2h^6   I_1_1_2/a    -i_2a            
+     15:a1     c2h^6   B_2/b_1_1    -b_2xb           
+     15:a2     c2h^6   C_2/n_1_1    -c_2xac        # -c_2xbc   
+     15:a3     c2h^6   I_2/c_1_1    -i_2xc           
+     15:-a1    c2h^6   C_2/c_1_1    -c_2xc           
+     15:-a2    c2h^6   B_2/n_1_1    -b_2xab        # -b_2xbc    
+     15:-a3    c2h^6   I_2/b_1_1    -i_2xb           
+     16        d2^1    P_2_2_2      p_2_2            
+     17        d2^2    P_2_2_21     p_2c_2           
+     17        d2^2    P_2_2_21     p_21_2  
+     17:cab    d2^2    P_21_2_2     p_2a_2a          
+     17:bca    d2^2    P_2_21_2     p_2_2b           
+     18        d2^3    P_21_21_2    p_2_2ab          
+     18:cab    d2^3    P_2_21_21    p_2bc_2          
+     18:bca    d2^3    P_21_2_21    p_2ac_2ac        
+     19        d2^4    P_21_21_21   p_2ac_2ab        
+     20        d2^5    C_2_2_21     c_2c_2           
+     20        d2^5    C_2_2_21     c_21_2    
+     20:cab    d2^5    A_21_2_2     a_2a_2a          
+     20:cab    d2^5    A_21_2_2     a_2a_21   
+     20:bca    d2^5    B_2_21_2     b_2_2b           
+     21        d2^6    C_2_2_2      c_2_2            
+     21:cab    d2^6    A_2_2_2      a_2_2            
+     21:bca    d2^6    B_2_2_2      b_2_2            
+     22        d2^7    F_2_2_2      f_2_2            
+     23        d2^8    I_2_2_2      i_2_2            
+     24        d2^9    I_21_21_21   i_2b_2c          
+     25        c2v^1   P_m_m_2      p_2_-2           
+     25:cab    c2v^1   P_2_m_m      p_-2_2           
+     25:bca    c2v^1   P_m_2_m      p_-2_-2          
+     26        c2v^2   P_m_c_21     p_2c_-2          
+     26        c2v^2   P_m_c_21     p_21_-2 
+     26:ba-c   c2v^2   P_c_m_21     p_2c_-2c         
+     26:ba-c   c2v^2   P_c_m_21     p_21_-2c 
+     26:cab    c2v^2   P_21_m_a     p_-2a_2a         
+     26:-cba   c2v^2   P_21_a_m     p_-2_2a          
+     26:bca    c2v^2   P_b_21_m     p_-2_-2b         
+     26:a-cb   c2v^2   P_m_21_b     p_-2b_-2         
+     27        c2v^3   P_c_c_2      p_2_-2c          
+     27:cab    c2v^3   P_2_a_a      p_-2a_2          
+     27:bca    c2v^3   P_b_2_b      p_-2b_-2b        
+     28        c2v^4   P_m_a_2      p_2_-2a          
+     28        c2v^4   P_m_a_2      p_2_-21     
+     28:ba-c   c2v^4   P_b_m_2      p_2_-2b          
+     28:cab    c2v^4   P_2_m_b      p_-2b_2          
+     28:-cba   c2v^4   P_2_c_m      p_-2c_2          
+     28:-cba   c2v^4   P_2_c_m      p_-21_2   
+     28:bca    c2v^4   P_c_2_m      p_-2c_-2c        
+     28:a-cb   c2v^4   P_m_2_a      p_-2a_-2a        
+     29        c2v^5   P_c_a_21     p_2c_-2ac        
+     29:ba-c   c2v^5   P_b_c_21     p_2c_-2b         
+     29:cab    c2v^5   P_21_a_b     p_-2b_2a         
+     29:-cba   c2v^5   P_21_c_a     p_-2ac_2a        
+     29:bca    c2v^5   P_c_21_b     p_-2bc_-2c       
+     29:a-cb   c2v^5   P_b_21_a     p_-2a_-2ab       
+     30        c2v^6   P_n_c_2      p_2_-2bc         
+     30:ba-c   c2v^6   P_c_n_2      p_2_-2ac         
+     30:cab    c2v^6   P_2_n_a      p_-2ac_2         
+     30:-cba   c2v^6   P_2_a_n      p_-2ab_2         
+     30:bca    c2v^6   P_b_2_n      p_-2ab_-2ab      
+     30:a-cb   c2v^6   P_n_2_b      p_-2bc_-2bc      
+     31        c2v^7   P_m_n_21     p_2ac_-2         
+     31:ba-c   c2v^7   P_n_m_21     p_2bc_-2bc       
+     31:cab    c2v^7   P_21_m_n     p_-2ab_2ab       
+     31:-cba   c2v^7   P_21_n_m     p_-2_2ac         
+     31:bca    c2v^7   P_n_21_m     p_-2_-2bc        
+     31:a-cb   c2v^7   P_m_21_n     p_-2ab_-2        
+     32        c2v^8   P_b_a_2      p_2_-2ab         
+     32:cab    c2v^8   P_2_c_b      p_-2bc_2         
+     32:bca    c2v^8   P_c_2_a      p_-2ac_-2ac      
+     33        c2v^9   P_n_a_21     p_2c_-2n         
+     33        c2v^9   P_n_a_21     p_21_-2n  
+     33:ba-c   c2v^9   P_b_n_21     p_2c_-2ab        
+     33:ba-c   c2v^9   P_b_n_21     p_21_-2ab  
+     33:cab    c2v^9   P_21_n_b     p_-2bc_2a        
+     33:cab    c2v^9   P_21_n_b     p_-2bc_21   
+     33:-cba   c2v^9   P_21_c_n     p_-2n_2a         
+     33:-cba   c2v^9   P_21_c_n     p_-2n_21     
+     33:bca    c2v^9   P_c_21_n     p_-2n_-2ac       
+     33:a-cb   c2v^9   P_n_21_a     p_-2ac_-2n       
+     34        c2v^10  P_n_n_2      p_2_-2n          
+     34:cab    c2v^10  P_2_n_n      p_-2n_2          
+     34:bca    c2v^10  P_n_2_n      p_-2n_-2n        
+     35        c2v^11  C_m_m_2      c_2_-2           
+     35:cab    c2v^11  A_2_m_m      a_-2_2           
+     35:bca    c2v^11  B_m_2_m      b_-2_-2          
+     36        c2v^12  C_m_c_21     c_2c_-2          
+     36        c2v^12  C_m_c_21     c_21_-2
+     36:ba-c   c2v^12  C_c_m_21     c_2c_-2c         
+     36:ba-c   c2v^12  C_c_m_21     c_21_-2c
+     36:cab    c2v^12  A_21_m_a     a_-2a_2a         
+     36:cab    c2v^12  A_21_m_a     a_-2a_21 
+     36:-cba   c2v^12  A_21_a_m     a_-2_2a          
+     36:-cba   c2v^12  A_21_a_m     a_-2_21   
+     36:bca    c2v^12  B_b_21_m     b_-2_-2b         
+     36:a-cb   c2v^12  B_m_21_b     b_-2b_-2         
+     37        c2v^13  C_c_c_2      c_2_-2c          
+     37:cab    c2v^13  A_2_a_a      a_-2a_2          
+     37:bca    c2v^13  B_b_2_b      b_-2b_-2b        
+     38        c2v^14  A_m_m_2      a_2_-2           
+     38:ba-c   c2v^14  B_m_m_2      b_2_-2           
+     38:cab    c2v^14  B_2_m_m      b_-2_2           
+     38:-cba   c2v^14  C_2_m_m      c_-2_2           
+     38:bca    c2v^14  C_m_2_m      c_-2_-2          
+     38:a-cb   c2v^14  A_m_2_m      a_-2_-2          
+     39        c2v^15  A_b_m_2      a_2_-2b        # a_2_-2c < Jun2000         
+     39:ba-c   c2v^15  B_m_a_2      b_2_-2a        # b_2_-2c   
+     39:cab    c2v^15  B_2_c_m      b_-2a_2        # b_-2c_2  
+     39:-cba   c2v^15  C_2_m_b      c_-2a_2        # c_-2b_2 
+     39:bca    c2v^15  C_m_2_a      c_-2a_-2a      # c_-2b_-2b  
+     39:a-cb   c2v^15  A_c_2_m      a_-2b_-2b      # a_-2c_-2c < Jun2000       
+     40        c2v^16  A_m_a_2      a_2_-2a          
+     40:ba-c   c2v^16  B_b_m_2      b_2_-2b          
+     40:cab    c2v^16  B_2_m_b      b_-2b_2          
+     40:-cba   c2v^16  C_2_c_m      c_-2c_2          
+     40:bca    c2v^16  C_c_2_m      c_-2c_-2c        
+     40:a-cb   c2v^16  A_m_2_a      a_-2a_-2a        
+     41        c2v^17  A_b_a_2      a_2_-2ab       # a_2_-2ac      
+     41:ba-c   c2v^17  B_b_a_2      b_2_-2ab       # b_2_-2bc
+     41:cab    c2v^17  B_2_c_b      b_-2ab_2       # b_-2bc_2 
+     41:-cba   c2v^17  C_2_c_b      c_-2ac_2       # c_-2bc_2  
+     41:bca    c2v^17  C_c_2_a      c_-2ac_-2ac    # c_-2bc_-2bc
+     41:a-cb   c2v^17  A_c_2_a      a_-2ab_-2ab    # a_-2ac_-2ac 
+     42        c2v^18  F_m_m_2      f_2_-2           
+     42:cab    c2v^18  F_2_m_m      f_-2_2           
+     42:bca    c2v^18  F_m_2_m      f_-2_-2          
+     43        c2v^19  F_d_d_2      f_2_-2d          
+     43:cab    c2v^19  F_2_d_d      f_-2d_2          
+     43:bca    c2v^19  F_d_2_d      f_-2d_-2d        
+     44        c2v^20  I_m_m_2      i_2_-2           
+     44:cab    c2v^20  I_2_m_m      i_-2_2           
+     44:bca    c2v^20  I_m_2_m      i_-2_-2          
+     45        c2v^21  I_b_a_2      i_2_-2c          
+     45:cab    c2v^21  I_2_c_b      i_-2a_2          
+     45:bca    c2v^21  I_c_2_a      i_-2b_-2b        
+     46        c2v^22  I_m_a_2      i_2_-2a          
+     46:ba-c   c2v^22  I_b_m_2      i_2_-2b          
+     46:cab    c2v^22  I_2_m_b      i_-2b_2          
+     46:-cba   c2v^22  I_2_c_m      i_-2c_2          
+     46:bca    c2v^22  I_c_2_m      i_-2c_-2c        
+     46:a-cb   c2v^22  I_m_2_a      i_-2a_-2a        
+     47        d2h^1   P_m_m_m      -p_2_2           
+     48:1      d2h^2   P_n_n_n:1    p_2_2_-1n        
+     48:2      d2h^2   P_n_n_n:2    -p_2ab_2bc       
+     49        d2h^3   P_c_c_m      -p_2_2c          
+     49:cab    d2h^3   P_m_a_a      -p_2a_2          
+     49:bca    d2h^3   P_b_m_b      -p_2b_2b         
+     50:1      d2h^4   P_b_a_n:1    p_2_2_-1ab       
+     50:2      d2h^4   P_b_a_n:2    -p_2ab_2b        
+     50:1cab   d2h^4   P_n_c_b:1    p_2_2_-1bc       
+     50:2cab   d2h^4   P_n_c_b:2    -p_2b_2bc        
+     50:1bca   d2h^4   P_c_n_a:1    p_2_2_-1ac       
+     50:2bca   d2h^4   P_c_n_a:2    -p_2a_2c         
+     51        d2h^5   P_m_m_a      -p_2a_2a         
+     51:ba-c   d2h^5   P_m_m_b      -p_2b_2          
+     51:cab    d2h^5   P_b_m_m      -p_2_2b          
+     51:-cba   d2h^5   P_c_m_m      -p_2c_2c         
+     51:bca    d2h^5   P_m_c_m      -p_2c_2          
+     51:a-cb   d2h^5   P_m_a_m      -p_2_2a          
+     52        d2h^6   P_n_n_a      -p_2a_2bc        
+     52:ba-c   d2h^6   P_n_n_b      -p_2b_2n         
+     52:cab    d2h^6   P_b_n_n      -p_2n_2b         
+     52:-cba   d2h^6   P_c_n_n      -p_2ab_2c        
+     52:bca    d2h^6   P_n_c_n      -p_2ab_2n        
+     52:a-cb   d2h^6   P_n_a_n      -p_2n_2bc        
+     53        d2h^7   P_m_n_a      -p_2ac_2         
+     53:ba-c   d2h^7   P_n_m_b      -p_2bc_2bc       
+     53:cab    d2h^7   P_b_m_n      -p_2ab_2ab       
+     53:-cba   d2h^7   P_c_n_m      -p_2_2ac         
+     53:bca    d2h^7   P_n_c_m      -p_2_2bc         
+     53:a-cb   d2h^7   P_m_a_n      -p_2ab_2         
+     54        d2h^8   P_c_c_a      -p_2a_2ac        
+     54:ba-c   d2h^8   P_c_c_b      -p_2b_2c         
+     54:cab    d2h^8   P_b_a_a      -p_2a_2b         
+     54:-cba   d2h^8   P_c_a_a      -p_2ac_2c        
+     54:bca    d2h^8   P_b_c_b      -p_2bc_2b        
+     54:a-cb   d2h^8   P_b_a_b      -p_2b_2ab        
+     55        d2h^9   P_b_a_m      -p_2_2ab         
+     55:cab    d2h^9   P_m_c_b      -p_2bc_2         
+     55:bca    d2h^9   P_c_m_a      -p_2ac_2ac       
+     56        d2h^10  P_c_c_n      -p_2ab_2ac       
+     56:cab    d2h^10  P_n_a_a      -p_2ac_2bc       
+     56:bca    d2h^10  P_b_n_b      -p_2bc_2ab       
+     57        d2h^11  P_b_c_m      -p_2c_2b         
+     57:ba-c   d2h^11  P_c_a_m      -p_2c_2ac        
+     57:cab    d2h^11  P_m_c_a      -p_2ac_2a        
+     57:-cba   d2h^11  P_m_a_b      -p_2b_2a         
+     57:bca    d2h^11  P_b_m_a      -p_2a_2ab        
+     57:a-cb   d2h^11  P_c_m_b      -p_2bc_2c        
+     58        d2h^12  P_n_n_m      -p_2_2n          
+     58:cab    d2h^12  P_m_n_n      -p_2n_2          
+     58:bca    d2h^12  P_n_m_n      -p_2n_2n         
+     59:1      d2h^13  P_m_m_n:1    p_2_2ab_-1ab     
+     59:2      d2h^13  P_m_m_n:2    -p_2ab_2a        
+     59:1cab   d2h^13  P_n_m_m:1    p_2bc_2_-1bc     
+     59:2cab   d2h^13  P_n_m_m:2    -p_2c_2bc        
+     59:1bca   d2h^13  P_m_n_m:1    p_2ac_2ac_-1ac   
+     59:2bca   d2h^13  P_m_n_m:2    -p_2c_2a         
+     60        d2h^14  P_b_c_n      -p_2n_2ab        
+     60:ba-c   d2h^14  P_c_a_n      -p_2n_2c         
+     60:cab    d2h^14  P_n_c_a      -p_2a_2n         
+     60:-cba   d2h^14  P_n_a_b      -p_2bc_2n        
+     60:bca    d2h^14  P_b_n_a      -p_2ac_2b        
+     60:a-cb   d2h^14  P_c_n_b      -p_2b_2ac        
+     61        d2h^15  P_b_c_a      -p_2ac_2ab       
+     61:ba-c   d2h^15  P_c_a_b      -p_2bc_2ac       
+     62        d2h^16  P_n_m_a      -p_2ac_2n        
+     62:ba-c   d2h^16  P_m_n_b      -p_2bc_2a        
+     62:cab    d2h^16  P_b_n_m      -p_2c_2ab        
+     62:-cba   d2h^16  P_c_m_n      -p_2n_2ac        
+     62:bca    d2h^16  P_m_c_n      -p_2n_2a         
+     62:a-cb   d2h^16  P_n_a_m      -p_2c_2n         
+     63        d2h^17  C_m_c_m      -c_2c_2          
+     63:ba-c   d2h^17  C_c_m_m      -c_2c_2c         
+     63:cab    d2h^17  A_m_m_a      -a_2a_2a         
+     63:-cba   d2h^17  A_m_a_m      -a_2_2a          
+     63:bca    d2h^17  B_b_m_m      -b_2_2b          
+     63:a-cb   d2h^17  B_m_m_b      -b_2b_2          
+     64        d2h^18  C_m_c_a      -c_2ac_2       # -c_2bc_2     
+     64:ba-c   d2h^18  C_c_m_b      -c_2ac_2ac     # -c_2bc_2bc  
+     64:cab    d2h^18  A_b_m_a      -a_2ab_2ab     # -a_2ac_2ac 
+     64:-cba   d2h^18  A_c_a_m      -a_2_2ab       # -a_2_2ac  
+     64:bca    d2h^18  B_b_c_m      -b_2_2ab       # -b_2_2bc 
+     64:a-cb   d2h^18  B_m_a_b      -b_2ab_2       # -b_2bc_2
+     65        d2h^19  C_m_m_m      -c_2_2           
+     65:cab    d2h^19  A_m_m_m      -a_2_2           
+     65:bca    d2h^19  B_m_m_m      -b_2_2           
+     66        d2h^20  C_c_c_m      -c_2_2c          
+     66:cab    d2h^20  A_m_a_a      -a_2a_2          
+     66:bca    d2h^20  B_b_m_b      -b_2b_2b         
+     67        d2h^21  C_m_m_a      -c_2a_2        # -c_2b_2     
+     67:ba-c   d2h^21  C_m_m_b      -c_2a_2a       # -c_2b_2b   
+     67:cab    d2h^21  A_b_m_m      -a_2b_2b       # -a_2c_2c  
+     67:-cba   d2h^21  A_c_m_m      -a_2_2b        # -a_2_2c  < Jun2000        
+     67:bca    d2h^21  B_m_c_m      -b_2_2a        # -b_2_2c  
+     67:a-cb   d2h^21  B_m_a_m      -b_2a_2        # -b_2c_2 
+     68:1      d2h^22  C_c_c_a:1    c_2_2_-1ac     # c_2_2_-1bc      
+     68:2      d2h^22  C_c_c_a:2    -c_2a_2ac      # -c_2b_2bc      
+     68:1ba-c  d2h^22  C_c_c_b:1    c_2_2_-1ac     # c_2_2_-1bc    
+     68:2ba-c  d2h^22  C_c_c_b:2    -c_2a_2c       # -c_2b_2c     
+     68:1cab   d2h^22  A_b_a_a:1    a_2_2_-1ab     # a_2_2_-1ac  
+     68:2cab   d2h^22  A_b_a_a:2    -a_2a_2b       # -a_2a_2c < Jun2000        
+     68:1-cba  d2h^22  A_c_a_a:1    a_2_2_-1ab     # a_2_2_-1ac 
+     68:2-cba  d2h^22  A_c_a_a:2    -a_2ab_2b      # -a_2ac_2c 
+     68:1bca   d2h^22  B_b_c_b:1    b_2_2_-1ab     # b_2_2_-1bc     
+     68:2bca   d2h^22  B_b_c_b:2    -b_2ab_2b      # -b_2bc_2b     
+     68:1a-cb  d2h^22  B_b_a_b:1    b_2_2_-1ab     # b_2_2_-1bc   
+     68:2a-cb  d2h^22  B_b_a_b:2    -b_2b_2ab      # -b_2b_2bc   
+     69        d2h^23  F_m_m_m      -f_2_2           
+     70:1      d2h^24  F_d_d_d:1    f_2_2_-1d        
+     70:2      d2h^24  F_d_d_d:2    -f_2uv_2vw       
+     71        d2h^25  I_m_m_m      -i_2_2           
+     72        d2h^26  I_b_a_m      -i_2_2c          
+     72:cab    d2h^26  I_m_c_b      -i_2a_2          
+     72:bca    d2h^26  I_c_m_a      -i_2b_2b         
+     73        d2h^27  I_b_c_a      -i_2b_2c         
+     73:ba-c   d2h^27  I_c_a_b      -i_2a_2b         
+     74        d2h^28  I_m_m_a      -i_2b_2          
+     74:ba-c   d2h^28  I_m_m_b      -i_2a_2a         
+     74:cab    d2h^28  I_b_m_m      -i_2c_2c         
+     74:-cba   d2h^28  I_c_m_m      -i_2_2b          
+     74:bca    d2h^28  I_m_c_m      -i_2_2a          
+     74:a-cb   d2h^28  I_m_a_m      -i_2c_2          
+     75        c4^1    P_4          p_4              
+     76        c4^2    P_41         p_4w             
+     76        c4^2    P_41         p_41 
+     77        c4^3    P_42         p_4c             
+     77        c4^3    P_42         p_42  
+     78        c4^4    P_43         p_4cw            
+     78        c4^4    P_43         p_43    
+     79        c4^5    I_4          i_4              
+     80        c4^6    I_41         i_4bw            
+     81        s4^1    P_-4         p_-4             
+     82        s4^2    I_-4         i_-4             
+     83        c4h^1   P_4/m        -p_4             
+     84        c4h^2   P_42/m       -p_4c            
+     84        c4h^2   P_42/m       -p_42      
+     85:1      c4h^3   P_4/n:1      p_4ab_-1ab       
+     85:2      c4h^3   P_4/n:2      -p_4a            
+     86:1      c4h^4   P_42/n:1     p_4n_-1n         
+     86:2      c4h^4   P_42/n:2     -p_4bc           
+     87        c4h^5   I_4/m        -i_4             
+     88:1      c4h^6   I_41/a:1     i_4bw_-1bw       
+     88:2      c4h^6   I_41/a:2     -i_4ad           
+     89        d4^1    P_4_2_2      p_4_2            
+     90        d4^2    P_4_21_2     p_4ab_2ab        
+     91        d4^3    P_41_2_2     p_4w_2c          
+     91        d4^3    P_41_2_2     p_41_2c 
+     92        d4^4    P_41_21_2    p_4abw_2nw       
+     93        d4^5    P_42_2_2     p_4c_2           
+     93        d4^5    P_42_2_2     p_42_2   
+     94        d4^6    P_42_21_2    p_4n_2n          
+     95        d4^7    P_43_2_2     p_4cw_2c         
+     95        d4^7    P_43_2_2     p_43_2c   
+     96        d4^8    P_43_21_2    p_4nw_2abw       
+     97        d4^9    I_4_2_2      i_4_2            
+     98        d4^10   I_41_2_2     i_4bw_2bw        
+     99        c4v^1   P_4_m_m      p_4_-2           
+    100        c4v^2   P_4_b_m      p_4_-2ab         
+    101        c4v^3   P_42_c_m     p_4c_-2c         
+    101        c4v^3   P_42_c_m     p_42_-2c    
+    102        c4v^4   P_42_n_m     p_4n_-2n         
+    103        c4v^5   P_4_c_c      p_4_-2c          
+    104        c4v^6   P_4_n_c      p_4_-2n          
+    105        c4v^7   P_42_m_c     p_4c_-2          
+    105        c4v^7   P_42_m_c     p_42_-2      
+    106        c4v^8   P_42_b_c     p_4c_-2ab        
+    106        c4v^8   P_42_b_c     p_42_-2ab   
+    107        c4v^9   I_4_m_m      i_4_-2           
+    108        c4v^10  I_4_c_m      i_4_-2c          
+    109        c4v^11  I_41_m_d     i_4bw_-2         
+    110        c4v^12  I_41_c_d     i_4bw_-2c        
+    111        d2d^1   P_-4_2_m     p_-4_2           
+    112        d2d^2   P_-4_2_c     p_-4_2c          
+    113        d2d^3   P_-4_21_m    p_-4_2ab         
+    114        d2d^4   P_-4_21_c    p_-4_2n          
+    115        d2d^5   P_-4_m_2     p_-4_-2          
+    116        d2d^6   P_-4_c_2     p_-4_-2c         
+    117        d2d^7   P_-4_b_2     p_-4_-2ab        
+    118        d2d^8   P_-4_n_2     p_-4_-2n         
+    119        d2d^9   I_-4_m_2     i_-4_-2          
+    120        d2d^10  I_-4_c_2     i_-4_-2c         
+    121        d2d^11  I_-4_2_m     i_-4_2           
+    122        d2d^12  I_-4_2_d     i_-4_2bw         
+    123        d4h^1   P_4/m_m_m    -p_4_2           
+    124        d4h^2   P_4/m_c_c    -p_4_2c          
+    125:1      d4h^3   P_4/n_b_m:1  p_4_2_-1ab       
+    125:2      d4h^3   P_4/n_b_m:2  -p_4a_2b         
+    126:1      d4h^4   P_4/n_n_c:1  p_4_2_-1n        
+    126:2      d4h^4   P_4/n_n_c:2  -p_4a_2bc        
+    127        d4h^5   P_4/m_b_m    -p_4_2ab         
+    128        d4h^6   P_4/m_n_c    -p_4_2n          
+    129:1      d4h^7   P_4/n_m_m:1  p_4ab_2ab_-1ab   
+    129:2      d4h^7   P_4/n_m_m:2  -p_4a_2a         
+    130:1      d4h^8   P_4/n_c_c:1  p_4ab_2n_-1ab    
+    130:2      d4h^8   P_4/n_c_c:2  -p_4a_2ac        
+    131        d4h^9   P_42/m_m_c   -p_4c_2          
+    132        d4h^10  P_42/m_c_m   -p_4c_2c         
+    133:1      d4h^11  P_42/n_b_c:1 p_4n_2c_-1n      
+    133:2      d4h^11  P_42/n_b_c:2 -p_4ac_2b        
+    134:1      d4h^12  P_42/n_n_m:1 p_4n_2_-1n       
+    134:2      d4h^12  P_42/n_n_m:2 -p_4ac_2bc       
+    135        d4h^13  P_42/m_b_c   -p_4c_2ab        
+    135        d4h^13  P_42/m_b_c   -p_42_2ab    
+    136        d4h^14  P_42/m_n_m   -p_4n_2n         
+    137:1      d4h^15  P_42/n_m_c:1 p_4n_2n_-1n      
+    137:2      d4h^15  P_42/n_m_c:2 -p_4ac_2a        
+    138:1      d4h^16  P_42/n_c_m:1 p_4n_2ab_-1n     
+    138:2      d4h^16  P_42/n_c_m:2 -p_4ac_2ac       
+    139        d4h^17  I_4/m_m_m    -i_4_2           
+    140        d4h^18  I_4/m_c_m    -i_4_2c          
+    141:1      d4h^19  I_41/a_m_d:1 i_4bw_2bw_-1bw   
+    141:2      d4h^19  I_41/a_m_d:2 -i_4bd_2         
+    142:1      d4h^20  I_41/a_c_d:1 i_4bw_2aw_-1bw   
+    142:2      d4h^20  I_41/a_c_d:2 -i_4bd_2c        
+    143        c3^1    P_3          p_3              
+    144        c3^2    P_31         p_31             
+    145        c3^3    P_32         p_32             
+    146:h      c3^4    R_3:h        r_3              
+    146:r      c3^4    R_3:r        p_3*             
+    147        c3i^1   P_-3         -p_3             
+    148:h      c3i^2   R_-3:h       -r_3             
+    148:r      c3i^2   R_-3:r       -p_3*            
+    149        d3^1    P_3_1_2      p_3_2            
+    150        d3^2    P_3_2_1      p_3_2"           
+    151        d3^3    P_31_1_2     p_31_2_(0_0_4) # p_31_2c_(0_0_1)
+    152        d3^4    P_31_2_1     p_31_2"          
+    153        d3^5    P_32_1_2     p_32_2_(0_0_2) # p_32_2c_(0_0_-1)
+    154        d3^6    P_32_2_1     p_32_2"          
+    155:h      d3^7    R_3_2:h      r_3_2"           
+    155:r      d3^7    R_3_2:r      p_3*_2           
+    156        c3v^1   P_3_m_1      p_3_-2"          
+    157        c3v^2   P_3_1_m      p_3_-2           
+    158        c3v^3   P_3_c_1      p_3_-2"c         
+    159        c3v^4   P_3_1_c      p_3_-2c          
+    160:h      c3v^5   R_3_m:h      r_3_-2"          
+    160:r      c3v^5   R_3_m:r      p_3*_-2          
+    161:h      c3v^6   R_3_c:h      r_3_-2"c         
+    161:r      c3v^6   R_3_c:r      p_3*_-2n         
+    162        d3d^1   P_-3_1_m     -p_3_2           
+    163        d3d^2   P_-3_1_c     -p_3_2c          
+    164        d3d^3   P_-3_m_1     -p_3_2"          
+    165        d3d^4   P_-3_c_1     -p_3_2"c         
+    166:h      d3d^5   R_-3_m:h     -r_3_2"          
+    166:r      d3d^5   R_-3_m:r     -p_3*_2          
+    167:h      d3d^6   R_-3_c:h     -r_3_2"c         
+    167:r      d3d^6   R_-3_c:r     -p_3*_2n         
+    168        c6^1    P_6          p_6              
+    169        c6^2    P_61         p_61             
+    170        c6^3    P_65         p_65             
+    171        c6^4    P_62         p_62             
+    172        c6^5    P_64         p_64             
+    173        c6^6    P_63         p_6c             
+    173        c6^6    P_63         p_63   
+    174        c3h^1   P_-6         p_-6             
+    175        c6h^1   P_6/m        -p_6             
+    176        c6h^2   P_63/m       -p_6c            
+    176        c6h^2   P_63/m       -p_63   
+    177        d6^1    P_6_2_2      p_6_2            
+    178        d6^2    P_61_2_2     p_61_2_(0_0_5) # p_61_2_(0_0_-1)
+    179        d6^3    P_65_2_2     p_65_2_(0_0_1)   
+    180        d6^4    P_62_2_2     p_62_2_(0_0_4) # p_62_2c_(0_0_1)
+    181        d6^5    P_64_2_2     p_64_2_(0_0_2) # p_64_2c_(0_0_-1)
+    182        d6^6    P_63_2_2     p_6c_2c          
+    182        d6^6    P_63_2_2     p_63_2c       
+    183        c6v^1   P_6_m_m      p_6_-2           
+    184        c6v^2   P_6_c_c      p_6_-2c          
+    185        c6v^3   P_63_c_m     p_6c_-2          
+    185        c6v^3   P_63_c_m     p_63_-2  
+    186        c6v^4   P_63_m_c     p_6c_-2c         
+    186        c6v^4   P_63_m_c     p_63_-2c  
+    187        d3h^1   P_-6_m_2     p_-6_2           
+    188        d3h^2   P_-6_c_2     p_-6c_2          
+    189        d3h^3   P_-6_2_m     p_-6_-2          
+    190        d3h^4   P_-6_2_c     p_-6c_-2c        
+    191        d6h^1   P_6/m_m_m    -p_6_2           
+    192        d6h^2   P_6/m_c_c    -p_6_2c          
+    193        d6h^3   P_63/m_c_m   -p_6c_2          
+    193        d6h^3   P_63/m_c_m   -p_63_2    
+    194        d6h^4   P_63/m_m_c   -p_6c_2c         
+    194        d6h^4   P_63/m_m_c   -p_63_2c    
+    195        t^1     P_2_3        p_2_2_3          
+    196        t^2     F_2_3        f_2_2_3          
+    197        t^3     I_2_3        i_2_2_3          
+    198        t^4     P_21_3       p_2ac_2ab_3      
+    199        t^5     I_21_3       i_2b_2c_3        
+    200        th^1    P_m_-3       -p_2_2_3         
+    201:1      th^2    P_n_-3:1     p_2_2_3_-1n      
+    201:2      th^2    P_n_-3:2     -p_2ab_2bc_3     
+    202        th^3    F_m_-3       -f_2_2_3         
+    203:1      th^4    F_d_-3:1     f_2_2_3_-1d      
+    203:2      th^4    F_d_-3:2     -f_2uv_2vw_3     
+    204        th^5    I_m_-3       -i_2_2_3         
+    205        th^6    P_a_-3       -p_2ac_2ab_3     
+    206        th^7    I_a_-3       -i_2b_2c_3       
+    207        o^1     P_4_3_2      p_4_2_3          
+    208        o^2     P_42_3_2     p_4n_2_3         
+    209        o^3     F_4_3_2      f_4_2_3          
+    210        o^4     F_41_3_2     f_4d_2_3         
+    211        o^5     I_4_3_2      i_4_2_3          
+    212        o^6     P_43_3_2     p_4acd_2ab_3     
+    213        o^7     P_41_3_2     p_4bd_2ab_3      
+    214        o^8     I_41_3_2     i_4bd_2c_3       
+    215        td^1    P_-4_3_m     p_-4_2_3         
+    216        td^2    F_-4_3_m     f_-4_2_3         
+    217        td^3    I_-4_3_m     i_-4_2_3         
+    218        td^4    P_-4_3_n     p_-4n_2_3        
+    219        td^5    F_-4_3_c     f_-4a_2_3      # f_-4c_2_3    
+    220        td^6    I_-4_3_d     i_-4bd_2c_3      
+    221        oh^1    P_m_-3_m     -p_4_2_3         
+    222:1      oh^2    P_n_-3_n:1   p_4_2_3_-1n      
+    222:2      oh^2    P_n_-3_n:2   -p_4a_2bc_3      
+    223        oh^3    P_m_-3_n     -p_4n_2_3        
+    224:1      oh^4    P_n_-3_m:1   p_4n_2_3_-1n     
+    224:2      oh^4    P_n_-3_m:2   -p_4bc_2bc_3     
+    225        oh^5    F_m_-3_m     -f_4_2_3         
+    226        oh^6    F_m_-3_c     -f_4a_2_3      # -f_4c_2_3   
+    227:1      oh^7    F_d_-3_m:1   f_4d_2_3_-1d     
+    227:2      oh^7    F_d_-3_m:2   -f_4vw_2vw_3     
+    228:1      oh^8    F_d_-3_c:1   f_4d_2_3_-1ad  # f_4d_2_3_-1cd  
+    228:2      oh^8    F_d_-3_c:2   -f_4ud_2vw_3   # -f_4cvw_2vw_3     
+    229        oh^9    I_m_-3_m     -i_4_2_3        
+    230        oh^10   I_a_-3_d     -i_4bd_2c_3      

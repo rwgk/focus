@@ -1,0 +1,12 @@
+dls.x: dls.o clock.o clock_linux.o
+	f77 -static -O -o $@ dls.o clock.o clock_linux.o
+#	strip dls.x
+
+.f.o:
+	f77 -O -c $*.f
+
+clock_linux.o: clock_linux.c
+	cc -O -ansi -c clock_linux.c
+
+clean:
+	rm -f dls.x dls.o clock.o clock_linux.o

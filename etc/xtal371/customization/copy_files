@@ -1,0 +1,16 @@
+#!/bin/csh -fe
+if (! -d bin || ! -d source || ! -f source/aa.r) then
+  echo "Error: Must be in top level distribution directory."
+  exit 1
+endif
+set custdir="$0"
+set custdir="$custdir:h"
+if (! -d "$custdir" || ! -f "$custdir"/aa.r) then
+  echo "Error: Invoke script with absolute path name."
+  exit 1
+endif
+set echo
+cp "$custdir"/xtal bin
+cp "$custdir"/aa.r source
+cp "$custdir"/di.r source
+cp "$custdir"/Makefile source

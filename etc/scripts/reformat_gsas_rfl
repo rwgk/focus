@@ -1,0 +1,3 @@
+#!/bin/csh -f
+set noglob
+python "$FOCUS_ETC"/gsas_tools/reformat_gsas_rfl.py $*
