@@ -4,6 +4,8 @@ edit cshrc:
 < else if ($opsys =~ osf1) then
 <   set exedir = exe-tru64
 
+# find . -name CVS -exec rm -rf {} \;
+# rm .cvsignore
 # rm package_notes
 # rm -rf exe-tru64
 # rm dls76/makefile.tru64
