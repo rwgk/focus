@@ -1,4 +1,4 @@
-#define VersionID "01.92.0"
+#define VersionID "01.92.1"
 
 #ifndef A_AppGlobal__
 #define A_AppGlobal__

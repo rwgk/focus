@@ -2072,7 +2072,7 @@ void SiteFrame(void)
 
     nCeD_PeakList = NeD_PeakList;
 
-    FwSearch(0);
+    FwSearch(F_ShowLargestFwFragment);
   }
 
   AppFree(NextPeakMx, NeD_PeakList * NeD_PeakList);
