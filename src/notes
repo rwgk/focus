@@ -1,0 +1,27 @@
+!!! DO NOT USE libfftpack41.a with Linux !!!
+
+source cshrc
+
+Compiling libfftpack41.a:
+  cd /net/cci/rwgk/soo/fftpack41/markup
+  ../tools/s-single+double
+  make FFLAGS=-O (or "-O -n32 -mips4")
+  mv libfftpack.a /net/cci/rwgk/focus-src/local/*/lib/libfftpack41.a
+  make clean
+  rm *.f
+
+Compiling libsginfo.a:
+  cd sginfo
+  makeO libsginfo
+  mv libsginfo.a /net/cci/rwgk/focus-src/local/*/lib
+  make clean
+
+Compiling fftw:
+  irix: setenv CFLAGS "-O -n32 -mips3"
+  cd fftw-2.1.3
+  ./configure --prefix=/net/cci/rwgk/focus-src/local/* --enable-float
+  make
+  make install
+
+
+2001-10-26: IRIX executable replaced with fftw only.

@@ -1,0 +1,3 @@
+#! /bin/csh -f
+tail +5 ~cns/xtallib/spacegroup.lib | grep -v 'symmetry=' | sed 's/ //g' | grep -v '^$' | tr "[A-Z]" "[a-z]" | grep -v 'display{spacegroup' | grep -v '{\*\*\*\*}' > z1
+sginfo -CNSlib | grep -v 'symmetry=' | sed 's/ //g' | grep -v '^$' | tr "[A-Z]" "[a-z]" > z2

@@ -1,0 +1,20 @@
+Title B2 GridSearch 
+SpaceGroup  P n m a
+UnitCell  13.1731 7.1256 12.6777
+
+FwSearchMethod  FwTracking
+MinNodeDistance  2.5
+MaxNodeDistance  3.7
+MinSymNodes  0
+MaxSymNodes  * 
+NodeType  4  *  -6 -3 -1 4 6
+MinLoopSize  3
+MaxLoopSize  24
+EvenLoopSizesOnly Off
+Check3DimConnectivity  On
+IdealT_NodeDistance  3.1
+CheckTetrahedralGeometry  Normal
+
+Grid_xyz 20 16 20 
+
+End

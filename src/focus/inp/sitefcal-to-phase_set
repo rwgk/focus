@@ -1,0 +1,7 @@
+#! /bin/csh -f
+
+echo '>Begin phase_set'
+section $1 SiteFcal | tail +3 | cut -c-12,24-33 | formulc 'h;k;l;p/360' hklp " %3.0f" " %3.0f" " %3.0f" "  %.6g"
+echo '>End phase_set'
+
+exit 0

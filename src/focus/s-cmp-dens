@@ -1,0 +1,9 @@
+#! /bin/csh -f
+
+section "$1" rrDensity > zrr
+set nl = `wc -l < zrr`
+section "$1" Density | head -$nl > zcr
+
+diff zcr zrr
+
+exit 0

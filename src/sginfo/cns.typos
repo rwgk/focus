@@ -1,0 +1,24 @@
+86:
+    < evaluate($crysys=tetragoanl)
+    ---
+    > evaluate($crysys=tetragonal)
+
+166:
+    1/3X-Y,2/3+X,2/3-Z
+
+183:
+    < evaluate($crysys=hexagoanl)                                                                 
+    ---                                                                                           
+    > evaluate($crysys=hexagonal)                                                                 
+
+216:
+    < elseif($sg="f4-3m")then
+    ---
+    > elseif($sg="f-43m")then
+216:
+    < evaluate($sgname="f4-3m")
+    ---
+    > evaluate($sgname="f-43m")
+
+222:
+    Symops of 221

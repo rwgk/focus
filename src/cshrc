@@ -1,0 +1,22 @@
+if      ( $arch == SGI ) then
+  alias makeO  'make CCFLAGS="-n32 -mips3 -O -xansi -lfpe -fullwarn" LOCAL="../local/sgi"'
+  alias makeG 'make CCFLAGS="-n32 -mips3 -g  -ansi -lfpe -fullwarn" LOCAL="../local/sgi"'
+
+else if ( $arch == ALPHA ) then
+  set ev = `/usr/sbin/psrinfo -v | tr "[A-Z] " "[a-z]\012" | grep ev | head -1 | cut -d. -f1`
+  set rel = `uname -r`
+  if ($rel =~ "V5.0") then
+    set cc_check = "-warnprotos -non_shared -newc -portable -arch $ev"
+  else
+    set cc_check =             "-non_shared -newc -portable -arch $ev"
+  endif
+  alias makeO 'make CCFLAGS="-O4 '"$cc_check"'" LOCAL="../local/alpha"'
+  alias makeG 'make CCFLAGS="-g  '"$cc_check"'" LOCAL="../local/alpha"'
+
+else if ( $arch == Linux ) then
+  set cc_check_G = "-ansi -Wall -pedantic"
+  set cc_check_O = "-ansi -Wall"
+  alias makeO 'make CCFLAGS="-O '"$cc_check_O"'" LOCAL="../local/linux"'
+  alias makeG 'make CCFLAGS="-g '"$cc_check_G"'" LOCAL="../local/linux"'
+
+endif

@@ -1,0 +1,21 @@
+(R|T)^-1=(R^-1|(-R^-1)T)
+
+(R|T)(I|L)=(R|RL+T)
+(I|L)(R|T)=(R|T+L)
+
+(R|T)(-I|K)=(-R|RK+T)
+(-I|K)(R|T)=(-R|-T+K)
+
+For a given (R|T) & L,      there also is a LTr (R-I)L.
+For a given (R|T) & (-I|K), there also is a LTr (R-I)K+2T.
+
+(-I|K)(-I|N)=(I|-N+K)
+(-I|N)(-I|K)=(I|-K+N)
+
+Group generation:
+  Given: (R|T)
+  Found in ListSMx: (-R|U)
+  Question: What is K in (-I|K)?
+      (-I|K)(R|T)=(-R|-T+K)=(-R|U)
+   => -T+K=U
+   => K=T+U
