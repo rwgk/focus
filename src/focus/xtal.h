@@ -700,6 +700,7 @@ Ex int            MaxRawPeaks;
 Ex int            NeD_PeakList;
 Ex T_eD_PeakList  *eD_PeakList;
 Ex int            nCeD_PeakList;
+Ex int            nList__RawSymEquiv;
 Ex T_fVector      *List_xRawSymEquiv;
 Ex T_fVector      *List_cRawSymEquiv;
 Ex Fprec          *NextPeakMx;
@@ -838,6 +839,7 @@ void DoSitePhases(void);
 void MapInd(int nMap, Fprec *DensMap, const T_PeakFlags *FlagMap,
             int ChkInDep, int MaxInDep, Fprec *CorrCoeff);
 void Sort_eD_PeakList(int PSE, int nEPL);
+void Free_eD_PeakList(void);
 int Build_eD_PeakList(Fprec *eDensity, T_PeakFlags *PeakFlags,
                       int UseLargestFwFragment);
 void SiteFrame(void);

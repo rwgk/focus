@@ -1,4 +1,4 @@
-#define VersionID "01.91.8"
+#define VersionID "01.92.0"
 
 #ifndef A_AppGlobal__
 #define A_AppGlobal__
@@ -131,9 +131,6 @@ static void InitializeParameters(void)
   MaxPeaksFwSearch = 0;
   MaxPeaksFwFragmentSearch = 0;
   MaxRawPeaks = 0;
-  eD_PeakList = NULL;
-  List_xRawSymEquiv = NULL;
-  List_cRawSymEquiv = NULL;
   NextPeakMx = NULL;
   MinDistance2Mx = NULL;
   PeakSearchLevel = 3;
@@ -197,6 +194,9 @@ static void InitializeParameters(void)
   tRius = 0.;
   eD_PeakList = NULL;
   NeD_PeakList = 0;
+  nList__RawSymEquiv = 0;
+  List_xRawSymEquiv = NULL;
+  List_cRawSymEquiv = NULL;
   nCodeTransl = 0;
   CodeTransl = NULL;
 

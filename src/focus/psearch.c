@@ -1777,6 +1777,28 @@ static int Asy_nEPL(int MaxSym)
 }
 
 
+void Free_eD_PeakList(void)
+{
+  if (eD_PeakList) {
+    if (   List_xRawSymEquiv == NULL
+        || List_cRawSymEquiv == NULL
+        || NextPeakMx == NULL) {
+      InternalError(NULL);
+    }
+    AppFree(NextPeakMx, NeD_PeakList * NeD_PeakList);
+            NextPeakMx = NULL;
+    AppFree(List_cRawSymEquiv, nList__RawSymEquiv);
+            List_cRawSymEquiv = NULL;
+    AppFree(List_xRawSymEquiv, nList__RawSymEquiv);
+            List_xRawSymEquiv = NULL;
+    AppFree(eD_PeakList, NeD_PeakList);
+            eD_PeakList = NULL;
+    NeD_PeakList = 0;
+    nList__RawSymEquiv = 0;
+  }
+}
+
+
 int Build_eD_PeakList(Fprec *eDensity, T_PeakFlags *PeakFlags,
                       int UseLargestFwFragment)
 {
@@ -1794,10 +1816,7 @@ int Build_eD_PeakList(Fprec *eDensity, T_PeakFlags *PeakFlags,
 
   Dyn_eD_CutOff = PeakSearch(eDensity, PeakFlags, PeakSearchLevel);
 
-  if (eD_PeakList) {
-    AppFree(eD_PeakList, NeD_PeakList);
-            eD_PeakList = NULL;
-  }
+  Free_eD_PeakList();
 
   nSymEquiv = 0;
   NeD_PeakList = 0;
@@ -1819,9 +1838,10 @@ int Build_eD_PeakList(Fprec *eDensity, T_PeakFlags *PeakFlags,
   if (nSymEquiv > MaxRawPeaks)
     InternalError("Corrupt Dyn_eD_CutOff");
 
+  nList__RawSymEquiv = nSymEquiv;
   CheckMalloc(eD_PeakList, NeD_PeakList);
-  CheckMalloc(List_xRawSymEquiv, nSymEquiv);
-  CheckMalloc(List_cRawSymEquiv, nSymEquiv);
+  CheckMalloc(List_xRawSymEquiv, nList__RawSymEquiv);
+  CheckMalloc(List_cRawSymEquiv, nList__RawSymEquiv);
   CheckMalloc(NextPeakMx, NeD_PeakList * NeD_PeakList);
 
   iSymEquiv = 0;
@@ -1916,14 +1936,6 @@ int Build_eD_PeakList(Fprec *eDensity, T_PeakFlags *PeakFlags,
     }
     putc('\n', stdout);
   }
-
-  AppFree(NextPeakMx, NeD_PeakList * NeD_PeakList);
-  AppFree(List_cRawSymEquiv, nSymEquiv);
-  AppFree(List_xRawSymEquiv, nSymEquiv);
-
-  List_xRawSymEquiv = NULL;
-  List_cRawSymEquiv = NULL;
-  NextPeakMx = NULL;
 
   return FwFragWasUsed;
 }

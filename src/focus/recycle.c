@@ -472,9 +472,5 @@ void RecyclePhases(T_FourierParameters *FP,
   if (FlagConverged)    nConvergedPhases++;
   else               nNotConvergedPhases++;
 
-  if (eD_PeakList) {
-    AppFree(eD_PeakList, NeD_PeakList);
-            eD_PeakList = NULL;
-           NeD_PeakList = 0;
-  }
+  Free_eD_PeakList();
 }
