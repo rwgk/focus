@@ -7,7 +7,7 @@ else
 endif
 
 foreach iC ($iCodes)
-  echo "$iC" | kriber reacs dett quit | awk '/Coordination sequences:/,/Mean /' | tail +2 | grep -v Mean | sed 's/^  *//' | sed 's/  */ /g' | cut -d' ' -f2- | awk '{ printf "%-12s ", "'"$iC"'"; print $0 }' | coseq_reduce | awk '{ printf "%-12.12s %d %d %d %d %d %d %d %d %d %d\n", $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11 }' | sed 's/^BEA /*BEA/' | sed 's/^CHI /-CHI/' | sed 's/^CLO /-CLO/' | sed 's/^RON /-RON/' | sed 's/^PAR /-PAR/' | sed 's/^WEN /-WEN/'
+  echo "$iC" | kriber reacs dett quit | awk '/Coordination sequences:/,/Mean /' | tail -n +2 | grep -v Mean | sed 's/^  *//' | sed 's/  */ /g' | cut -d' ' -f2- | awk '{ printf "%-12s ", "'"$iC"'"; print $0 }' | coseq_reduce | awk '{ printf "%-12.12s %d %d %d %d %d %d %d %d %d %d\n", $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11 }' | sed 's/^BEA /*BEA/' | sed 's/^CHI /-CHI/' | sed 's/^CLO /-CLO/' | sed 's/^RON /-RON/' | sed 's/^PAR /-PAR/' | sed 's/^WEN /-WEN/'
 end
 
 exit 0
