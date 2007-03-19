@@ -103,59 +103,59 @@ VNI 611375421655/227293178112 971.0
 VSV 1227/500 948.1
 ZON 328/161 797.8
 # emails to christian
-CGF 73/35
-CZP 12/5
-SAO 18/11
-IFR 50359/24750
-MWW 25813/11440
-CGS 46/25
-ITE 41224/19305
-SAT 29/15
-ACO 2
-CFI 122488/53361
-SBE 27704/17955
-SBS 7739/4830
-SBT 713/455
-TSC 152/105
-AFN 119/60
-AWO 521/245
-DFT 32/15
-ESV 135694813/59909850
-STT ~2.28211634
-SFF 5885369968/2564186625
-STF 1084438/482625
-FRA 158/77
-GON 1996/845
-OSO 387/200
-ASV 2
-MTF 24499519/8668296
-OSI 7/3
-SAS 44/25
-SAV 37/21
-SFE 18952597/8232840
-SFF 5885369968/2564186625
-STF 1084438/482625
-TER 173/78
-UEI 521/245
-CDO 41023/14700
-GIU 52/25
-MAR 52/25
-OBW 6700027/3237234
-RRO 2693/1120
-RWR 13036/4725
-SFO 854/495
-SOS 199/105
-UTL 1514986789/707566860
-EON 8250284717/3573052560
-LIT 59/30
-NSI 751/288
-OWE 72/35
-IHW ~2.69689
-MOZ 27/14
-AEN 91867/35700
-DON 115133/52650
-ISV 38432/18445
-MSO 25/12
+CGF 73/35 819.0
+CZP 12/5 885.0
+SAO 18/11 632.4
+IFR 50359/24750 797.5
+MWW 25813/11440 850.5
+CGS 46/25 718.0
+ITE 41224/19305 824.2
+SAT 29/15 763.0
+ACO 2 787.0
+CFI 122488/53361 891.8
+SBE 27704/17955 619.0
+SBS 7739/4830 617.2
+SBT 713/455 617.2
+TSC 152/105 589.5
+AFN 119/60 776.8
+AWO 521/245 827.7
+DFT 32/15 840.0
+ESV 135694813/59909850 874.8
+STT ~2.28211634 859.4
+SFF 5885369968/2564186625 880.1
+STF 1084438/482625 876.5
+FRA 158/77 801.6
+GON 1996/845 926.2
+OSO 387/200 747.0
+ASV 2 787.0
+MTF 24499519/8668296 1082.9
+OSI 7/3 892.0
+SAS 44/25 700.5
+SAV 37/21 690.3
+SFE 18952597/8232840 892.4
+SFF 5885369968/2564186625 880.1
+STF 1084438/482625 876.5
+TER 173/78 871.8
+UEI 521/245 831.7
+CDO 41023/14700 1053.4
+GIU 52/25 810.5
+MAR 52/25 808.3
+OBW 6700027/3237234 756.3
+RRO 2693/1120 924.3
+RWR 13036/4725 1052.0
+SFO 854/495 681.2
+SOS 199/105 728.3
+UTL 1514986789/707566860 825.8
+EON 8250284717/3573052560 873.4
+LIT 59/30 768.0
+NSI 751/288 1016.3
+OWE 72/35 809.2
+IHW ~2.69689 1012.7
+MOZ 27/14 757.1
+AEN 91867/35700 956.3
+DON 115133/52650 851.0
+ISV 38432/18445 772.0
+MSO 25/12 821.8
 # obtained with simple_crack.py 2007-03
 BCT 22/9 959.0
 BEC 45712/23205 764.0
@@ -349,6 +349,7 @@ def run(args):
   td_archive_use_flags = {}
   for tag in td_archive.keys():
     td_archive_use_flags[tag] = False
+  td10_substitutes = {}
   n_unknown = 0
   n_td10_mismatch = 0
   n_approx_mismatch = 0
@@ -404,6 +405,8 @@ def run(args):
     else:
       print "~"+s_current_mma3,
     print
+    if (td_record is not None and td_record.td10 is None):
+      td10_substitutes[tag] = s_current_td10
     print
   unused = []
   for tag,flag in td_archive_use_flags.items():
@@ -421,6 +424,17 @@ def run(args):
   print "number of approximation mismatches:", n_approx_mismatch
   print "number of exact unknown:", len(exact_unknown)
   print "number of inexact approximations:", n_inexact
+  #
+  if (len(td10_substitutes) != 0):
+    print
+    print "New td_archive_table with additional current TD10:"
+    for line in td_archive_table.splitlines():
+      if (line[0] != "#"):
+        tag = line.split()[0]
+        s_current_td10 = td10_substitutes.get(tag)
+        if (s_current_td10 is not None):
+          line += " "+s_current_td10
+      print line
 
 if (__name__ == "__main__"):
   run(sys.argv[1:])
