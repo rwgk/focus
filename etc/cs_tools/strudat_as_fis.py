@@ -6,36 +6,13 @@ from td_from_focus_output import extract_section, extract_coseq
 from cctbx.crystal import coordination_sequences
 from cctbx import xray
 from cctbx import crystal
+from iotbx.command_line.show_distances import display
 from iotbx.kriber import strudat
 from iotbx.option_parser import option_parser
 from libtbx import easy_run
 from libtbx import dict_with_default_0
 from cStringIO import StringIO
 import sys, os
-
-def display(
-      distance_cutoff,
-      max_shell,
-      coseq_dict,
-      xray_structure):
-  xray_structure.show_summary().show_scatterers()
-  print
-  pairs = xray_structure.show_distances(
-    distance_cutoff=distance_cutoff,
-    keep_pair_asu_table=True)
-  print
-  if (pairs.pair_counts.size() <= 30):
-    print "Pair counts:", list(pairs.pair_counts)
-    print
-  term_table = crystal.coordination_sequences.simple(
-    pair_asu_table=pairs.pair_asu_table,
-    max_shell=max_shell)
-  coordination_sequences.show_terms(
-    structure=xray_structure,
-    term_table=term_table,
-    coseq_dict=coseq_dict)
-  print
-  return term_table
 
 def format_focus_input(tag, xray_structure, term_table):
   min_sym_nodes = 0
@@ -93,8 +70,9 @@ def run(args):
       print "strudat tag:", entry.tag
       print
       xray_structure = entry.as_xray_structure()
-      term_table = display(
+      pairs, term_table = display(
         distance_cutoff=3.4,
+        show_cartesian=False,
         max_shell=10,
         coseq_dict=coseq_dict,
         xray_structure=xray_structure)
