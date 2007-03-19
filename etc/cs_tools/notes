@@ -1,0 +1,14 @@
+Convert strudat entries to .fis files:
+  strudat_as_fis.py
+Compute 1000 CS terms:
+  qsub_focus_generator.py *.fis
+Generate .itpl files:
+  simple_crack.py *.cs1000
+Generate .etd files:
+  python quick_mean_a.py *.itpl
+Fetch results from .etd files generated with quick_mean_a.py:
+  grep '<a>' *.etd | grep -v 'No success ' | cut -d' ' -f2,8 | uniq | cut -c-4,9-
+Add the exact <a> to td_archive_table in td_from_focus_output.py.
+Create table for atlas:
+  td_from_focus_output.py *.cs1000
+  grep TABLE tds | cut -d' ' -f2-
