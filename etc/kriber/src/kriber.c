@@ -3245,7 +3245,7 @@ Static Void bestimme_topologie(_TEXT *Tfpout)
 {
   long i, j, k;
   tt_koord_sequenz z[maxanzahlatomlagen];
-  tt_koord_sequenz ze[20];
+  tt_koord_sequenz ze[50];
   long anzze;
   Char zecod[6], zecodneu[6];
   static Char zcod[maxanzahlatomlagen][50][6]; /* 50 = max number of       */
