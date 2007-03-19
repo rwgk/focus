@@ -1,5 +1,5 @@
 """
-iotbx.python $HOME/iza/strudat_as_fis.py $HOME/iza/web_atlas/strudat_web_atlas_20070316 --coseq $HOME/focus-etc/kriber/coseq
+iotbx.python $HOME/focus-etc/cs_tools/strudat_as_fis.py $HOME/iza/web_atlas/strudat_web_atlas_20070316 --coseq $HOME/focus-etc/kriber/coseq
 """
 
 from td_from_focus_output import extract_section, extract_coseq
