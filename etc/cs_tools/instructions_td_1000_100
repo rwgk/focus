@@ -1,0 +1,97 @@
+Instructions for computing TD1000:100
+-------------------------------------
+
+1. Create a focus input file like this:
+
+Title Code CLO
+SpaceGroup Pm-3m
+UnitCell 25.84 25.84 25.84 90 90 90
+MinNodeDistance 2.7
+MinSymNodes 192
+NodeType  3  1
+NodeType  4  4
+CheckTetrahedralGeometry Off
+SI1   0.18630  0.72880  0.44050
+SI2   0.27030  0.64610  0.56010
+SI3   0.08470  0.70510  0.62020
+SI4   0.00000  0.64650  0.43930
+SI5   0.00000  0.68110  0.76510
+End
+
+Note that kriber's "wrifocus" does most of the work. However, in some
+cases it is necessary to manually define MinNodeDistance and
+CheckTetrahedralGeometry Off. To be sure focus finds only one
+framework, sometimes it is necessary to exactly specify the number of
+nodes with 3 and 4 connections (NodeType). For fully four-connected
+frameworks the NodeType lines can by omitted.
+______________________________________________________________________________
+
+2. Quick focus test run (finishes in fractions of a second):
+
+focus -siteframe -sitelabel -coseq=10 CLO.fis
+
+Inspect the output to verify that the connectivity and the resulting
+coordination sequences are correct. Adjust the focus input if necessary
+and re-run focus until this is the case.
+______________________________________________________________________________
+
+3. Compute 1000 CS terms with focus:
+
+focus -siteframe -sitelabel -coseqsplit=2000000 -coseq=1000 CLO.fis > CLO.cs1000
+
+This takes about six minutes per coordination sequence (2.6 GHZ
+Opteron). The -coseqsplit value is not very critial. It sets the
+memory allocatioin for a hashing algorithm. The computation should go
+faster the larger the value, but there are complex tradeoffs.
+______________________________________________________________________________
+
+4. Compute the TD1000:100 values:
+
+Download this pure Python script:
+
+  http://cci.lbl.gov/~rwgk/cs_tools/td_from_focus_output.py
+
+Then (finishes in fractions of a second):
+
+  python td_from_focus_output.py CLO.cs1000 > tds
+
+Extract the line starting with "TABLE", e.g.:
+
+  grep TABLE tds
+
+Result:
+
+  TABLE CLO 456 0.443
+
+The first value is the TD10, the second the TD1000:100.
+
+The TD1000:100 is defined as:
+
+  foreach coordination sequence (1000 terms each)
+    for each of the last 100 values of the sequence
+      compute a = N / k**2
+    compute average of the 100 a
+  compute the average of the averages, weighted by the
+    multiplicity of the T-position
+  divide by 3 (number of dimensions) to obtain the TD1000:100
+
+*******************************************************************************
+
+See also:
+
+  http://cci.lbl.gov/~rwgk/focus/
+
+    Download page for focus program.
+
+  http://cci.lbl.gov/~rwgk/cs_tools/strudat_as_fis.py
+
+    This script converts all entries in a strudat file to .fis files.
+    It automates steps 1 and 2 above and is known to work for all 176
+    Atlas entries as of March 2007.
+    In addition to focus it requires the cctbx:
+      http://cci.lbl.gov/cctbx_build/
+
+  http://cci.lbl.gov/~rwgk/cs1000_2007_03/
+
+    Directory with 176 .fis and .cs1000 files, covers all Atlas
+    entries as of March 2007.
