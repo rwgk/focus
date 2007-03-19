@@ -388,7 +388,7 @@ def run(args):
           n_approx_mismatch += 1
       elif (td_record.exact_mean_a is None):
         print "EXACT_UNKNOWN",
-        exact_unknown.append(tag)
+        exact_unknown.append(fo_file_name)
       if (td_record.td10 is not None):
         s_archived_td10 = "%.1f" % td_record.td10
         if (s_archived_td10 != s_current_td10):
@@ -410,7 +410,7 @@ def run(args):
   unused.sort()
   print "Unused archive records:", unused
   print
-  print "Exact unknown:", exact_unknown
+  print "Exact unknown:", " ".join(exact_unknown)
   print
   print "number of unknown tags:", n_unknown
   print "number of td10 mismatches:", n_td10_mismatch
