@@ -409,7 +409,10 @@ def run(args):
   for tag,flag in td_archive_use_flags.items():
     if (not flag): unused.append(tag)
   unused.sort()
-  print "Unused archive records:", unused
+  u = len(unused)
+  if (u != 0 and u <= 15):
+    u = " ".join(unused)
+  print "Unused archive records:", u
   print
   print "Exact unknown:", " ".join(exact_unknown)
   print
