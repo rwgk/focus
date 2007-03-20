@@ -3,7 +3,12 @@ Convert strudat entries to .fis files:
 Compute 1000 CS terms:
   qsub_focus_generator.py *.fis
 Generate .itpl files:
-  simple_crack.py *.cs1000
+  With one CPU:
+    simple_crack.py *.cs1000
+  With multiple CPUs:
+    qsub_simple_crack_generator.py
+To generate dcs_lib for simple_crack.py:
+  itpl_as_dcs_lib.py *.itpl | sort -n
 Generate .etd files:
   python quick_mean_a.py *.itpl
 Fetch results from .etd files generated with quick_mean_a.py:
