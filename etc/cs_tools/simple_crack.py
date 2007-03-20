@@ -31,20 +31,27 @@ def simple_crack(ftc, coseqs):
         if (sum_dcs * repetitions >= n-dcs_max): break
         mdcs = []
         for v in dcs: mdcs.extend([v]*repetitions)
-        procoseq_result = easy_run.fully_buffered(
-          command="procoseq -%s -dcs=%s" % (ftc, ",".join(mdcs)),
-          stdin_lines=coseq_lines).raise_if_errors()
-        for line in procoseq_result.stdout_lines:
-          if (    line.startswith(":")
-              and line.endswith(procoseq_end_of_pl_line)):
-            success = line
-            break
+        def run_procoseq(dcs):
+          procoseq_result = easy_run.fully_buffered(
+            command="procoseq -%s -dcs=%s" % (ftc, ",".join(dcs)),
+            stdin_lines=coseq_lines).raise_if_errors()
+          for line in procoseq_result.stdout_lines:
+            if (line.startswith(": DCS Period Length ")):
+              p = line.split()[-1]
+              procoseq_out, success = run_procoseq(dcs=mdcs+[p])
+              if (success is not None):
+                return procoseq_out, success
+            if (    line.startswith(":")
+                and line.endswith(procoseq_end_of_pl_line)):
+              return procoseq_result.stdout_lines, line
+          return None, None
+        procoseq_out, success = run_procoseq(dcs=mdcs)
     if (success is None):
       result.append("# No success with dcs max %s: %s %s" % (
         dcs_max, ftc, label))
     else:
       itpl_lines = extract_section(
-        lines=procoseq_result.stdout_lines, label="itpl")
+        lines=procoseq_out, label="itpl")
       rcs_result = easy_run.fully_buffered(
         command="rcs -reduceit",
         stdin_lines = itpl_lines).raise_if_errors()
