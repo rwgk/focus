@@ -156,6 +156,9 @@ AEN 91867/35700 956.3
 DON 115133/52650 851.0
 ISV 38432/18445 772.0
 MSO 25/12 821.8
+# email to iza-sc
+IWW ~2.2695989 848.8
+SFG 54787639/21474180 931.8
 # obtained with simple_crack.py 2007-03
 BCT 22/9 959.0
 BEC 45712/23205 764.0
@@ -179,9 +182,6 @@ UFI 2224384/1156155 746.5
 UOZ 160/81 776.2
 USI 5951/3360 691.4
 # placeholders generated with this script (RECORD below)
-# code not in emails
-IWW ~2.2695989 848.8
-SFG ~2.5507561 931.8
 # exact certainly never computed
 IMF ~2.5374974 964.3
 IWV ~2.0996404 802.5
