@@ -1,0 +1,8 @@
+FOCUS_ETC=$HOME/focus-etc  # change if necessary
+exedir=exe-linux           # change if necessary: exe-irix exe-linux exe-tru64
+#
+export FOCUS_ETC
+PATH="$FOCUS_ETC/scripts:$FOCUS_ETC/$exedir:$PATH"
+export PATH
+COSEQ_DB="$FOCUS_ETC/kriber/coseq"
+export COSEQ_DB
