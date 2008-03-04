@@ -291,11 +291,11 @@ def mean(values, weights=None):
   return sum_wv / sum_w
 
 def mean_a(terms, n_tail):
-  as = []
+  a_list = []
   for k,n in enumerate(terms):
     if (k == 0): continue
-    as.append(n / k**2)
-  return mean(values=as[-n_tail:])
+    a_list.append(n / k**2)
+  return mean(values=a_list[-n_tail:])
 
 def mean_mean_a_3(site_multiplicities, dict_of_terms, n_tail):
   len_terms = None
