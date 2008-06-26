@@ -3,8 +3,7 @@
 #include <math.h>
 
 #if defined(FFTfftw)
-#define FFTW_REAL_IS_FLOAT
-#include <rfftw.h>
+#include <fftw3.h>
 #endif
 
 #include "main.h"
@@ -226,8 +225,6 @@ void InitFourierParameters(T_FourierParameters *FP,
   FP->mWsp = mWspC(FP->Nx) + mWspC(FP->Ny) + mWspR(FP->Nz);
   CheckMalloc(FP->Wsp, FP->mWsp);
 
-  FP->Plan = NULL;
-
   FP->mDensity = FP->Mx * FP->My * FP->Mz;
   CheckMalloc(FP->Density, FP->mDensity);
 
@@ -255,11 +252,6 @@ void FreeFourierParameters(T_FourierParameters *FP)
 
   if (FP->Wsp) AppFree(FP->Wsp, FP->mWsp);
       FP->Wsp = NULL;
-
-#if defined(FFTfftw)
-  if (FP->Plan) rfftwnd_destroy_plan(FP->Plan);
-      FP->Plan = NULL;
-#endif
 }
 
 
@@ -644,6 +636,10 @@ void FourierTransform(T_FourierParameters *FP)
   Fprec  eDscale;
   long   MinTicks;
 
+#if defined(FFTfftw)
+  fftwf_plan fftw_plan_;
+#endif
+
 
   FP->Density[0] = F000mtp;
 
@@ -679,11 +675,7 @@ void FourierTransform(T_FourierParameters *FP)
         if (   FP->Mx != FP->Nx
             || FP->My != FP->My
             || FP->Mz != FP->Nz + 2 || FP->Nz % 2 != 0)
-          progerror("Improper array dimensions for rfftwnd.");
-        if (FP->Plan == NULL)
-            FP->Plan = rfftw3d_create_plan(FP->Nx, FP->Ny, FP->Nz,
-                                           FFTW_COMPLEX_TO_REAL,
-                                           FFTW_ESTIMATE | FFTW_IN_PLACE);
+          progerror("Improper array dimensions for fftw.");
         break;
 #endif
 
@@ -735,8 +727,13 @@ void FourierTransform(T_FourierParameters *FP)
 
 #if defined(FFTfftw)
     case FPUT_fftw:
-      rfftwnd_one_complex_to_real(FP->Plan, (fftw_complex *) FP->Density,
-                                            (fftw_real *)    FP->Density);
+      fftw_plan_ = fftwf_plan_dft_c2r_3d(
+        FP->Nx, FP->Ny, FP->Nz,
+        (fftw_complex *) FP->Density,
+        FP->Density,
+        FFTW_ESTIMATE);
+      fftwf_execute(fftw_plan_);
+      fftwf_destroy_plan(fftw_plan_);
       break;
 #endif
 

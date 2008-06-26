@@ -761,7 +761,6 @@ typedef struct
     int    Mx, My, Mz, Friedel;
     int    mWsp;
     float  *Wsp;
-    void   *Plan;
     int    mDensity;
     Fprec  *Density;
     int    SkipFrom_iy;
