@@ -1,11 +1,19 @@
 Import("focus_scons_env", "env_etc")
 import libtbx.load_env
+import os
 
 env = focus_scons_env.Copy()
 env.Append(CPPPATH=["#focus/src/sginfo"])
+env.Append(CCFLAGS=["-DFFTfftw"])
 env.Prepend(LIBS=["fftw3f", "sginfo"])
 env.Append(LIBPATH=["#lib"])
-env.Append(CCFLAGS=["-DFFTfftw"])
+base = libtbx.env.under_build("base")
+if (os.path.isfile(os.path.join(base, "include", "fftw3.h"))):
+  env.Append(CPPPATH=[os.path.join(base, "include")])
+  env.Append(LIBPATH=[os.path.join(base, "lib")])
+  if (    env_etc.compiler == "unix_gcc"
+      and ARGUMENTS.get("focus", "") == "static"):
+    env.Prepend(LINKFLAGS=["-static"])
 exe = env.Program(
   target=["#exe/focus"],
   source=[
