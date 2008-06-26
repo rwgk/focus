@@ -1390,6 +1390,7 @@ int ReadCmdFile(FILE *fpcmd)
               Fprec   val[6];
 
               nval = 0;
+              mode = 0;
 
               if (str_arg(arg, Iline, iarg++))
               {
@@ -1567,6 +1568,7 @@ int ReadCmdFile(FILE *fpcmd)
               Fprec   val[6];
 
               nval = 0;
+              mode = 0;
 
               if (str_arg(arg, Iline, iarg++))
               {
@@ -1630,6 +1632,7 @@ int ReadCmdFile(FILE *fpcmd)
               Fprec   val[6];
 
               nval = 0;
+              mode = 0;
 
               if (str_arg(arg, Iline, iarg++))
               {
