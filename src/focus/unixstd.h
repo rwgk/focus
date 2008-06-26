@@ -15,9 +15,6 @@
 #endif
 
 #include <unistd.h>
-#if ! defined(__hpux) && ! defined(_ABIN32)
-extern int gethostname(char *, int);
-#endif
 
 #endif
 
