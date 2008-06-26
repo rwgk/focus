@@ -1,0 +1,39 @@
+Import("focus_scons_env", "env_etc")
+import libtbx.load_env
+
+env = focus_scons_env.Copy()
+env.Append(CPPPATH=["#focus/src/sginfo"])
+env.Prepend(LIBS=["fftw3f", "sginfo"])
+env.Append(LIBPATH=["#lib"])
+env.Append(CCFLAGS=["-DFFTfftw"])
+exe = env.Program(
+  target=["#exe/focus"],
+  source=[
+    "atominfo.c",
+    "cputime.c",
+    "evalfw.c",
+    "findpnnb.c",
+    "frame.c",
+    "io.c",
+    "lattice.c",
+    "lib.c",
+    "matrix.c",
+    "posnmx.c",
+    "psearch.c",
+    "ranmar.c",
+    "recycle.c",
+    "scatfact.c",
+    "setaos.c",
+    "sgextend.c",
+    "signal.c",
+    "sitefcal.c",
+    "tetrahed.c",
+    "trialoop.c",
+    "trpcmplx.c",
+    "xtal.c",
+    "main.c",
+    "fourier.c",
+    "nodsurf.c"])
+libtbx.env.write_dispatcher_in_bin(
+  source_file=exe[0].get_abspath(),
+  target_file="focus")
