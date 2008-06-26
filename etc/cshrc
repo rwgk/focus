@@ -1,4 +1,6 @@
-setenv FOCUS_ETC ~/focus-etc
+if (! $?FOCUS_ETC) then
+  setenv FOCUS_ETC ~/focus-etc
+endif
 
 set opsys = `uname | tr "[A-Z]" "[a-z]"`
 
