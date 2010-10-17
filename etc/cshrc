@@ -10,6 +10,8 @@ else if ($opsys =~ linux) then
   set exedir = exe-linux
 else if ($opsys =~ osf1) then
   set exedir = exe-tru64
+else if ($opsys =~ darwin) then
+  set exedir = exe-mac-intel
 else
   set exedir = ""
 endif
