@@ -3,3 +3,5 @@ cd build
 focus/install_fftw3_here.csh -j 48
 python cctbx_project/libtbx/configure.py focus
 make
+
+tar zcvf ~/public_html/focus/focus-src-2010-10-16.tar.gz --exclude=.svn focus/how_to_build focus/install_fftw3_here.csh focus/SConscript focus/src
