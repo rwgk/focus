@@ -1,0 +1,5 @@
+mkdir build
+cd build
+focus/install_fftw3_here.csh -j 48
+python cctbx_project/libtbx/configure.py focus
+make
