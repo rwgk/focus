@@ -19,7 +19,8 @@ unsigned _stklen = 16 * 1024;
 #define realloc farrealloc
 #define free farfree
 
-#elif ! (defined(__ALPHA) && defined(__VMS))
+#elif ! (defined(__ALPHA) && defined(__VMS)) \
+   && ! defined(__APPLE__)
 #include <malloc.h>
 
 #endif
