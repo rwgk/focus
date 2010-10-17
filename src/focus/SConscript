@@ -6,7 +6,6 @@ env = focus_scons_env.Clone()
 env.Append(CPPPATH=["#focus/src/sginfo"])
 env.Append(CCFLAGS=["-DFFTfftw"])
 env.Prepend(LIBS=["fftw3f", "sginfo"])
-env.Append(LIBPATH=["#lib"])
 base = libtbx.env.under_build("base")
 if (os.path.isfile(os.path.join(base, "include", "fftw3.h"))):
   env.Append(CPPPATH=[os.path.join(base, "include")])
