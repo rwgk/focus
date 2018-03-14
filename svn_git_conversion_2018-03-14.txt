@@ -1,0 +1,12 @@
+# Create a new "focus" repository at https://github.com/rwgk
+mkdir -p $HOME/impgit/svn
+cd $HOME/impgit/svn
+tar zxvf $Save/central_svn_focus_2018-03-11.tgz
+mkdir $HOME/impgit/git
+cd $HOME/impgit/git
+git svn clone --stdlayout file://$HOME/impgit/svn/focus focus
+cd focus
+git remote add origin https://github.com/rwgk/focus.git
+git push -u origin master
+cd
+rm -rf impgit
